@@ -11,7 +11,7 @@ description: 설계 문서·PRD·TRD를 리뷰해 빠진 결정과 실행 불가
 
 ## 두 축으로 나눠 본다
 
-독립적이므로 병렬로 돌린다(위임 판단은 delegation 스킬).
+독립적이므로 병렬로 돌린다(위임 판단은 delegation 스킬). 프롬프트는 `references/review-prompts.md`.
 
 **완결성** — 문서 자체가 온전한가
 - 결정했어야 하는데 안 한 것

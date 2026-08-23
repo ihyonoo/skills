@@ -8,7 +8,13 @@
 ./scripts/link.sh
 ```
 
-스킬과 전역 지침을 Claude Code·Codex 양쪽에 링크한다. `--check`를 붙이면 링크를 만들지 않고 현재 상태만 검증한다.
+스킬과 전역 지침을 Claude Code·Codex 양쪽에 링크한다. 원본이 없어진 이 레포의 링크는 함께 정리한다. `--check`를 붙이면 아무것도 바꾸지 않고 현재 상태만 검증한다.
+
+```bash
+./scripts/check-skills.sh
+```
+
+스킬이 [작성 규약](./AGENTS.md)을 지키는지 검사한다. frontmatter 필드, 본문 단어 수, `@` 임포트, 참조 파일 존재 여부, README 등재를 본다. 스킬을 추가하거나 고친 뒤 돌린다.
 
 | 원본 | Claude Code | Codex |
 |---|---|---|
@@ -26,12 +32,13 @@
 | `deep-interview` | frontier 기반 라운드 인터뷰로 요구사항 확정 |
 | `delegation` | 서브에이전트 위임 여부·병렬 수·모델 티어를 추천안과 함께 확인 |
 | `spec-review` | 문서를 완결성·실행가능성 두 축으로 리뷰 |
+| `code-review` | 코드를 정확성·정합성 두 축으로 리뷰 |
 
 ### 문서
 
 | 스킬 | 역할 |
 |---|---|
-| `design` | 규모(S/M/L) 판정 → 인터뷰 → `docs/design/` |
+| `design` | 규모(S/M/L) 판정 → 인터뷰 → M이면 `docs/design/`, L이면 prd·trd로 |
 | `prd` | 무엇을 왜 만드는지 → `docs/prd/` |
 | `trd` | 어떻게 만드는지 → `docs/trd/` |
 
@@ -48,7 +55,7 @@
 
 | 스킬 | 역할 |
 |---|---|
-| `branch-flow` | 브랜치 생성 → 커밋 → PR 작성 |
+| `branch-flow` | 브랜치 생성 → 커밋 → 셀프 리뷰 → PR 작성 |
 | `post-merge` | 머지 후 로컬 정리 |
 
 ### 프로젝트 설정
@@ -66,12 +73,14 @@ design ─┬─ (S) 문서 없이 ───────────┐
                                    ↓
                               implement ── tdd / frontend-design / root-cause
                                    ↓
-                            branch-flow → post-merge
+                 branch-flow (커밋 → code-review → PR) → post-merge
 ```
 
 `implement`가 문서와 코드를 잇는다. 확정된 문서를 실제로 열어 읽는 것으로 시작하고, 요구사항 ID 하나가 작업 단위다.
 
-`deep-interview`와 `spec-review`는 design·prd·trd가, `delegation`은 조사가 필요한 모든 스킬이 부른다.
+`deep-interview`와 `spec-review`는 design·prd·trd가, `code-review`는 branch-flow가, `delegation`은 조사가 필요한 모든 스킬이 부른다.
+
+설계 메모는 M에서만 쓴다. L은 PRD·TRD가 그 역할을 대신하므로 같은 내용을 세 번 적지 않는다.
 
 ## 호출 방법
 
