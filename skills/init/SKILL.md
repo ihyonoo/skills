@@ -28,7 +28,7 @@ Do not fill this in with guesses. If the survey will take three or more tool cal
 
 ## 3. Write it
 
-**Under 100 lines.** This file loads in full every session, so length is a cost paid on every turn.
+**Shorter is better.** This file loads in full every session, so every line is a cost paid on every turn. Around 100 lines, stop and check whether what you are adding is worth reloading forever. Go past it when the project genuinely needs it — not by default.
 
 **What goes in**
 
