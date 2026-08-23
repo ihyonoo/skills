@@ -3,59 +3,59 @@ name: code-review
 description: 코드 변경을 리뷰해 결함과 규약 위반을 찾는다. 구현이 끝났을 때, PR을 올리기 전, 사용자가 "코드 리뷰해줘" "이 변경 봐줘" "괜찮은지 봐줘"라고 할 때 사용한다. 문서·PRD·TRD 리뷰는 spec-review를 쓴다.
 ---
 
-## 리뷰어에게 변경과 기준만 준다
+## Give the reviewer the change and the standards, nothing else
 
-리뷰를 서브에이전트에 위임할 때 **왜 이렇게 짰는지를 넘기지 않는다.** diff 범위, 해당 문서 경로, 지침 파일 경로만 준다.
+When delegating the review to a subagent, **do not pass why you wrote it that way.** Pass the diff range, the relevant document path, and the instruction file path.
 
-코드가 스스로를 설명하는지가 리뷰의 대상이다. 작성자의 변명을 먼저 들은 리뷰어는 그 코드를 영원히 납득한다.
+Whether the code explains itself is the point of the review. A reviewer who hears the author's excuses first will accept that code forever.
 
-## 두 축으로 나눠 본다
+## Split into two axes
 
-독립적이므로 병렬로 돌린다(위임 판단은 delegation 스킬). 프롬프트는 `references/review-prompts.md`.
+They are independent, so run them in parallel (use the delegation skill to decide). Prompts are in `references/review-prompts.md`.
 
-**정확성** — 이 코드가 의도대로 동작하는가
+**Correctness** — does this code do what it intends
 
-- 경계 조건 — 빈 입력, 0, 최대값, 단일 원소
-- 에러 경로 — 실패했을 때 자원이 정리되는가, 부분 상태가 남는가
-- 신뢰 경계 — 외부 입력이 검증 없이 안쪽으로 흐르는가
-- 순서·동시성 의존 — 두 번 실행되거나 순서가 바뀌면 깨지는가
-- 조건부 부수효과 — 분기 안에서만 일어나는 쓰기
+- Boundary conditions — empty input, zero, maximum, a single element
+- Error paths — are resources released on failure, is partial state left behind
+- Trust boundaries — does external input flow inward unvalidated
+- Order and concurrency dependence — does it break when run twice or reordered
+- Conditional side effects — writes that happen only inside a branch
 
-**정합성** — 이 변경이 문서와 규약에 맞는가
+**Consistency** — does this change match the documents and the rules
 
-- 요구사항 ID 중 코드에 대응이 없는 것
-- 문서에 없는데 들어온 것
-- 지침 파일·전역 지침과 어긋나는 지점
-- 이번 변경으로 새로 미사용이 된 import·변수·함수
+- Requirement IDs with no corresponding code
+- Things that arrived without being in the document
+- Points that conflict with the instruction file or the global instructions
+- Imports, variables, and functions this change itself made unused
 
-## 근거를 붙인다
+## Attach evidence
 
-**"괜찮아 보인다"는 리뷰 결과가 아니다.** 안전하다고 판단했으면 그렇게 만드는 줄을 인용한다. 확인하지 못했으면 "미확인"으로 분류한다.
+**"Looks fine" is not a review result.** If you judged something safe, quote the line that makes it safe. If you could not confirm it, classify it as "unverified".
 
-"아마 처리됐을 것", "테스트가 있을 것"으로 넘어가지 않는다. 확인하거나, 확인 못 했다고 적는다.
+Do not wave things through with "it is probably handled" or "there is probably a test". Confirm it, or write that you could not.
 
-## 등급을 매긴다
+## Assign a grade
 
-- **막음** — 머지하면 동작이 깨지거나 데이터가 상한다
-- **고치면 좋음** — 지금 동작하지만 나중에 비용이 된다
-- **의견** — 취향 또는 대안 제시
+- **Blocking** — merging breaks behavior or corrupts data
+- **Worth fixing** — it works now, but it costs later
+- **Opinion** — taste, or an alternative
 
-막음이 하나라도 있으면 PR을 올리지 않는다.
+If even one blocking finding stands, do not open the PR.
 
-## 결과를 다룬다
+## Handle the results
 
-리뷰 결과에 아첨하지 않는다. 각 항목에 셋 중 하나를 명시한다.
+Do not flatter the review. For each item, state one of three:
 
-- 수용 — 고친다
-- 반박 — 왜 문제가 아닌지 근거를 적는다. 리뷰어가 코드를 잘못 읽었을 수도 있다
-- 보류 — 지금 고치지 않는 이유와 언제 다룰지를 적는다
+- Accept — fix it
+- Rebut — write why it is not a problem. The reviewer may have misread the code
+- Defer — write why it is not being fixed now, and when it will be
 
-"리뷰어가 맥락을 몰라서"라는 반박이 반복되면 그건 **코드나 문서에 그 맥락이 빠졌다는 신호**다.
+When "the reviewer lacked context" is the repeated rebuttal, that is **a signal the context is missing from the code or the document.**
 
-수정한 뒤에는 고친 부분만 다시 리뷰한다. 전체를 다시 돌리지 않는다.
+After fixing, re-review only what changed. Do not rerun the whole thing.
 
-## 하지 않는 것
+## Never do this
 
-- 포매팅·네이밍 지적으로 지면 채우기. 린터가 할 일이다
-- 이번 변경과 무관한 기존 코드 지적하기 — 발견하면 목록으로 따로 알린다
-- 막음 항목을 남긴 채 PR 올리기
+- Filling the page with formatting and naming notes. That is the linter's job
+- Flagging existing code unrelated to this change — if you find some, report it as a separate list
+- Opening the PR with a blocking finding left standing

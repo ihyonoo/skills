@@ -1,87 +1,99 @@
-# 이 레포의 스킬 작성 규약
+# Skill authoring rules for this repo
 
-## 구조
+## Structure
 
 ```
-skills/<name>/SKILL.md          필수. 500단어 상한(예외는 아래)
-skills/<name>/references/*.md   본문에서 넘치는 것. 필요할 때만 읽힘
+skills/<name>/SKILL.md          Required. 1000-word limit (exceptions below)
+skills/<name>/references/*.md   What overflows the body. Loaded only when needed
 ```
 
-`SKILL.md`가 500단어를 넘으면 잘라서 `references/`로 뺀다. 원칙·판단 기준은 본문에, 긴 예시·템플릿·체크리스트는 참조 파일에 둔다. 절차가 복잡한 것 자체는 문제가 아니다. 복잡한 절차가 **항상** 로드되는 것이 문제다.
+When `SKILL.md` exceeds 1000 words, cut it and move the excess into `references/`. Principles and judgment criteria go in the body; long examples, templates, and checklists go in reference files. A complex procedure is not the problem. A complex procedure that loads **every time** is the problem.
 
-### 상한 예외
+### Limit exceptions
 
-**작업 종류에 따라 읽을 참조 파일이 갈리는 라우팅 스킬**만 예외를 받는다. 분기 조건과 라우팅표가 본문에 있어야 어느 참조를 읽을지 고를 수 있고, 그건 참조 파일로 뺄 수 없기 때문이다.
+Only **routing skills, where the reference files to read depend on the kind of work**, get an exception. The branch conditions and the routing table must be in the body to pick which reference to read, and that cannot be moved into a reference file.
 
-**규칙이 많은 것은 예외 사유가 아니다.** 그건 `references/`로 뺀다.
+**Having many rules is not grounds for an exception.** Move those into `references/`.
 
-예외는 `scripts/check-skills.sh`의 `skill_word_limit()`에 스킬 이름을 적어서 준다. 스크립트를 고쳐야 하므로 예외가 조용히 늘지 않는다.
+Grant an exception by naming the skill in `skill_word_limit()` in `scripts/check-skills.sh`. Editing the script is required, so exceptions do not grow quietly.
 
-현재 예외: `frontend-design` (1000단어)
+Current exception: `frontend-design` (2000 words).
 
 ## frontmatter
 
-`name`, `description` 두 개만 쓴다. 선택적으로 `argument-hint`.
+Use exactly two fields: `name` and `description`. Optionally `argument-hint`.
 
-**description은 트리거 명세다. 워크플로 요약이 아니다.** description이 절차를 요약하면 모델이 본문을 읽지 않고 description만 따라간다(superpowers에서 실측으로 확인된 현상).
+**The description is a trigger spec, not a workflow summary.** When a description summarizes the procedure, the model follows the description and never reads the body (observed and measured in superpowers).
 
-형식: `<무엇을 한다 한 문장>. <언제 쓰는지 트리거 나열>`
+Format: `<one sentence on what it does>. <list of when to use it>`
 
-트리거는 사용자가 실제로 쓸 한국어 표현을 포함한다. 분기 하나당 트리거 하나 — 동의어를 늘어놓지 않는다.
+**Write descriptions in Korean.** Triggers must contain the Korean phrases the user actually says. One trigger per branch — do not pile up synonyms.
 
-## 본문
+## Body
 
-- 한국어. 격식체 반말(`~한다`)
-- 모든 스킬은 모델이 자동 호출할 수 있다. `disable-model-invocation`은 쓰지 않는다
-- 오케스트레이터 스킬의 1단계는 **규모 판정 + 사용자 확인**이다. 오발동해도 비용이 질문 하나로 끝난다
-- 상황에 안 맞으면 빠지는 조건을 한 줄 넣는다
+- English. Imperative and direct
+- Every skill can be invoked by the model. Do not use `disable-model-invocation`
+- Step 1 of an orchestrator skill is **scope assessment plus user confirmation**. A false trigger then costs one question
+- Include one line stating the condition under which the skill bows out
 
-## 문장 형식은 실패 유형에 맞춘다
+## Match sentence form to the failure mode
 
-- **규율 위반**(하지 말아야 할 걸 함) → 금지문. 예외 조항을 달지 않는다. "~하지 않는다"에 "단, 중요하면"을 붙이는 순간 협상이 다시 열린다
-- **산출물 형태 오류**(형식이 틀림) → 긍정형 레시피. 무엇을 하라고 적는다
+- **Discipline failures** (doing what must not be done) → prohibitions. Attach no exception clause. The moment "do not X" gains "unless it matters," the negotiation reopens
+- **Output-shape failures** (wrong format) → positive recipes. State what to do
 
-## 스킬 간 연결
+Write prohibitions as `Do not` or `Never`. Do not soften them into `avoid`, `try not to`, or `should not`.
 
-`@` 임포트를 쓰지 않는다. 즉시 강제 로드되어 컨텍스트를 태운다.
+## Connecting skills
 
-이름으로 부른다: `delegation 스킬로 위임한다`
+Do not use `@` imports. They force an immediate load and burn context.
 
-단방향 파이프라인 호출은 허용한다(`design` → `prd` → `trd` → `implement`). **순환 호출을 만들지 않는다.**
+Call skills by name: `delegate with the delegation skill`.
 
-양쪽이 공통으로 쓰는 로직은 프리미티브 스킬로 뽑아 각자 그걸 부르게 한다.
+One-directional pipeline calls are allowed (`design` → `prd` → `trd` → `implement`). **Never create a cycle.**
 
-## 서브에이전트에 넘길 때
+When two skills share logic, extract it into a primitive skill and have each call that.
 
-대화 히스토리를 붙여넣지 않는다. 파일 경로로 넘기고 파일로 받는다.
+## Handing work to subagents
 
-## 하네스 중립
+Do not paste conversation history. Pass a file path and receive a file back.
 
-이 레포의 스킬은 Claude Code(`~/.claude/skills`)와 Codex(`~/.codex/skills`)가 **같은 파일을 공유**한다. 양쪽 다 frontmatter는 `name`/`description` 두 개만 읽으므로 형식은 그대로 호환된다.
+## Harness neutrality
 
-특정 하네스에만 있는 것을 본문에 적지 않는다.
+Skills in this repo are **shared as the same files** by Claude Code (`~/.claude/skills`) and Codex (`~/.codex/skills`). Both read only `name` and `description` from frontmatter, so the format stays compatible.
 
-- 툴 이름 대신 **행동**을 쓴다 — `AskUserQuestion으로 묻는다`(X) → `선택지 형태로 묻는다`(O)
-- 모델은 **티어**로 적는다 — 소형·고속 / 표준 / 최상위 추론. 구체적 모델명은 괄호 예시로만
-- 하네스 전용 슬래시 명령을 지시하지 않는다 — `지금 실행 중인 에이전트가 제공하는 <기능>을 쓴다`로 서술
-- 커밋·PR에 `Co-Authored-By` 서명과 AI 생성 표기를 넣지 않는다
+Do not write harness-specific things in the body.
 
-분기 문구(`Claude Code에서는 ~, Codex에서는 ~`)를 본문에 흩뿌리지 않는다. 행동으로 서술하면 분기가 애초에 필요 없고 분량도 줄어든다.
+- Write **behavior** instead of tool names — `ask with AskUserQuestion` (X) → `ask as a set of options` (O)
+- Write models as **tiers** — small and fast / standard / top-tier reasoning. Name specific models only as parenthetical examples
+- Do not instruct harness-specific slash commands — phrase it as `use the <capability> the running agent provides`
+- Do not put `Co-Authored-By` signatures or AI-generated markers in commits or PRs
 
-하네스별 경로나 도구 이름을 꼭 적어야 하면 `references/`로 뺀다. superpowers도 스킬 14개 중 3개에서만 하네스 이름을 본문에 두고, 나머지 상세는 `references/codex-tools.md` 같은 파일로 분리한다.
+Do not scatter branching phrases (`in Claude Code do X, in Codex do Y`) through the body. Describing behavior removes the need to branch and cuts length.
 
-## 전역 지침
+When a harness-specific path or tool name must be written down, move it into `references/`. Even superpowers names a harness in the body of only 3 of its 14 skills and splits the rest into files like `references/codex-tools.md`.
 
-`global-instructions.md`가 원본이고, `~/.claude/CLAUDE.md`와 `~/.codex/AGENTS.md`가 이 파일을 심볼릭 링크한다. **고칠 때는 반드시 원본을 고친다.**
+## Global instructions
 
-본문에 특정 에이전트 이름을 쓰지 않는다 — `Claude가 대신 머지하지 않는다`(X) → `에이전트가 대신 머지하지 않는다`(O).
+`global-instructions.md` is the original; `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` symlink to it. **Always edit the original.**
 
-이 규약 문서는 `AGENTS.md`가 원본이고 `CLAUDE.md`가 그것을 링크한다. `init` 스킬이 프로젝트에 적용하는 방향과 같다 — 어느 에이전트로 작업하든 같은 규약을 읽는다.
+Do not name a specific agent in the body — `Claude does not merge on your behalf` (X) → `the agent does not merge on your behalf` (O).
 
-## 스킬을 고친 뒤
+For this rules document, `AGENTS.md` is the original and `CLAUDE.md` links to it. This matches the direction the `init` skill applies to projects — whichever agent does the work reads the same rules.
 
-`scripts/check-skills.sh` — 이 문서의 규약 중 기계로 확인되는 것을 검사한다. frontmatter 필드, 본문 단어 수, `@` 임포트, 참조 파일 존재, README 등재. FAIL이 남으면 고친다.
+## Language
 
-`scripts/link.sh` — 설치된 하네스의 스킬 디렉터리마다 심볼릭 링크를 건다. 스킬을 추가하거나 이름을 바꾸면 다시 실행한다. 심볼릭 링크가 아닌 기존 항목은 건드리지 않고, 원본이 없어진 이 레포의 링크는 정리한다.
+Write skill bodies, reference files, `global-instructions.md`, this document, and everything under `docs/` in English.
 
-스킬을 추가했으면 README의 스킬 표에도 넣는다.
+Keep these in Korean:
+
+- **`description` in frontmatter.** It is the trigger and must match what the user says
+- **`README.md`**, and PR bodies and commit messages. People read these
+- **Korean examples embedded in the body.** Korean marketing-copy tells, commit message examples, trigger phrases. These are rules about Korean output, so English examples would break them
+
+## After editing a skill
+
+`scripts/check-skills.sh` — checks the machine-verifiable parts of these rules: frontmatter fields, body word count, `@` imports, reference file existence, README listing. Fix any FAIL.
+
+`scripts/link.sh` — creates a symlink in each installed harness's skill directory. Run it again after adding or renaming a skill. It leaves non-symlink entries alone and clears this repo's links whose source is gone.
+
+After adding a skill, add it to the skill table in the README.

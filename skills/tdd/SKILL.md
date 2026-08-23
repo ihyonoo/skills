@@ -3,59 +3,59 @@ name: tdd
 description: 테스트를 먼저 쓰고 구현한다. 새 기능을 만들 때, 버그를 고칠 때, 리팩터링할 때 사용한다.
 ---
 
-**실패하는 테스트 없이 구현 코드를 쓰지 않는다.** 먼저 써버렸으면 지우고 다시 시작한다. 참고용으로 남겨두거나 보면서 테스트를 쓰지 않는다.
+**Do not write implementation code without a failing test.** If you already wrote it, delete it and start over. Do not keep it for reference and do not write the test while looking at it.
 
 ## RED
 
-테스트를 쓰고 **실행해서 실패를 눈으로 본다.**
+Write the test and **run it to see it fail with your own eyes.**
 
-실패 메시지를 읽는다. 예상과 다른 이유로 실패했다면 테스트가 틀린 것이다. 고치고 다시 실행한다.
+Read the failure message. If it failed for a different reason than expected, the test is wrong. Fix it and run again.
 
-실행하지 않고 넘어가지 않는다. 실패를 확인하지 않은 테스트는 통과해도 아무것도 증명하지 못한다.
+Do not skip the run. A test whose failure you never observed proves nothing when it passes.
 
 ## GREEN
 
-통과시키는 **최소** 구현을 쓴다. 앞으로 필요할 것 같은 것을 미리 넣지 않는다.
+Write the **minimum** implementation that passes. Do not add what you think will be needed later.
 
 ## REFACTOR
 
-테스트를 통과시킨 채로 정리한다. 중복 제거, 이름 정리, 구조 개선. 이 단계에서 동작을 바꾸지 않는다.
+Clean up while the test stays green. Remove duplication, fix names, improve structure. Do not change behavior in this step.
 
-## 버그를 고칠 때
+## Fixing a bug
 
-버그를 재현하는 테스트를 먼저 쓴다. 그 테스트가 **실패하는 것을 확인한 뒤** 고친다. 통과하면 그 테스트가 회귀 테스트로 남는다.
+Write a test that reproduces the bug first. **Confirm that test fails**, then fix. Once it passes, it stays as the regression test.
 
-원인을 모르면 root-cause 스킬을 먼저 돌린다.
+If you do not know the cause, run the root-cause skill first.
 
-## 리팩터링할 때
+## Refactoring
 
-동작을 바꾸지 않는 변경이므로 새 테스트를 먼저 쓰지 않는다. 대신 **고칠 범위를 지금 테스트가 덮고 있는지 확인하는 것으로 시작한다.**
+Refactoring does not change behavior, so do not write a new test first. Instead, **start by checking whether the current tests cover the area you are about to change.**
 
-- **덮고 있다** — 그 테스트를 통과시킨 채로 고친다. 중간에 빨간불이 나면 동작이 바뀐 것이다
-- **덮고 있지 않다** — 현재 동작을 그대로 기록하는 테스트를 먼저 쓴다. 옳은 동작이 아니라 **지금 동작**을 쓴다. 이것이 전후를 비교하는 기준이 된다
+- **Covered** — change it while keeping those tests green. A red light midway means behavior changed
+- **Not covered** — first write tests that record the current behavior. Write **what it does now**, not what it should do. This becomes the before-and-after baseline
 
-리팩터링 중에 테스트를 고쳐야 통과한다면 그건 리팩터링이 아니라 동작 변경이다. 멈추고 RED로 돌아간다.
+If a test has to be edited to pass during refactoring, that is a behavior change, not a refactor. Stop and go back to RED.
 
-## 어디까지 테스트하는가
+## How far to test
 
-단위 테스트만으로 충분하다고 보지 않는 경우가 있다.
+Unit tests alone are not enough in some cases.
 
-- 실사용자 대상으로 배포되어 있거나 운영 인프라·CI가 있는 프로젝트
-- 여러 모듈이 이미 서로 연동해 동작하고 있는 상태
+- The project is deployed to real users, or has production infrastructure or CI
+- Several modules already work together
 
-이럴 때는 연동 지점(API 엔드포인트, DB 상태 전이, 외부 프로세스 호출)에 대한 통합 테스트도 함께 쓴다. **애매하면 통합 테스트를 포함하는 쪽으로 판단한다.**
+In those cases, also write integration tests for the connection points (API endpoints, DB state transitions, external process calls). **When it is unclear, decide in favor of including the integration test.**
 
-## 좋은 테스트
+## A good test
 
-- 이름이 무엇을 검증하는지 말한다
-- 하나의 동작만 검증한다
-- 구현 세부가 아니라 관찰 가능한 동작을 본다. 내부 함수 호출 횟수를 세지 않는다
-- 실패했을 때 어디가 왜 틀렸는지 메시지만 보고 안다
+- Its name says what it verifies
+- It verifies one behavior
+- It watches observable behavior, not implementation detail. It does not count internal function calls
+- On failure, the message alone tells you what is wrong and where
 
-## 건너뛰려면 확인받는다
+## Confirm before skipping
 
-일회성 프로토타입, 생성된 코드, 설정 파일은 예외가 될 수 있다. 다만 **판단을 혼자 내리지 않고 먼저 사용자에게 확인받는다.**
+One-off prototypes, generated code, and config files can be exceptions. But **do not make that call alone — confirm with the user first.**
 
-예외 중 하나는 미리 정해져 있다 — frontend-design의 변형 단계에서 만드는 시안은 버릴 코드이므로 테스트를 쓰지 않고, 따로 확인받지도 않는다.
+One exception is fixed in advance: the variants built during the frontend-design variant stage are throwaway code, so they get no tests and need no confirmation.
 
-코드를 쓰는 작업이 아니면(문서 작성, 설정값 조회 같은) 한 줄로 말하고 빠진다.
+If the work is not writing code (writing documents, looking up a config value), say so in one line and bow out.

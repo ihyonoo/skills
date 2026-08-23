@@ -1,71 +1,72 @@
-# 서브에이전트 프롬프트 템플릿
+# Subagent prompt templates
 
-`<...>`를 채워서 그대로 넘긴다. 두 축은 서로 독립이므로 병렬로 띄운다.
+Fill in `<...>` and pass them through as is. The two axes are independent, so launch them in parallel.
 
-두 프롬프트 모두 **작성 의도를 넣지 않는다.** diff와 기준 파일 경로만 준다.
-
----
-
-## 정확성 축
-
-```
-`<레포 경로>`의 `<base>...<head>` 변경을 리뷰한다. 결함만 찾는다.
-
-변경 범위를 먼저 확인해라:
-  git -C <레포 경로> diff <base>...<head>
-
-다음을 순서대로 본다. 각 항목마다 해당 없으면 "해당 없음"으로 넘어간다.
-
-1. 경계 조건 — 빈 입력, 0, 최대값, 단일 원소, 중복
-2. 에러 경로 — 실패 시 자원 정리, 부분 상태 잔존, 되감기 누락
-3. 신뢰 경계 — 외부 입력이 검증 없이 안쪽으로 흐르는 지점
-4. 순서·동시성 — 두 번 실행되거나 순서가 바뀌면 깨지는 곳
-5. 조건부 부수효과 — 특정 분기에서만 일어나는 쓰기·삭제·전송
-
-각 지적에 반드시 포함할 것:
-- 파일 경로와 줄 번호
-- 그 결함이 실제로 터지는 구체적 입력 또는 상태
-- 등급: 막음 / 고치면 좋음 / 의견
-
-근거 규칙:
-- "괜찮아 보인다"는 결과가 아니다. 안전하다고 판단했으면 그 근거가 되는 줄을 인용해라
-- "아마 처리됐을 것", "테스트가 있을 것"으로 넘어가지 마라. 확인하거나 "미확인"으로 적어라
-- 추측으로 결함을 만들지 마라. 재현 경로를 못 쓰겠으면 그 항목은 빼라
-
-포매팅·네이밍·취향은 지적하지 않는다.
-
-결과를 `<출력 경로>`에 마크다운으로 써라. 등급이 높은 순으로 정렬한다.
-최종 응답에는 파일 경로와 등급별 건수만 남겨라.
-```
+Neither prompt carries **the author's intent.** Give only the diff and the paths to the standards.
 
 ---
 
-## 정합성 축
+## Correctness axis
 
 ```
-`<레포 경로>`의 `<base>...<head>` 변경이 확정된 문서와 레포 규약에 맞는지 검증한다.
+Review the `<base>...<head>` change in `<repo path>`. Look only for defects.
 
-읽을 것:
-- 변경: git -C <레포 경로> diff <base>...<head>
-- 요구사항 문서: <문서 경로>
-- 지침 파일: <레포 경로>/AGENTS.md (또는 CLAUDE.md)
-- 전역 지침: <전역 지침 경로>
+Start by checking the change:
+  git -C <repo path> diff <base>...<head>
 
-검증할 것:
+Work through the following in order. Write "not applicable" and move on when an item does not apply.
 
-1. 요구사항 대응 — 문서의 요구사항 ID를 하나씩 짚어 코드에 대응이 있는지 확인한다.
-   대응이 없으면 그 ID를 적는다
-2. 범위 초과 — 문서에 없는데 들어온 기능·설정·추상화
-3. 규약 위반 — 지침 파일과 전역 지침에 어긋나는 지점. 어느 규칙의 어느 문장인지 인용한다
-4. 새로 생긴 미사용 — 이번 변경으로 참조가 끊긴 import·변수·함수.
-   변경 전부터 미사용이던 것은 제외한다
+1. Boundary conditions — empty input, zero, maximum, a single element, duplicates
+2. Error paths — resource cleanup on failure, leftover partial state, missing rollback
+3. Trust boundaries — points where external input flows inward unvalidated
+4. Order and concurrency — places that break when run twice or reordered
+5. Conditional side effects — writes, deletes, or sends that happen only in a specific branch
 
-각 지적에 파일 경로, 줄 번호, 근거(문서·규약의 해당 문장)를 붙인다.
-근거를 인용할 수 없으면 그 항목은 빼라.
+Every finding must include:
+- File path and line number
+- The concrete input or state that actually triggers the defect
+- Grade: blocking / worth fixing / opinion
 
-코드 결함은 보지 않는다. 다른 리뷰어가 맡는다.
+Evidence rules:
+- "Looks fine" is not a result. If you judged it safe, quote the line that makes it safe
+- Do not wave things through with "it is probably handled" or "there is probably a test". Confirm it, or write "unverified"
+- Do not invent defects from speculation. If you cannot write the path that reproduces it, drop the item
 
-결과를 `<출력 경로>`에 마크다운으로 써라.
-대응이 없는 요구사항 ID 목록을 맨 위에 둔다.
-최종 응답에는 파일 경로와 미대응 ID 개수만 남겨라.
+Do not comment on formatting, naming, or taste.
+
+Write the result to `<output path>` as markdown, sorted by grade, most severe first.
+Leave only the file path and the counts per grade in your final response.
+```
+
+---
+
+## Consistency axis
+
+```
+Verify that the `<base>...<head>` change in `<repo path>` matches the settled documents and the repo rules.
+
+Read:
+- The change: git -C <repo path> diff <base>...<head>
+- Requirements document: <document path>
+- Instruction file: <repo path>/AGENTS.md (or CLAUDE.md)
+- Global instructions: <global instructions path>
+
+Verify:
+
+1. Requirement coverage — walk each requirement ID in the document and confirm
+   corresponding code exists. Record any ID with no correspondence
+2. Scope creep — features, settings, or abstractions that arrived without being in the document
+3. Rule violations — points that conflict with the instruction file or the global
+   instructions. Quote which rule and which sentence
+4. Newly unused — imports, variables, and functions this change cut the references to.
+   Exclude anything already unused before the change
+
+Attach a file path, a line number, and evidence (the relevant sentence from the document
+or the rules) to every finding. If you cannot quote the evidence, drop the item.
+
+Do not look for code defects. Another reviewer handles those.
+
+Write the result to `<output path>` as markdown.
+Put the list of uncovered requirement IDs at the top.
+Leave only the file path and the count of uncovered IDs in your final response.
 ```

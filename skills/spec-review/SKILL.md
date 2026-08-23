@@ -3,49 +3,49 @@ name: spec-review
 description: 설계 문서·PRD·TRD를 리뷰해 빠진 결정과 실행 불가능한 부분을 찾는다. 문서 초안을 다 쓴 직후, 승인 요청 전, 사용자가 "리뷰해줘" "이거 괜찮은지 봐줘"라고 할 때 사용한다.
 ---
 
-## 리뷰어에게 문서만 준다
+## Give the reviewer the document and nothing else
 
-리뷰를 서브에이전트에 위임할 때 **작성 과정의 맥락을 넘기지 않는다.** 문서 경로만 준다.
+When delegating the review to a subagent, **do not pass the context of how it was written.** Pass the document path only.
 
-문서가 자족적인지가 리뷰의 핵심 대상이다. 작성자만 아는 배경을 리뷰어에게 주면 그 문서는 영원히 자족적으로 보인다.
+Whether the document stands on its own is the point of the review. Feed the reviewer background only the author knows and the document will look self-sufficient forever.
 
-## 두 축으로 나눠 본다
+## Split into two axes
 
-독립적이므로 병렬로 돌린다(위임 판단은 delegation 스킬). 프롬프트는 `references/review-prompts.md`.
+They are independent, so run them in parallel (use the delegation skill to decide). Prompts are in `references/review-prompts.md`.
 
-**완결성** — 문서 자체가 온전한가
-- 결정했어야 하는데 안 한 것
-- 여러 해석이 가능한 문장
-- 측정할 수 없는 성공 기준("빠르게", "안정적으로")
-- 근거 없이 등장한 숫자
-- 명시되지 않은 비목표
+**Completeness** — is the document itself whole
+- Decisions that should have been made and were not
+- Sentences that admit several readings
+- Success criteria that cannot be measured ("fast", "stable")
+- Numbers that appear without grounds
+- Non-goals left unstated
 
-**실행가능성** — 이대로 만들 수 있는가
-- 이 문서만 보고 구현을 시작할 수 있는가
-- 드러나지 않은 의존(외부 API, 데이터, 권한, 다른 팀)
-- 주어진 제약 안에서 비현실적인 범위
-- 기존 코드·구조와 충돌하는 지점
+**Feasibility** — can this be built as written
+- Can implementation start from this document alone
+- Hidden dependencies (external APIs, data, permissions, other teams)
+- Scope that is unrealistic inside the stated constraints
+- Points that conflict with existing code and structure
 
-## 등급을 매긴다
+## Assign a grade
 
-- **막음** — 이대로 진행하면 구현 중에 반드시 멈춘다
-- **고치면 좋음** — 진행은 되지만 나중에 비용이 된다
-- **의견** — 취향 또는 대안 제시
+- **Blocking** — proceeding as written will stall implementation
+- **Worth fixing** — it proceeds, but it costs later
+- **Opinion** — taste, or an alternative
 
-막음이 하나라도 있으면 승인으로 넘어가지 않는다.
+If even one blocking finding stands, do not move to approval.
 
-## 결과를 다룬다
+## Handle the results
 
-리뷰 결과에 아첨하지 않는다. 각 항목에 대해 셋 중 하나를 명시한다.
+Do not flatter the review. For each item, state one of three:
 
-- 수용 — 문서를 고친다
-- 반박 — 왜 문제가 아닌지 근거를 적는다. 리뷰어가 문서를 잘못 읽었을 수도 있다
-- 보류 — 지금 결정할 수 없는 이유와 언제 결정할지를 적는다
+- Accept — fix the document
+- Rebut — write why it is not a problem. The reviewer may have misread the document
+- Defer — write why it cannot be decided now, and when it will be
 
-반박은 정당하다. 리뷰어는 문서만 봤고 나는 더 안다. 다만 "리뷰어가 맥락을 몰라서"라는 반박이 반복되면 그건 **문서에 그 맥락이 빠졌다는 신호**다.
+Rebuttals are legitimate. The reviewer saw only the document; you know more. But when "the reviewer lacked context" is the repeated rebuttal, that is **a signal the context is missing from the document.**
 
-## 하지 않는 것
+## Never do this
 
-- 문서를 쓴 사람이 그대로 리뷰하기 — 같은 사각지대를 공유한다
-- 오탈자·문체 지적으로 지면 채우기. 그건 리뷰가 아니다
-- 리뷰 없이 승인 요청으로 넘어가기
+- Letting the author review their own document — they share the same blind spots
+- Filling the page with typo and style notes. That is not a review
+- Moving to an approval request without a review
