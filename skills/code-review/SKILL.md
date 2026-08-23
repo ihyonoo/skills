@@ -15,6 +15,8 @@ Whether the code explains itself is the point of the review. A reviewer who hear
 
 They are independent, so run them in parallel (use the delegation skill to decide). Prompts are in `references/review-prompts.md`.
 
+One exception: when the chosen reviewer is an external agent from another vendor, the two axes merge into a single call. The delegation skill defines that branch.
+
 **Correctness** — does this code do what it intends
 
 - Boundary conditions — empty input, zero, maximum, a single element
