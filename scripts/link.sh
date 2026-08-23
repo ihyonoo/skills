@@ -17,13 +17,17 @@ GUIDE_DESTS=("$HOME/.claude/CLAUDE.md" "$HOME/.codex/AGENTS.md")
 fail=0
 
 link_one() {  # $1=원본 $2=링크경로
-  local src="$1" dst="$2" name; name="$(basename "$dst")"
+  # 원본 경로의 후행 슬래시를 떼어 readlink 결과와 그대로 비교할 수 있게 한다
+  local src="${1%/}" dst="$2" name; name="$(basename "$dst")"
   if [ -e "$dst" ] && [ ! -L "$dst" ]; then
     echo "  skip  $name (심볼릭 링크가 아닌 항목이 이미 있음)"
+    # 쓰기 모드에서는 남의 파일을 건드리지 않지만, 검증 모드에서는 미설치이므로 실패다
+    if [ "$CHECK_ONLY" -eq 1 ]; then fail=1; fi
     return
   fi
   [ "$CHECK_ONLY" -eq 1 ] || ln -sfn "$src" "$dst"
-  if [ -e "$dst" ]; then
+  # 존재만 보면 엉뚱한 대상을 가리키는 링크도 통과하므로 대상까지 비교한다
+  if [ -e "$dst" ] && [ "$(readlink "$dst" 2>/dev/null)" = "$src" ]; then
     echo "  ok    $name"
   else
     echo "  BROKEN $name → $(readlink "$dst" 2>/dev/null)"
