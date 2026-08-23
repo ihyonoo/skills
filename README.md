@@ -49,7 +49,7 @@
 | `implement` | 확정 문서를 열어 읽고 요구사항 ID 단위로 구현. 끝나면 대조 |
 | `tdd` | RED-GREEN-REFACTOR |
 | `root-cause` | 재현 → 가설 → 반증 → 왜 세 번 |
-| `frontend-design` | 구조가 다른 변형 2~3개 제시. AI 티 패턴 목록 포함 |
+| `frontend-design` | 다이얼 3개로 방향 확정 후 구조가 다른 변형 2~3개 제시. AI 티 패턴과 마감 체크리스트 포함 |
 
 ### Git
 
@@ -92,4 +92,8 @@ design ─┬─ (S) 문서 없이 ───────────┐
 
 작성 규약은 [AGENTS.md](./AGENTS.md) 참고.
 
-경량성은 스킬 개수가 아니라 **로드 시점**으로 확보한다. 상시 비용은 description뿐이고 본문은 발동할 때만 들어온다. 그래서 스킬은 많아도 되고, 필요하면 절차가 복잡해도 된다 — 대신 `SKILL.md`는 500단어를 넘기지 않고 넘치는 것은 `references/`로 뺀다.
+경량성은 스킬 개수가 아니라 **로드 시점**으로 확보한다. 상시 비용은 description뿐이고 본문은 발동할 때만 들어온다. 그래서 스킬은 많아도 되고, 필요하면 절차가 복잡해도 된다 — 대신 `SKILL.md`는 500단어를 넘기지 않고 넘치는 것은 `references/`로 뺀다. 작업 종류에 따라 읽을 참조 파일이 갈리는 라우팅 스킬만 예외를 받는다(현재 `frontend-design` 하나).
+
+## 출처
+
+`frontend-design`의 디자인 규칙 일부는 [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) (MIT)에서 가져와 한국어로 재작성하고 이 저장소 범위에 맞게 압축했다.
