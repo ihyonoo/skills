@@ -6,6 +6,16 @@ set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WORD_LIMIT=500
 
+# 본문 상한 예외
+# 작업 종류에 따라 읽을 참조 파일이 갈리는 라우팅 스킬만 대상이다
+# 규칙이 많다는 것은 예외 사유가 아니다 - 그건 references/로 뺀다
+skill_word_limit() {  # $1=스킬 이름
+  case "$1" in
+    frontend-design) echo 1000 ;;
+    *) echo "$WORD_LIMIT" ;;
+  esac
+}
+
 fail=0
 warn=0
 
@@ -69,8 +79,9 @@ for dir in "$REPO"/skills/*/; do
 
   # 본문 단어 수. frontmatter를 뺀 나머지만 센다
   words="$(awk 'NR==1&&$0=="---"{i=1;next} i&&$0=="---"{i=0;next} !i' "$file" | wc -w | tr -d ' ')"
-  if [ "$words" -gt "$WORD_LIMIT" ]; then
-    report FAIL "$name" "본문 ${words}단어 (상한 ${WORD_LIMIT}). references/로 뺄 것"
+  limit="$(skill_word_limit "$name")"
+  if [ "$words" -gt "$limit" ]; then
+    report FAIL "$name" "본문 ${words}단어 (상한 ${limit}). references/로 뺄 것"
   fi
 
   # @ 임포트는 즉시 강제 로드되어 컨텍스트를 태운다
