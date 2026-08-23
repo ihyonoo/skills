@@ -20,9 +20,9 @@ argument-hint: [만들려는 것]
 
 **S** — 설계 문서 없음. 무엇을 왜 어떻게 고칠지 3줄 요약 → 승인 → 구현.
 
-**M** — deep-interview 1~2라운드 → 설계 메모 1페이지 → 승인 → implement.
+**M** — deep-interview(대개 1~2라운드에 frontier가 빈다) → 설계 메모 1페이지 → spec-review → 승인 → implement.
 
-**L** — deep-interview를 frontier가 빌 때까지 → 설계 문서 → 리뷰 → 승인 → prd → trd → implement.
+**L** — deep-interview를 frontier가 빌 때까지 → 설계 문서 → spec-review → 승인 → prd → trd → implement.
 
 작업 도중 숨어 있던 복잡도가 드러나면 **단계를 올린다.** 멈추고 그 사실을 말한 뒤 올린다. 내려가지는 않는다.
 
