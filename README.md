@@ -38,7 +38,7 @@
 
 | 스킬 | 역할 |
 |---|---|
-| `design` | 규모(S/M/L) 판정 → 인터뷰 → `docs/design/` |
+| `design` | 규모(S/M/L) 판정 → 인터뷰 → M이면 `docs/design/`, L이면 prd·trd로 |
 | `prd` | 무엇을 왜 만드는지 → `docs/prd/` |
 | `trd` | 어떻게 만드는지 → `docs/trd/` |
 
