@@ -3,9 +3,11 @@ name: code-review
 description: 코드 변경을 리뷰해 결함과 규약 위반을 찾는다. 구현이 끝났을 때, PR을 올리기 전, 사용자가 "코드 리뷰해줘" "이 변경 봐줘" "괜찮은지 봐줘"라고 할 때 사용한다. 문서·PRD·TRD 리뷰는 spec-review를 쓴다.
 ---
 
-## Give the reviewer the change and the standards, nothing else
+## Delegate the review. Never review your own code
 
-When delegating the review to a subagent, **do not pass why you wrote it that way.** Pass the diff range, the relevant document path, and the instruction file path.
+Hand the review to a subagent that did not write this code. The context that produced the bug is the same context that hides it.
+
+Give the reviewer the change and the standards, nothing else. **Do not pass why you wrote it that way.** Pass the diff range, the relevant document path, and the instruction file path.
 
 Whether the code explains itself is the point of the review. A reviewer who hears the author's excuses first will accept that code forever.
 
@@ -56,6 +58,7 @@ After fixing, re-review only what changed. Do not rerun the whole thing.
 
 ## Never do this
 
+- Letting the author review their own code — the same context that produced the bug hides it
 - Filling the page with formatting and naming notes. That is the linter's job
 - Flagging existing code unrelated to this change — if you find some, report it as a separate list
 - Opening the PR with a blocking finding left standing
