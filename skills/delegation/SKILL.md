@@ -27,14 +27,22 @@ Map the models the running agent offers onto these tiers (in Claude Code, haiku 
 
 When unclear, use standard. If you will trust the result and move on without checking, go up one tier.
 
+Review work has a second axis, and it is not capability. A reviewer from the same vendor shares your blind spots — it reads the same idioms as safe and the same designs as natural. Isolating the context is not the same as isolating the model.
+
+So an agent from a different vendor is a valid model choice for any review, at any tier. Offer it only when the environment actually provides one — `references/external-review.md` has the availability check and the call shapes.
+
 ## 3. Confirm
 
 Ask two things as a set of options, but **put your recommendation first and mark the label with (추천).**
 
 - Execution: direct / one subagent / N in parallel — write the time cost and context impact into each option
-- Model: recommended model first, the rest with their tradeoff ("faster but may miss things" / "more accurate but slower")
+- Model: recommended model first, the rest with their tradeoff ("faster but may miss things" / "more accurate but slower"). For a review, include the external agent as one option whenever it is available, with its own tradeoff — slower, and a separate usage limit. When the user picks it, ask a second question for the model. **The vendor name is not a model**
 
-Skip the question and just run the recommendation, then say so in one line, when: the user already specified the approach, the work is plainly a direct-handling job, another skill already fixed the execution mode (spec-review's two parallel axes, for example), or an interview round is in progress.
+Skip the execution question when: the user already specified the approach, the work is plainly a direct-handling job, another skill already fixed the execution mode (spec-review's two parallel axes, for example), or an interview round is in progress.
+
+Skip the model question when: the user already named a model, the work is handled directly, or an interview round is in progress. **A fixed execution mode does not fix the model** — when another skill pinned the axes, still ask which model runs them.
+
+When you skip, run the recommendation and say so in one line.
 
 ## 4. Write the prompt
 
