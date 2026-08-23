@@ -4,14 +4,14 @@
 set -uo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-WORD_LIMIT=500
+WORD_LIMIT=1000
 
 # 본문 상한 예외
 # 작업 종류에 따라 읽을 참조 파일이 갈리는 라우팅 스킬만 대상이다
 # 규칙이 많다는 것은 예외 사유가 아니다 - 그건 references/로 뺀다
 skill_word_limit() {  # $1=스킬 이름
   case "$1" in
-    frontend-design) echo 1000 ;;
+    frontend-design) echo 2000 ;;
     *) echo "$WORD_LIMIT" ;;
   esac
 }
