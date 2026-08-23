@@ -35,6 +35,29 @@ link_one() {  # $1=원본 $2=링크경로
   fi
 }
 
+prune_stale() {  # $1=대상 디렉터리. 원본이 없어진 이 레포의 링크를 지운다
+  local dest="$1" link target
+  for link in "$dest"/*; do
+    [ -L "$link" ] || continue
+    target="$(readlink "$link")"
+    # 이 레포를 가리키는 링크만 손댄다. 다른 출처의 링크는 남의 것이다
+    case "$target" in
+      "$REPO"/skills/*) ;;
+      *) continue ;;
+    esac
+    if [ -e "$target" ]; then
+      continue
+    fi
+    if [ "$CHECK_ONLY" -eq 1 ]; then
+      echo "  STALE $(basename "$link") (원본이 없어진 링크)"
+      fail=1
+    else
+      rm "$link"
+      echo "  prune $(basename "$link")"
+    fi
+  done
+}
+
 # 스킬
 for dest in "${SKILL_DESTS[@]}"; do
   if [ ! -d "$(dirname "$dest")" ]; then
@@ -46,6 +69,7 @@ for dest in "${SKILL_DESTS[@]}"; do
   for dir in "$REPO"/skills/*/; do
     link_one "$dir" "$dest/$(basename "$dir")"
   done
+  prune_stale "$dest"
 done
 
 # 전역 지침
