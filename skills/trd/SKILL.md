@@ -4,53 +4,53 @@ description: 기술 요구사항 문서를 작성한다. PRD가 확정된 뒤 �
 argument-hint: [기능 이름]
 ---
 
-**어떻게** 만드는지를 쓴다. 무엇을 왜 만드는지는 PRD에 있다.
+Write **how** it gets built. What and why are in the PRD.
 
-## 먼저 확인한다
+## Check first
 
-해당 PRD를 읽는다. 없으면 PRD부터 쓸지 물어본다. PRD 없이 TRD를 쓰면 무엇을 위한 설계인지 검증할 수 없다.
+Read the matching PRD. If there is none, ask whether to write the PRD first. Without a PRD there is no way to verify what the design is for.
 
-기존 코드 구조를 모르면 delegation 스킬로 탐색을 위임한 뒤 시작한다.
+If you do not know the existing code structure, delegate exploration with the delegation skill before starting.
 
-## 경로
+## Path
 
-`docs/trd/YYYY-MM-DD-<kebab-slug>.md` — PRD와 같은 slug를 쓴다.
+`docs/trd/YYYY-MM-DD-<kebab-slug>.md` — use the same slug as the PRD.
 
-## 구조
+## Structure
 
-**1. 개요**
-어떤 PRD의 어떤 요구사항을 다루는지. 접근 방식을 3~4줄로.
+**1. Overview**
+Which PRD and which of its requirements this covers. The approach in three or four lines.
 
-**2. 아키텍처**
-구성 요소와 그 사이의 흐름. 도식이 필요하면 넣되, 문단으로 설명해야 이해되는 도식이면 다시 그린다.
+**2. Architecture**
+The components and the flow between them. Add a diagram if it helps, but if the diagram needs a paragraph to be understood, redraw it.
 
-**3. 데이터 모델**
-스키마, 주요 필드, 관계, 인덱스. 기존 테이블 변경이면 마이그레이션 방향까지.
+**3. Data model**
+Schema, key fields, relationships, indexes. For changes to existing tables, include the migration direction.
 
-**4. 인터페이스**
-API 엔드포인트, 함수 시그니처, 이벤트. 요청·응답 형태와 에러 케이스. 시그니처까지가 상한이고 구현 본문은 쓰지 않는다.
+**4. Interfaces**
+API endpoints, function signatures, events. Request and response shapes, and error cases. Signatures are the ceiling — do not write implementation bodies.
 
-**5. 요구사항 매핑**
-PRD의 `R-n` 각각을 어느 구성 요소가 충족하는지 표로. **매핑되지 않은 요구가 남으면 설계가 덜 된 것이다.**
+**5. Requirement mapping**
+A table showing which component satisfies each `R-n` from the PRD. **An unmapped requirement means the design is not finished.**
 
-**6. 의존성**
-외부 서비스, 라이브러리, 인프라. 버전과 도입 이유. 각 항목에 검토한 대안과 그것을 고른 근거를 함께 적는다.
+**6. Dependencies**
+External services, libraries, infrastructure. Versions and why each was introduced. For each, record the alternatives considered and the reason for the choice.
 
-**7. 비기능 요건**
-성능 목표, 부하 가정, 보안·권한, 로깅·관측.
+**7. Non-functional requirements**
+Performance targets, load assumptions, security and permissions, logging and observability.
 
-**8. 테스트 전략**
-무엇을 단위로, 무엇을 통합으로 검증할지. PRD 성공 기준을 무엇으로 확인할지.
+**8. Test strategy**
+What gets verified by unit tests and what by integration tests. How the PRD's success criteria will be confirmed.
 
-**9. 위험**
-틀렸을 때 비용이 큰 가정과 대비책.
+**9. Risks**
+Assumptions that are expensive when wrong, and the countermeasures.
 
-## 작성 후
+## After writing
 
-spec-review를 반드시 거친다. 특히 요구사항 매핑에 구멍이 없는지 본다.
+Always run spec-review. Look especially for holes in the requirement mapping.
 
-승인되면 implement로 넘어간다. **구현은 이 문서를 실제로 열어서 읽는 것으로 시작한다.**
+Once approved, move to implement. **Implementation starts by actually opening and reading this document.**
 
-## 하지 않는 것
+## Never do this
 
-- PRD에 없는 기능을 TRD에서 추가하기. 필요하면 PRD를 고친다
+- Adding a feature in the TRD that is not in the PRD. Fix the PRD instead

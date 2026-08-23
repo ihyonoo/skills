@@ -3,53 +3,53 @@ name: delegation
 description: 무거운 작업을 서브에이전트에 넘길지, 병렬로 돌릴지, 어떤 모델을 쓸지 추천안과 함께 사용자에게 확인받는다. 탐색·리뷰·검증·조사처럼 도구 호출이 3회 이상 예상되는 작업을 시작하기 직전에 사용한다.
 ---
 
-판단을 먼저 세우고, 그 판단을 사용자에게 확인받는다. 질문만 던지고 사용자에게 고르라고 넘기지 않는다.
+Form the judgment first, then confirm that judgment with the user. Do not just throw questions and leave the choice to them.
 
-## 1. 먼저 판단한다
+## 1. Judge first
 
-| 상황 | 방식 |
+| Situation | Approach |
 |---|---|
-| 파일 1~2개 열기, grep 1~2회 | **직접 처리.** 서브에이전트 기동 비용이 더 크다 |
-| 3회 이상 쿼리가 필요한 코드베이스 탐색 | 서브에이전트 1개 |
-| 리뷰, 테스트·빌드 검증, 외부 문서 조사 | 서브에이전트 1개 |
-| 파일이 겹치지 않는 독립 도메인 2개 이상 | 병렬 N개 |
-| 파일 편집 자체, 커밋·푸시·브랜치 생성 | **직접 처리.** 위임하지 않는다 |
+| Opening one or two files, one or two greps | **Handle it directly.** Spinning up a subagent costs more |
+| Codebase exploration needing three or more queries | One subagent |
+| Review, test and build verification, external research | One subagent |
+| Two or more independent domains with no file overlap | N in parallel |
+| Editing files, committing, pushing, creating branches | **Handle it directly.** Never delegate these |
 
-## 2. 모델을 고른다
+## 2. Pick a model
 
-| 작업 성격 | 티어 |
+| Kind of work | Tier |
 |---|---|
-| 파일 수집, 목록화, 포맷 변환, 단순 요약 | 소형·고속 |
-| 코드베이스 탐색, 테스트 실행, 문서 초안, 일반 리뷰 | 표준 |
-| 아키텍처 판단, 어려운 디버깅, 최종 리뷰, 미묘한 트레이드오프 | 최상위 추론 |
+| Gathering files, listing, format conversion, plain summarization | Small and fast |
+| Codebase exploration, running tests, document drafts, ordinary review | Standard |
+| Architecture judgment, hard debugging, final review, subtle tradeoffs | Top-tier reasoning |
 
-지금 실행 중인 에이전트가 제공하는 모델을 이 티어에 매핑해 고른다(Claude Code라면 각각 haiku / sonnet / opus).
+Map the models the running agent offers onto these tiers (in Claude Code, haiku / sonnet / opus respectively).
 
-애매하면 표준. 결과를 그대로 믿고 다음 단계로 갈 작업이면 한 티어 올린다.
+When unclear, use standard. If you will trust the result and move on without checking, go up one tier.
 
-## 3. 확인받는다
+## 3. Confirm
 
-두 가지를 선택지 형태로 묻되, **내 추천을 첫 선택지에 두고 라벨에 (추천)을 붙인다.**
+Ask two things as a set of options, but **put your recommendation first and mark the label with (추천).**
 
-- 실행 방식: 직접 / 서브에이전트 1개 / 병렬 N개 — 각 선택지에 소요 시간과 컨텍스트 영향을 적는다
-- 모델: 추천 모델을 먼저, 나머지는 "더 빠르지만 놓칠 수 있음" / "더 정확하지만 느림" 식으로 트레이드오프를 적는다
+- Execution: direct / one subagent / N in parallel — write the time cost and context impact into each option
+- Model: recommended model first, the rest with their tradeoff ("faster but may miss things" / "more accurate but slower")
 
-다음 경우에는 묻지 않고 추천안대로 실행한 뒤 한 줄로 알린다 — 사용자가 이미 방식을 지정했을 때, 명백히 직접 처리할 일일 때, 다른 스킬이 실행 방식을 이미 정해뒀을 때(예: spec-review의 두 축 병렬), 인터뷰 라운드가 진행 중일 때.
+Skip the question and just run the recommendation, then say so in one line, when: the user already specified the approach, the work is plainly a direct-handling job, another skill already fixed the execution mode (spec-review's two parallel axes, for example), or an interview round is in progress.
 
-## 4. 프롬프트를 쓴다
+## 4. Write the prompt
 
-서브에이전트는 이 대화를 **전혀 모른다**. 목적·맥락·기대 산출 형식을 프롬프트 안에서 자족적으로 설명한다.
+The subagent knows **nothing** about this conversation. Explain the purpose, the context, and the expected output format self-sufficiently inside the prompt.
 
-**대화 히스토리를 붙여넣지 않는다.** 붙여넣은 내용과 에이전트가 출력한 내용은 남은 세션 내내 컨텍스트에 상주하고 매 턴 다시 읽힌다. 넘길 것이 있으면 파일로 쓰고 경로를 준다. 결과도 파일로 받는다.
+**Do not paste conversation history.** What you paste, and what the agent outputs, sit in context for the rest of the session and get re-read every turn. When something must be handed over, write it to a file and pass the path. Take the result back as a file too.
 
-산출 형식을 지정한다 — 분량 상한, 섹션 구성, 한국어 여부.
+Specify the output format — length cap, sections, and which language to write in.
 
-## 5. 실행하고 기다린다
+## 5. Run it and wait
 
-다음 작업이 결과에 의존하면 foreground, 아니면 background로 돌리고 다른 일을 계속한다. 독립적인 위임이 여럿이면 한 번에 병렬로 띄운다.
+If the next task depends on the result, run it in the foreground; otherwise run it in the background and keep working. When several independent delegations exist, launch them in parallel at once.
 
-background로 돌린 작업의 결과는 **완료 알림이 오기 전까지 추측하지 않는다.** 사용자가 물으면 아직 실행 중이라고 답한다.
+**Do not guess at the result of a backgrounded task before the completion notice arrives.** If the user asks, say it is still running.
 
-## 6. 결과를 검증한다
+## 6. Verify the result
 
-서브에이전트 보고를 액면 그대로 받지 않는다. 결론이 다음 단계를 좌우한다면 핵심 주장 한두 개는 직접 확인한다.
+Do not take a subagent's report at face value. When the conclusion drives the next step, confirm one or two of its central claims yourself.

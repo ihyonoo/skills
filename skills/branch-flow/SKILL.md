@@ -3,41 +3,43 @@ name: branch-flow
 description: 기능 브랜치 생성, 커밋, PR 작성을 정해진 규칙대로 수행한다. 개발 작업을 시작할 때, 커밋이나 PR을 만들 때, 기본 브랜치에서 코드를 수정하려 할 때 사용한다.
 ---
 
-## 네이밍
+## Naming
 
-type 어휘는 셋 다 공통이다: `feat` `fix` `refactor` `docs` `chore` `test` `ci` `build` `perf` `style`
+All three share the same type vocabulary: `feat` `fix` `refactor` `docs` `chore` `test` `ci` `build` `perf` `style`
 
-- 브랜치 — `<type>/<kebab-slug>` (영문 소문자)
-- 커밋 — `<type>: <한글 요약>`
-- PR 제목 — 커밋과 동일
+- Branch — `<type>/<kebab-slug>` (lowercase English)
+- Commit — `<type>: <Korean summary>`
+- PR title — same as the commit
 
-## 1. 브랜치
+Commit messages and PR bodies are written in Korean. People read them.
 
-현재 브랜치가 기본 브랜치(main/master)면 **반드시 새 브랜치를 만든다.** 이름을 제안하고 승인받은 뒤에만 `git checkout -b`를 실행한다.
+## 1. Branch
 
-## 2. 커밋
+When the current branch is the default branch (main/master), **always create a new branch.** Propose a name and run `git checkout -b` only after approval.
 
-**스스로 커밋하지 않는다.** 메시지 초안을 제안하고, 사용자가 "커밋해줘"라고 명시할 때만 실행한다.
+## 2. Commit
 
-- 변경을 논리 단위로 나눈다. 관련 없는 변경을 한 커밋에 섞지 않는다
-- 요약은 한 줄. 본문이 필요하면 **왜**를 적는다 — 무엇을 바꿨는지는 diff가 이미 말한다
-- `Co-Authored-By` 서명이나 AI 생성 표기를 넣지 않는다
+**Never commit on your own.** Propose a draft message and run it only when the user explicitly says to commit.
 
-## 3. 셀프 리뷰
+- Split changes into logical units. Do not mix unrelated changes into one commit
+- One line for the summary. When a body is needed, write **why** — the diff already says what changed
+- Do not add `Co-Authored-By` signatures or AI-generated markers
 
-푸시하기 전에 code-review 스킬을 돌린다. **막음 등급이 남아 있으면 4단계로 넘어가지 않는다.**
+## 3. Self-review
 
-지금 실행 중인 에이전트가 별도의 코드 리뷰 기능을 제공하면 그것도 함께 돌리고 겹치는 지적은 합친다.
+Run the code-review skill before pushing. **Do not move to step 4 while a blocking finding remains.**
 
-수정이 필요하면 같은 브랜치에 커밋을 추가한다 — 이때도 메시지는 제안·승인을 거친다.
+If the running agent provides its own code review capability, run that too and merge overlapping findings.
+
+When fixes are needed, add commits to the same branch — those messages also go through propose-and-approve.
 
 ## 4. PR
 
-푸시할 브랜치를 설명하고 승인받은 뒤 푸시한다. 본문 초안을 제안하고 승인받은 뒤 `gh pr create`.
+Describe the branch to be pushed, get approval, then push. Propose a draft body, get approval, then `gh pr create`.
 
-3단계에서 보류로 분류한 항목은 **참고** 절에 적는다.
+Items deferred in step 3 go in the **참고** section.
 
-본문 구조:
+Body structure:
 
 ```
 ## 배경
@@ -57,10 +59,10 @@ UI·화면 변경이 있을 때만. 캡처 수단이 없으면 자리표시자�
 남은 이슈, 후속 작업, 리뷰어가 특히 봐야 할 곳 (선택)
 ```
 
-**문체** — 격식체 반말로 쓴다. `~한다`, `~했다`, `~이다`. `~합니다`, `~해요`는 쓰지 않는다. 이모지를 넣지 않는다.
+**PR body style** — Korean, plain declarative form: `~한다`, `~했다`, `~이다`. Do not use `~합니다` or `~해요`. No emoji.
 
-본문 끝에 AI 생성 표기를 붙이지 않는다.
+Do not append an AI-generated marker at the end of the body.
 
-## 머지
+## Merging
 
-**사용자가 GitHub에서 직접 한다.** 대신 머지하지 않는다. 머지가 끝난 뒤 로컬 정리는 post-merge 스킬을 따른다.
+**The user does it on GitHub.** Do not merge on their behalf. After the merge, follow the post-merge skill for local cleanup.

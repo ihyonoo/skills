@@ -3,53 +3,53 @@ name: implement
 description: 확정된 설계 문서나 PRD·TRD를 코드로 옮긴다. 문서 승인이 끝나고 구현을 시작할 때, "이제 만들자" "구현하자"고 할 때, 작업 도중 어느 요구사항까지 됐는지 확인할 때 사용한다.
 ---
 
-## 1. 문서를 실제로 연다
+## 1. Actually open the document
 
-`docs/design/`, `docs/prd/`, `docs/trd/`에서 이 작업에 해당하는 문서를 찾아 **읽는다.** 기억이나 대화 내용에 의존하지 않는다 — 세션이 바뀌었거나 컨텍스트가 압축됐다면 그 기억은 이미 없다.
+Find the document for this work in `docs/design/`, `docs/prd/`, or `docs/trd/` and **read it.** Do not rely on memory or on the conversation — if the session changed or context was compacted, that memory is already gone.
 
-문서가 없으면 design 스킬로 돌아간다. **이번 세션에서 S로 판정한 것을 직접 확인한 경우에만** 문서 없이 진행한다. 기억에 없으면 S였다고 가정하지 않는다.
+If there is no document, go back to the design skill. Proceed without one **only when you directly confirmed an S assessment in this session.** If it is not in front of you, do not assume it was S.
 
-읽은 뒤 시작 전에 한 번 정리해서 보여준다.
+After reading, lay it out once before starting.
 
-- 이번에 구현할 요구사항 ID 목록
-- 각 ID가 어느 파일·모듈에 해당하는지 (TRD의 매핑을 그대로 옮긴다)
-- 진행 순서와 그 이유
+- The requirement IDs to implement this round
+- Which file or module each ID maps to (copy the TRD's mapping as is)
+- The order and the reason for it
 
-코드를 건드리기 전에 branch-flow 스킬로 작업 브랜치를 만든다.
+Create the working branch with the branch-flow skill before touching code.
 
-**순서는 얇은 관통을 먼저 만드는 쪽으로 잡는다.** ID 하나를 끝낼 때마다 실행되고 눈으로 확인할 수 있는 것이 남아야 한다. 계층을 하나씩 완성하는 순서(DB를 전부 → API를 전부 → UI를 전부)는 마지막 계층이 끝나기 전까지 아무것도 동작하지 않아서, 중간에 멈추면 검증되지 않은 반토막이 남는다.
+**Order the work so a thin slice goes end to end first.** Finishing one ID must leave something that runs and can be seen. Completing one layer at a time (all the DB, then all the API, then all the UI) means nothing works until the last layer lands, so stopping midway leaves an unverified half.
 
-## 2. ID 하나가 작업 단위다
+## 2. One ID is one unit of work
 
-여러 요구사항을 한 번에 섞지 않는다. 하나씩 끝내고 다음으로 간다.
+Do not mix several requirements at once. Finish one, then move on.
 
-각 단위는 tdd 스킬을 따른다. UI가 포함되면 frontend-design을, 도중에 원인 모를 버그가 나오면 root-cause를 쓴다.
+Each unit follows the tdd skill. Use frontend-design when UI is involved, and root-cause when a bug of unknown origin appears.
 
-진행 상태를 **파일로** 남긴다. 문서와 같은 slug로 `docs/progress/<slug>.md`에 요구사항 ID별 상태(완료·진행·미착수)를 갱신한다. 대화에만 적으면 컨텍스트가 압축될 때 가장 먼저 사라진다.
+Record progress **in a file.** Under the same slug as the document, keep `docs/progress/<slug>.md` updated with each requirement ID's state (done, in progress, not started). Kept only in the conversation, it is the first thing lost when context is compacted.
 
-## 3. 문서와 어긋나면 멈춘다
+## 3. Stop when reality contradicts the document
 
-구현하다 보면 설계가 틀렸다는 게 드러난다. 드문 일이 아니라 정상이다.
+Implementation reveals that the design was wrong. This is normal, not rare.
 
-그때 **조용히 다르게 구현하지 않는다.** 멈추고 선택지로 묻는다.
+When it happens, **do not quietly implement something different.** Stop and ask as a set of options.
 
-- 문서를 고치고 새 설계대로 간다
-- 문서대로 가고, 드러난 문제는 따로 다룬다
+- Fix the document and follow the new design
+- Follow the document, and handle the discovered problem separately
 
-어느 쪽이든 **문서를 먼저 갱신하고** 구현을 잇는다. 코드가 문서를 앞서가는 순간 그 문서는 거짓말이 되고, 다음 사람은 틀린 문서를 믿는다.
+Either way, **update the document first**, then continue. The moment code runs ahead of the document, that document becomes a lie and the next person believes it.
 
-## 4. 끝나면 대조한다
+## 4. Reconcile at the end
 
-요구사항 ID를 하나씩 짚는다.
+Walk the requirement IDs one by one.
 
-- **구현됨** — 어느 파일에
-- **안 됨** — 왜, 언제 할지
-- **문서에 없는데 만든 것** — 왜 필요했는지
+- **Implemented** — in which file
+- **Not done** — why, and when it will be
+- **Built but not in the document** — why it was needed
 
-MUST가 하나라도 남아 있으면 완료라고 하지 않는다.
+Do not call it complete while a single MUST remains.
 
-대조가 끝나면 branch-flow 스킬로 커밋과 PR에 넘어간다.
+Once reconciled, move to commits and the PR with the branch-flow skill.
 
-## 하지 않는 것
+## Never do this
 
-- 문서에 없는 기능을 "있으면 좋을 것 같아서" 넣기
+- Adding a feature that is not in the document because "it seemed useful"

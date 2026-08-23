@@ -3,61 +3,61 @@ name: init
 description: 프로젝트 지침 파일을 만들거나 갱신하고 에이전트별 파일을 연결한다. 새 프로젝트에서 처음 작업할 때, "지침 만들어줘" "프로젝트 문서화해줘" "init"이라고 할 때 사용한다.
 ---
 
-프로젝트 루트에 `AGENTS.md`를 원본으로 두고 `CLAUDE.md`가 그것을 심볼릭 링크한다. 어느 에이전트로 작업하든 같은 지침을 읽게 하려는 것이다.
+Keep `AGENTS.md` at the project root as the original, with `CLAUDE.md` symlinked to it. The point is that whichever agent does the work reads the same instructions.
 
-## 1. 기존 파일부터 확인한다
+## 1. Check the existing files first
 
-네 가지 경우가 있고 처리가 다르다.
+There are four cases and they are handled differently.
 
-- **둘 다 없음** → 새로 만든다
-- **`CLAUDE.md`만 있음** → 내용을 `AGENTS.md`로 옮기고 `CLAUDE.md`를 링크로 교체한다. **교체 전에 백업한다**
-- **`AGENTS.md`만 있음** → `CLAUDE.md` 링크만 추가한다
-- **둘 다 실제 파일** → 내용을 비교한다. 다르면 병합안을 제시하고 승인받는다. **임의로 덮지 않는다**
+- **Neither exists** → create them
+- **Only `CLAUDE.md` exists** → move the content into `AGENTS.md` and replace `CLAUDE.md` with a link. **Back it up before replacing**
+- **Only `AGENTS.md` exists** → add the `CLAUDE.md` link
+- **Both are real files** → compare the content. If they differ, propose a merge and get approval. **Never overwrite on your own**
 
-**기존 내용은 보존이 기본이다.** 이미 지침이 있으면 새로 쓰는 게 아니라 **갱신**한다.
+**Preserving existing content is the default.** When instructions already exist, you are **updating** them, not rewriting them.
 
-- 사람이 직접 쓴 규칙·주의점·과거 교훈은 건드리지 않는다
-- 지금은 틀린 것(없어진 명령, 바뀐 구조, 사라진 디렉터리)만 고친다
-- 지워야 할 항목이 있으면 목록으로 제시하고 승인받는다. 조용히 삭제하지 않는다
-- 전역 지침과 중복되는 항목을 발견하면 제거를 **제안**한다. 판단은 사용자가 한다
+- Do not touch rules, warnings, or past lessons a person wrote by hand
+- Fix only what is now wrong: commands that no longer exist, changed structure, directories that are gone
+- If something should be deleted, present it as a list and get approval. Do not delete quietly
+- When you find items duplicated from the global instructions, **propose** removing them. The user decides
 
-무엇을 고쳤는지 마지막에 요약해서 보고한다.
+Summarize what you changed at the end.
 
-## 2. 코드베이스를 조사한다
+## 2. Survey the codebase
 
-추측으로 채우지 않는다. 조사가 3회 이상 도구 호출로 번지면 delegation 스킬로 위임한다.
+Do not fill this in with guesses. If the survey will take three or more tool calls, delegate with the delegation skill.
 
-- 빌드·테스트·실행·린트 명령 — `package.json` scripts, `Makefile`, `pyproject.toml`, CI 설정에서 찾는다
-- 디렉터리 구조와 각 디렉터리의 역할
-- 언어·프레임워크·주요 의존성과 버전
-- 이미 자리잡은 컨벤션 — 네이밍, 테스트 위치, import 스타일
+- Build, test, run, and lint commands — find them in `package.json` scripts, `Makefile`, `pyproject.toml`, CI config
+- The directory structure and what each directory is for
+- Language, framework, main dependencies and versions
+- Conventions already in place — naming, test locations, import style
 
-## 3. 쓴다
+## 3. Write it
 
-**들어갈 것**
+**What goes in**
 
-- 개요 한 문단 — 이 프로젝트가 무엇을 하는지
-- 자주 쓰는 명령 — 실제로 동작을 확인한 것만
-- 구조 — 주요 디렉터리와 역할
-- 이 프로젝트만의 규칙 — 전역 지침과 다르거나 추가되는 것
-- 주의점 — 하다가 실패하기 쉬운 것, 과거에 틀렸던 접근
+- One paragraph of overview — what this project does
+- Frequently used commands — only ones you actually confirmed work
+- Structure — the main directories and their roles
+- Rules specific to this project — what differs from or adds to the global instructions
+- Warnings — what tends to fail, approaches that were wrong before
 
-**들어가면 안 되는 것**
+**What must not go in**
 
-- 전역 지침에 이미 있는 것 — git 워크플로우, 코딩 원칙, 테스트 규칙. 중복은 두 배로 로드되고 나중에 어긋난다
-- 코드를 읽으면 아는 것 — 함수 목록, 파일 나열
-- 일반론 — "클린 코드를 작성한다", "가독성을 지킨다"
+- Anything already in the global instructions — git workflow, coding principles, test rules. Duplication loads twice and drifts apart later
+- Anything you learn by reading the code — function lists, file listings
+- Generalities — "write clean code", "keep it readable"
 
-한국어로, 짧게 쓴다. **이 파일은 매 세션 전량 로드된다.** 절차가 길어지면 스킬로 빼는 것을 제안한다.
+Write it in English, and keep it short. **This file loads in full every session.** When a procedure gets long, propose moving it into a skill.
 
-## 4. 연결한다
+## 4. Link them
 
-프로젝트 루트에서 링크를 만든다.
+Create the link at the project root.
 
 ```
 ln -s AGENTS.md CLAUDE.md
 ```
 
-`.gitignore`에 넣지 않는다. 지침은 레포와 함께 간다.
+Do not add it to `.gitignore`. The instructions travel with the repo.
 
-혼자 쓰는 레포가 아니라 여러 사람이 clone 한다면 먼저 알린다. git에 커밋된 심볼릭 링크는 Windows에서 깨질 수 있어, 그 경우 링크 대신 양쪽을 실제 파일로 둘지 물어본다.
+If this is not a solo repo and several people clone it, say so first. Symlinks committed to git can break on Windows, and in that case ask whether to keep both as real files instead of a link.

@@ -1,97 +1,97 @@
-# 스택 지침
+# Stack guidance
 
-**이미 쓰는 것이 있으면 그걸 따른다. 아래는 새로 정할 때의 기본값이다.** 개별 항목마다 이 단서를 반복하지 않는다.
+**Follow what is already in use. Everything below is the default for fresh decisions.** This caveat is not repeated on individual items.
 
-라이브러리를 가져다 쓰기 전에 `package.json`을 확인한다. 없으면 설치 명령을 먼저 알린다. 있다고 가정하지 않는다.
+Check `package.json` before importing any library. If it is missing, state the install command first. Do not assume it exists.
 
-## shadcn/ui 기본 테마를 그대로 쓰지 않는다
+## Do not ship the shadcn/ui default theme
 
-코드를 내 레포로 복사해오는 방식이므로 고칠 수 있다. 기본값 그대로면 "shadcn 티"가 난다.
+The code is copied into your own repo, so it can be changed. Left at defaults it reads as "shadcn".
 
-`globals.css`의 토큰에서 최소 이것만은 손본다.
+At minimum, adjust these tokens in `globals.css`.
 
-- `--primary` — 액센트 색. 기본 검정/파랑을 그대로 두지 않는다
-- `--radius` — 기본 `0.5rem`. 프로젝트 성격에 맞게 조정하고 이후 전부 여기에 맞춘다
-- `--muted-foreground` — 본문 보조 텍스트. 대비가 충분한지 확인
+- `--primary` — the accent. Do not leave the default black or blue
+- `--radius` — defaults to `0.5rem`. Tune it to the project and align everything else to it
+- `--muted-foreground` — secondary body text. Check that it has enough contrast
 
-## 스케일을 먼저 고정한다
+## Fix the scales first
 
-화면을 그리기 전에 정한다. 정해두면 매번 고민하지 않고 일관성이 생긴다.
+Decide before drawing screens. Fixing them removes the per-decision deliberation and produces consistency.
 
-- **간격** — 4~6단계만 사용 (예: `2 / 4 / 8 / 12 / 20`)
-- **글자 크기** — 4~5단계 (예: `sm / base / lg / 2xl / 4xl`)
-- **radius** — 1개
-- **색** — 액센트 1, 무채색 4~5단계, 상태색(성공·경고·오류) 3
+- **Spacing** — use 4 to 6 steps only (for example `2 / 4 / 8 / 12 / 20`)
+- **Type sizes** — 4 to 5 steps (for example `sm / base / lg / 2xl / 4xl`)
+- **Radius** — one
+- **Color** — 1 accent, 4 to 5 neutral steps, 3 status colors (success, warning, error)
 
-이 목록 밖의 값이 필요해지면 스케일이 잘못된 것이다. 임의 값(`p-[13px]`)을 추가하기 전에 스케일을 의심한다.
+When you need a value outside these lists, the scale is wrong. Suspect the scale before adding an arbitrary value like `p-[13px]`.
 
-## 폰트
+## Fonts
 
-시스템 기본 폰트를 그대로 두면 밋밋하고, Inter는 이미 너무 흔하다. 하나 고른다.
+The system default looks flat, and Inter is already everywhere. Pick one.
 
-- 본문·UI — Geist, IBM Plex Sans, Pretendard(한글)
-- 한글이 섞이면 한글 폰트를 먼저 고르고 영문을 맞춘다. 반대로 하면 한글이 깨져 보인다
-- 숫자를 표로 나열할 때는 `tabular-nums`
-- 프레임워크가 제공하는 폰트 최적화(`next/font` 등)를 쓰거나 직접 호스팅하고 `font-display: swap`을 준다. 운영 환경에서 `<link>`로 웹폰트를 불러오지 않는다
+- Body and UI — Geist, IBM Plex Sans, Pretendard (Korean)
+- When Korean is in the mix, choose the Korean face first and match the Latin one to it. Doing it the other way around breaks the Korean
+- Use `tabular-nums` when numbers are listed in a table
+- Use the framework's font optimization (`next/font` and equivalents) or self-host with `font-display: swap`. Do not pull web fonts with a `<link>` in production
 
-## 반응형
+## Responsive
 
-좁은 화면부터 만든다. Tailwind의 `md:`, `lg:`는 넓어질 때 더하는 방향이다.
+Build from the narrow width up. Tailwind's `md:` and `lg:` add as it widens.
 
-- 브레이크포인트는 2개면 충분하다
-- 표는 좁은 화면에서 가로 스크롤 컨테이너에 넣는다. 페이지 자체가 가로로 밀리면 안 된다
-- 터치 대상은 44px 이상
-- 화면 전체 높이가 필요하면 `h-screen` 대신 `min-h-[100dvh]`. 모바일 브라우저 주소창 때문에 레이아웃이 튄다
-- 여러 열은 flex 퍼센트 계산(`w-[calc(33%-1rem)]`) 대신 grid로 짠다
+- Two breakpoints are enough
+- Put tables in a horizontally scrolling container at narrow widths. The page itself must never scroll sideways
+- Touch targets 44px or larger
+- Use `min-h-[100dvh]` instead of `h-screen` for full-height sections. The mobile browser address bar makes the layout jump
+- Build multi-column layouts with grid, not flex percentage math (`w-[calc(33%-1rem)]`)
 
-## 다크모드를 만든다면
+## Dark mode
 
-색을 두 벌 쓰지 말고 **CSS 변수로 토큰을 잡고 값만 교체**한다. 컴포넌트에는 `bg-background`, `text-foreground` 같은 토큰 이름만 쓴다.
+Do not maintain two sets of colors. **Define tokens as CSS variables and swap the values.** Components reference only token names like `bg-background` and `text-foreground`.
 
-`dark:` 접두사를 컴포넌트마다 흩뿌리면 나중에 색 하나 바꾸는 데 파일을 전부 열어야 한다.
+Scattering the `dark:` prefix across components means opening every file to change one color later.
 
-## 접근성 최소선
+## Accessibility floor
 
-지키지 않으면 실제로 못 쓰는 사람이 생긴다.
+Miss these and real people cannot use it.
 
-- 본문 대비 4.5:1 이상. 회색 텍스트를 너무 연하게 두는 실수가 흔하다
-- 포커스 링을 지우지 않는다. 디자인상 거슬리면 `focus-visible`로 바꾼다
-- 아이콘만 있는 버튼에 `aria-label`
-- 색으로만 상태를 구분하지 않는다 — 아이콘이나 텍스트를 함께
+- Body contrast 4.5:1 or better. Gray text left too light is the common mistake
+- Do not remove focus rings. When the design suffers, switch to `focus-visible`
+- `aria-label` on icon-only buttons
+- Do not signal state by color alone — pair it with an icon or text
 
-## 버전과 라이브러리
+## Versions and libraries
 
-새로 정할 때의 기본값이다.
+Defaults for fresh decisions.
 
-- **Tailwind** — v4. v3는 기존 프로젝트가 요구할 때만. v4에서는 PostCSS 설정에 `tailwindcss`가 아니라 `@tailwindcss/postcss`를 쓰거나 번들러 플러그인을 쓴다
-- **애니메이션** — Motion(`motion/react`). `framer-motion`은 예전 이름이라 새 코드에서는 `motion/react`로 가져온다
-- **아이콘** — Phosphor / HugeIcons / Radix / Tabler 중 하나. lucide는 기본값으로 쓰지 않는다(`ai-tells.md` 6절)
-- 한 프로젝트에 아이콘 세트는 하나. 디자인 시스템도 하나. 섞지 않는다
+- **Tailwind** — v4. v3 only when an existing project requires it. On v4, use `@tailwindcss/postcss` in the PostCSS config rather than `tailwindcss`, or use the bundler plugin
+- **Animation** — Motion (`motion/react`). `framer-motion` is the old name; import from `motion/react` in new code
+- **Icons** — one of Phosphor, HugeIcons, Radix, Tabler. Do not use lucide as the default (`ai-tells.md`, section 6)
+- One icon set per project. One design system per project. Do not mix
 
-## 움직임을 구현할 때
+## Implementing motion
 
-- **`transform`과 `opacity`만 애니메이션한다.** `top`, `left`, `width`, `height`는 매 프레임 레이아웃을 다시 계산한다
-- `will-change`는 실제로 움직이는 요소에만 아껴서 쓴다
-- **`window.addEventListener("scroll", ...)`을 쓰지 않는다.** 스크롤 프레임마다 실행되고 묶음 처리가 안 된다. 라이브러리가 제공하는 스크롤 훅, `IntersectionObserver`, CSS 스크롤 연동 애니메이션(`animation-timeline: view()`) 중에서 고른다
-- **연속적으로 변하는 값을 컴포넌트 상태로 추적하지 않는다.** 마우스 위치, 스크롤 진행률, 포인터 물리 같은 것을 상태에 넣으면 값이 바뀔 때마다 트리 전체가 다시 그려지고 모바일에서 무너진다. 라이브러리가 제공하는 모션 값을 쓴다
-- `requestAnimationFrame` 루프 안에서 상태를 건드리지 않는다
-- 정리(cleanup)를 빠뜨리지 않는다. 스크롤 트리거와 리스너는 화면에서 사라질 때 해제한다
-- **움직임을 줄이는 설정을 존중한다.** 무한 반복, 시차 효과, 스크롤 가로채기는 `prefers-reduced-motion`에서 정적으로 무너지게 만든다
-- 노이즈·그레인 같은 필터는 고정된 오버레이 레이어에만 건다. 스크롤되는 컨테이너에 걸면 계속 다시 그려진다
+- **Animate `transform` and `opacity` only.** `top`, `left`, `width`, and `height` recalculate layout every frame
+- Use `will-change` sparingly, only on elements that actually move
+- **Do not use `window.addEventListener("scroll", ...)`.** It runs every scroll frame with no batching. Pick a library scroll hook, `IntersectionObserver`, or CSS scroll-driven animation (`animation-timeline: view()`)
+- **Do not track continuously changing values in component state.** Mouse position, scroll progress, pointer physics — putting these in state redraws the whole tree on every change and collapses on mobile. Use the library's motion values
+- Do not touch state inside a `requestAnimationFrame` loop
+- Do not skip cleanup. Release scroll triggers and listeners when the element leaves the screen
+- **Honor reduced-motion settings.** Infinite loops, parallax, and scroll hijacking must collapse to static
+- Apply noise and grain filters only to a fixed overlay layer. On a scrolling container they repaint continuously
 
-## 성능
+## Performance
 
-- 첫 화면 이미지에 우선순위를 준다. 폰트·이미지·임베드가 들어갈 자리를 미리 잡아 레이아웃이 밀리지 않게 한다
-- 첫 화면 밖의 무거운 것은 늦게 불러온다. 애니메이션 라이브러리도 작지 않다
-- `z-index`를 아무 데나 뿌리지 않는다. 고정 헤더, 모달, 오버레이처럼 층이 필요한 곳에만 쓰고 값 체계를 한 곳에 적어둔다
+- Give the first-screen image priority. Reserve space for fonts, images, and embeds so the layout does not shift
+- Load heavy things below the fold late. Animation libraries are not small
+- Do not sprinkle `z-index` everywhere. Use it only where layering is real (sticky headers, modals, overlays) and record the scale in one place
 
-## 자주 하는 실수
+## Common mistakes
 
-- `transition-all` — 바뀌는 속성만 지정한다
-- 컨테이너에 고정 높이 — 내용이 넘치면 잘린다
-- `overflow-hidden`으로 레이아웃 문제 덮기 — 원인을 찾는다
-- 클래스 문자열이 너무 길어지면 컴포넌트로 분리할 신호다
+- `transition-all` — specify only the properties that change
+- Fixed height on a container — content that overflows gets clipped
+- Papering over layout problems with `overflow-hidden` — find the cause
+- A class string growing long is the signal to split out a component
 
 ---
 
-출처: 스택 규칙 일부는 Leonxlnx/taste-skill (MIT)에서 가져와 한국어로 재작성했다.
+Some stack rules are adapted from Leonxlnx/taste-skill (MIT).

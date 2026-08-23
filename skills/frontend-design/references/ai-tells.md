@@ -1,178 +1,178 @@
-# AI가 만든 티가 나는 이유
+# Why it reads as AI-made
 
-거의 전부 **기본값을 그대로 썼기 때문**이다. 도구가 가장 쉽게 내놓는 선택지가 곧 가장 흔한 형태다.
+Almost always because **the defaults were left in place**. The option the tool offers most easily is the shape that appears most often.
 
-이 파일은 화면 종류를 가리지 않는다. 랜딩·마케팅 페이지라면 `landing.md`를 함께 읽는다.
+This file applies to any kind of screen. For landing and marketing pages, read `landing.md` alongside it.
 
 ---
 
-## 1. 색
+## 1. Color
 
-**티 나는 것**
-- 보라→인디고 그라디언트(`from-purple-500 to-indigo-500`). 가장 강한 신호다
-- 모든 색을 Tailwind 기본 팔레트의 `500`으로 사용
-- 색을 여러 개 씀 — 파랑 버튼, 초록 배지, 주황 경고, 빨강 삭제
-- 네온 글로우, 순수 검정(`#000000`)
+**The tell**
+- Purple-to-indigo gradient (`from-purple-500 to-indigo-500`). The strongest signal there is
+- Every color taken from the `500` step of the default Tailwind palette
+- Too many colors — blue button, green badge, orange warning, red delete
+- Neon glows, pure black (`#000000`)
 
-**대신**
-- 액센트 색 **하나** + 무채색. 상태색(경고·오류)은 그 외 예외
-- 채도를 낮춘다. 실제 브랜드 색은 순색이 아니다
-- 그라디언트는 쓰지 않거나, 같은 색상의 명도 차이 정도로만
-- 검정은 순검정 대신 `zinc-950` 같은 오프블랙
-- 그림자를 쓸 때는 배경 색조에 맞춰 틴트한다. 밝은 배경에 순검정 그림자는 쓰지 않는다
+**Instead**
+- **One** accent plus neutrals. Status colors (warning, error) are the exception
+- Lower the saturation. Real brand colors are not pure hues
+- Skip gradients, or keep them to a lightness shift within one hue
+- Use an off-black like `zinc-950` rather than pure black
+- Tint shadows toward the background hue. Never a pure-black shadow on a light background
 
-**액센트 색 고정** — 한 화면에서 액센트를 정했으면 끝까지 같은 색이다. 따뜻한 회색 기조에서 갑자기 파란 버튼이 나오거나, 장미색 액센트 화면의 푸터에 청록 배지가 붙으면 깨진다.
+**Lock the accent** — once chosen, it is that color everywhere. A blue button appearing in a warm-gray scheme, or a teal badge in the footer of a rose-accented screen, breaks it.
 
-**팔레트를 반복하지 않는다** — 직전에 만든 화면과 같은 팔레트 계열로 또 가지 않는다. 브리프가 비슷해 보여도 마찬가지다. 같은 조합을 계속 쓰면 브랜드가 안 보인다.
+**Do not repeat a palette** — do not reach for the same palette family as the screen you built last, even when the brief looks similar. Reusing the same combination makes the brand invisible.
 
-## 2. 모서리와 그림자
+## 2. Corners and shadows
 
-**티 나는 것**
-- 모든 요소에 `rounded-xl` + `shadow-lg`. 전부 떠 있으면 위계가 사라진다
-- 카드 안의 카드 안의 카드
+**The tell**
+- `rounded-xl` plus `shadow-lg` on everything. When it all floats, hierarchy disappears
+- A card inside a card inside a card
 
-**대신**
-- 그림자는 **진짜 떠 있는 것**에만 — 모달, 드롭다운, 툴팁
-- 카드 구분은 `border` 1px 또는 배경색 차이로
-- 카드는 높이 차이가 실제 위계를 나타낼 때만 쓴다. 아니면 여백이나 구분선으로 묶는다
+**Instead**
+- Shadows only on things that **actually float** — modals, dropdowns, tooltips
+- Separate cards with a 1px `border` or a background shift
+- Use cards only when elevation reflects real hierarchy. Otherwise group with whitespace or rules
 
-**모서리 값 고정** — 화면 전체에서 radius 체계를 하나로 정한다. 전부 각지게(0) / 전부 둥글게(12~16px) / 인터랙티브만 알약형 중 하나. 섞으려면 규칙을 정해두고("버튼은 알약, 카드는 16px, 입력은 8px") 어디서나 그 규칙을 지킨다. 각진 레이아웃에 둥근 버튼이 섞이면 깨진다.
+**Lock the radius** — pick one radius system for the whole screen. All sharp (0), all soft (12 to 16px), or pill-shaped for interactive elements only. To mix, fix a rule ("buttons are pills, cards are 16px, inputs are 8px") and follow it everywhere. Round buttons in an angular layout is broken.
 
-## 3. 레이아웃
+## 3. Layout
 
-**티 나는 것**
-- 중앙정렬 히어로 + 그 아래 3열 카드 그리드. 랜딩 템플릿 그 자체다
-- 모든 것이 화면 정중앙 정렬
-- 콘텐츠 폭이 화면 전체
+**The tell**
+- Centered hero with a 3-column card grid below it. That is the landing template itself
+- Everything centered on the screen
+- Content spanning the full viewport width
 
-**대신**
-- 좌측 정렬을 기본으로. 중앙정렬은 짧은 문구에만
-- 비대칭을 두려워하지 않는다 — 2:1, 사이드바 + 본문
-- 읽는 글은 한 줄 65자 내외로 폭을 제한
-- 여러 열을 쓸 때 flex 퍼센트 계산(`w-[calc(33%-1rem)]`) 대신 grid를 쓴다
-- 다단 레이아웃은 좁은 화면에서 어떻게 무너지는지를 같은 곳에 적어둔다. "알아서 되겠지"로 두지 않는다
+**Instead**
+- Left-aligned by default. Center only short phrases
+- Do not fear asymmetry — 2:1, sidebar plus body
+- Cap reading measure around 65 characters per line
+- Build multi-column layouts with grid, not flex percentage math (`w-[calc(33%-1rem)]`)
+- Write down how each multi-column layout collapses at narrow widths, in the same place. Do not leave it to "it will probably work"
 
-## 4. 여백
+## 4. Whitespace
 
-**티 나는 것**
-- 어디에나 같은 간격(`p-6`, `gap-6`). 무엇이 한 덩어리인지 안 보인다
+**The tell**
+- The same gap everywhere (`p-6`, `gap-6`). Nothing shows what belongs together
 
-**대신**
-- **관련된 것은 붙이고, 그룹 사이는 크게 벌린다.** 제목과 그 설명은 가깝게, 다음 섹션은 멀게
-- 간격 단계를 4~6개로 제한하고 그 안에서만 고른다
+**Instead**
+- **Pull related things together and push groups apart.** A heading sits close to its description; the next section sits far away
+- Limit spacing to 4 to 6 steps and choose only from those
 
-## 5. 타이포그래피
+## 5. Typography
 
-**티 나는 것**
-- 크기만 바꿔서 위계 표현
-- 모든 제목이 `font-bold`
-- 본문과 제목이 같은 색
-- 큰 제목을 그라디언트 텍스트로 처리
+**The tell**
+- Hierarchy expressed by size alone
+- Every heading at `font-bold`
+- Body and headings in the same color
+- Large headings rendered as gradient text
 
-**대신**
-- 크기 + 굵기 + **색**을 함께 쓴다. 본문을 회색으로 낮추면 제목이 저절로 올라온다
-- 크기 단계는 4~5개면 충분하다
-- 큰 제목일수록 자간을 좁힌다(`tracking-tight`)
+**Instead**
+- Use size, weight, and **color** together. Drop the body to gray and the heading rises on its own
+- 4 to 5 size steps is enough
+- Tighten tracking as headings get larger (`tracking-tight`)
 
-**serif를 기본으로 잡지 않는다** — "창의적이니까", "고급스러우니까"는 serif를 고를 이유가 아니다. 그 판단이 가장 흔한 AI 기본값이다. serif는 브리프가 서체를 지정했거나, 출판물·헤리티지·매거진처럼 장르가 분명할 때만 쓴다. 그 외에는 sans display로 간다. `Fraunces`와 `Instrument Serif`는 기본값으로 쓰지 않는다. serif를 쓰기로 했다면 직전 작업과 같은 서체를 또 쓰지 않는다.
+**Do not reach for a serif by default** — "it feels creative" and "it feels premium" are not reasons to pick a serif. That instinct is the most common AI default. Use a serif when the brief names the typeface, or when the genre is unmistakable: publication, heritage, magazine. Otherwise go sans display. Do not use `Fraunces` or `Instrument Serif` as defaults. If you do use a serif, do not reuse the one from the last project.
 
-**제목 안에서 한 단어만 강조할 때** 다른 서체를 끼워넣지 않는다. 같은 서체의 이탤릭이나 굵기로 처리한다. sans 제목에 serif 한 단어를 꽂는 건 아마추어 신호다.
+**When emphasizing one word inside a heading**, do not drop in a different typeface. Use italic or weight within the same family. A serif word jammed into a sans headline is an amateur signal.
 
-**이탤릭 디센더** — 이탤릭 단어에 `y g j p q`가 있으면 `leading-none`에서 아래가 잘린다. 줄높이를 1.1 이상 주고 아래쪽 여유를 확보한다.
+**Italic descenders** — when an italic word contains `y g j p q`, `leading-none` clips it. Set line height to at least 1.1 and reserve room below.
 
-## 6. 아이콘
+## 6. Icons
 
-**티 나는 것**
-- 이모지를 아이콘 자리에 사용. 가장 티 난다
-- 아이콘마다 크기와 굵기가 제각각
-- 없는 아이콘을 SVG path로 직접 그리기
+**The tell**
+- Emoji standing in for icons. The loudest tell of all
+- Sizes and stroke weights varying icon to icon
+- Drawing a missing icon by hand as an SVG path
 
-**대신**
-- 아이콘 세트 하나를 골라 통일한다. Phosphor / HugeIcons / Radix / Tabler 중에서 고른다
-- lucide는 기본값으로 쓰지 않는다. shadcn/ui 기본 세트라 그대로 쓰면 티가 난다. 명시적으로 요청받았거나 프로젝트가 이미 쓰고 있으면 그때는 쓴다
-- 크기·선 굵기를 전역에서 고정한다
-- 글리프가 없으면 세트를 하나 더 설치한다. 손으로 그리지 않는다
-- 아이콘 없이 텍스트만으로도 이해되는지 확인한다
+**Instead**
+- Pick one icon set and stay in it. Choose from Phosphor, HugeIcons, Radix, Tabler
+- Do not use lucide by default. It is the shadcn/ui default set, so shipping it as-is reads as AI. Use it when explicitly requested or when the project already depends on it
+- Fix size and stroke weight globally
+- If a glyph is missing, install a second set. Do not draw it
+- Confirm the screen still makes sense with the icons removed
 
-## 7. 문구
+## 7. Copy
 
-**티 나는 것**
+**The tell**
 - "Seamlessly", "Effortlessly", "Supercharge", "손쉽게", "혁신적인", "차세대"
-- 느낌표
-- 버튼에 "지금 시작하기", "더 알아보기"
+- Exclamation marks
+- Buttons reading "지금 시작하기" or "더 알아보기"
 
-**대신**
-- 구체적으로 쓴다. "빠르게 배포하세요" 대신 "3초 만에 배포"
-- 버튼에는 그 버튼이 실제로 하는 일을 쓴다 — "리포트 내보내기"
+**Instead**
+- Be concrete. Not "빠르게 배포하세요" but "3초 만에 배포"
+- Put what the button actually does on the button — "리포트 내보내기"
 
-**같은 뜻의 버튼을 두 개 두지 않는다** — "문의하기"와 "상담 신청"이 한 화면에 같이 있으면 하나로 합친다. 의도가 같으면 라벨도 하나다.
+**Do not place two buttons that mean the same thing** — when "문의하기" and "상담 신청" sit on one screen, merge them. One intent, one label.
 
-**화면에 보이는 문장을 마감 전에 다시 읽는다** — 제목, 버튼, 캡션, 빈 상태 문구, 에러 문구까지. 어색한 비유, 가리키는 대상이 불분명한 문장, 그럴듯하게 들리려고 쓴 문장을 찾아 평범한 문장으로 바꾼다. 멋부린 문장은 밋밋한 문장보다 나쁘다.
+**Re-read every visible sentence before finishing** — headings, buttons, captions, empty-state text, error text. Find the awkward metaphors, the sentences whose referent is unclear, the sentences written to sound thoughtful, and replace them with plain ones. Clever copy is worse than dull copy.
 
-## 8. 가짜 데이터
+## 8. Fake data
 
-데모용 데이터에서 티가 가장 많이 난다.
+Demo data is where the tell shows most.
 
-**티 나는 것**
-- "홍길동", "John Doe", "Jane Smith" 같은 표본 이름
-- "Acme", "Nexus", "SmartFlow", "Cloudly" 같은 가짜 스타트업 이름
-- 딱 떨어지는 숫자 — `99.99%`, `50%`, `1,234,567`, `10,000+`
-- 아바타 자리에 회색 사람 아이콘이나 이니셜 원
-- 날짜가 전부 같은 날이거나 정확히 하루 간격
+**The tell**
+- Sample names like "홍길동", "John Doe", "Jane Smith"
+- Invented startup names like "Acme", "Nexus", "SmartFlow", "Cloudly"
+- Suspiciously round numbers — `99.99%`, `50%`, `1,234,567`, `10,000+`
+- A gray person icon or an initial circle where an avatar goes
+- Dates all on the same day, or exactly one day apart
 
-**대신**
-- 맥락에 맞는 실제 같은 이름을 쓴다. 한국어 서비스면 한국 이름, 글로벌이면 지역이 섞이게
-- 브랜드명은 그 업계에 실제로 있을 법하게 짓는다
-- 숫자를 흐트러뜨린다 — `47.2%`, `1,284`, `3.6배`
-- 아바타는 실제 같은 사진 자리표시자를 쓰거나, 정 없으면 아바타 자체를 뺀다
-- 목록 데이터는 길이·시간·상태가 제각각이어야 한다. 모든 행이 같은 모양이면 가짜로 보인다
+**Instead**
+- Use realistic names that fit the context. Korean names for a Korean service, a regional mix for a global one
+- Invent brand names that could plausibly exist in that industry
+- Rough up the numbers — `47.2%`, `1,284`, `3.6배`
+- Use a believable photo placeholder for avatars, or drop avatars entirely
+- List data must vary in length, time, and state. Rows that all look alike read as fake
 
-**숫자를 지어내지 않는다** — 정밀해 보이는 수치(`4.1배`, `99.9% 가동률`)는 근거가 있을 때만 쓴다. 없으면 자리표시자임을 주석으로 표시하거나 그 수치를 빼고 만든다.
+**Do not invent numbers** — use precise-looking figures (`4.1배`, `99.9% 가동률`) only when there is a source. Without one, mark them as placeholders in a comment or build without them.
 
-## 9. 애니메이션
+## 9. Animation
 
-**티 나는 것**
-- 모든 요소에 `hover:scale-105 transition-all`
-- 페이지 진입 시 순차 페이드인
-- 카드마다 무한 반복 애니메이션
+**The tell**
+- `hover:scale-105 transition-all` on everything
+- A staggered fade-in on page entry
+- An infinite loop on every card
 
-**대신**
-- 상태가 실제로 변하는 곳에만. 열림·닫힘·로딩
-- 150~200ms. 그보다 길면 느리게 느껴진다
-- `transition-all` 대신 바뀌는 속성만 지정
+**Instead**
+- Only where state actually changes. Open, close, loading
+- 150 to 200ms. Longer than that feels slow
+- Name the properties that change instead of `transition-all`
 
-**움직이기 전에 이유를 한 문장으로 댈 수 있어야 한다.** 유효한 이유는 넷뿐이다 — 위계(시선을 옮긴다), 순서(내용을 차례로 드러낸다), 피드백(동작을 받았음을 알린다), 상태 전환(무언가 바뀌었음을 보인다). "멋있어서"는 이유가 아니다.
+**You must be able to justify motion in one sentence before adding it.** There are only four valid reasons — hierarchy (moving the eye), sequence (revealing content in order), feedback (acknowledging an action), and state transition (showing something changed). "It looked cool" is not one.
 
-## 10. 없는 상태들
+## 10. The missing states
 
-**티 나는 것**
-- 로딩 표시 없음, 빈 목록에 아무것도 없음, 에러 나면 흰 화면
-- 로딩에 동그란 스피너 하나
+**The tell**
+- No loading indicator, nothing in an empty list, a white screen on error
+- A single spinner for loading
 
-**대신**
-- 이 셋을 반드시 만든다. 실제 서비스와 데모를 가르는 지점이 여기다
-- 로딩은 최종 레이아웃 모양을 딴 스켈레톤으로
-- 빈 상태에는 다음에 할 일을 함께 둔다
-- 에러는 폼이면 해당 입력 옆에, 일시적인 것이면 토스트로
+**Instead**
+- Always build these three. This is what separates a real service from a demo
+- Make loading a skeleton shaped like the final layout
+- Put the next action inside the empty state
+- Errors go beside the input for forms, in a toast when they are transient
 
-## 11. 폼
+## 11. Forms
 
-- 라벨은 입력 **위**에. 자리표시자를 라벨 대신 쓰지 않는다
-- 도움말은 마크업에 자리를 만들어둔다. 에러 문구는 입력 **아래**
-- 입력·자리표시자·포커스 링·라벨이 배경 대비 기준을 넘는지 확인한다. 거의 흰 폼에 연한 회색 자리표시자는 안 보인다
+- Labels go **above** the input. Do not use the placeholder as the label
+- Reserve space for helper text in the markup. Error text goes **below** the input
+- Check that inputs, placeholders, focus rings, and labels clear contrast against the background. A pale gray placeholder on a near-white form is invisible
 
-## 12. 버튼
+## 12. Buttons
 
-- 버튼 글자가 버튼 배경 위에서 읽히는지 확인한다. 흰 배경에 흰 글자, 테두리 없는 투명 버튼이 흔한 사고다
-- 사진 위에 올린 고스트 버튼은 스크림이나 테두리를 준다
-- 데스크톱에서 버튼 라벨이 두 줄로 넘어가면 라벨을 줄이거나 버튼을 넓힌다. 주요 버튼은 3단어 이내
-
----
-
-## 마감 전
-
-`preflight.md`의 체크리스트를 돌린다. 세면 끝나는 항목들이라 눈대중보다 빠르다.
+- Confirm the button text is readable on the button background. White on white and borderless transparent buttons are the common accidents
+- Give ghost buttons over photos a scrim or a border
+- If a button label wraps to two lines at desktop, shorten the label or widen the button. Primary buttons stay within 3 words
 
 ---
 
-출처: 가짜 데이터·serif 규율·색 고정 등 일부 항목은 Leonxlnx/taste-skill (MIT)에서 가져와 한국어로 재작성했다.
+## Before finishing
+
+Run the checklist in `preflight.md`. Every item is counted or seen, so it is faster than eyeballing.
+
+---
+
+Some items — fake data, serif discipline, locking the accent — are adapted from Leonxlnx/taste-skill (MIT).

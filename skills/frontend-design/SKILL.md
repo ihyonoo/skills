@@ -3,93 +3,93 @@ name: frontend-design
 description: 웹 화면을 설계하고 구현한다. 페이지·컴포넌트·대시보드를 만들 때, 기존 화면의 디자인을 고칠 때, "UI 만들어줘" "디자인이 별로다" "AI 티 난다"고 할 때 사용한다.
 ---
 
-## 1. 방향을 먼저 정한다
+## 1. Settle the direction first
 
-화면을 만드는 일이 아니면(설정값 변경, 텍스트 수정 같은) 한 줄로 말하고 빠진다.
+If the work is not building a screen (changing a config value, editing text), say so in one line and bow out.
 
-고정된 기본 스타일을 두지 않는다. 코드를 쓰기 전에 선택지 형태로 확인한다.
+Do not carry a fixed default style. Confirm as a set of options before writing code.
 
-- **참고할 화면** — 마음에 드는 서비스나 사이트가 있는지 먼저 묻는다. 말로 된 설명보다 훨씬 정확하다
-- **다크모드** — 라이트만 만들지, 둘 다 만들지
+- **A reference screen** — ask first whether there is a service or site they like. Far more precise than a verbal description
+- **Dark mode** — light only, or both
 
-스택은 묻기 전에 기존 코드에서 확인한다. 이미 쓰는 것이 있으면 그걸 따르고, 새로 정해야 할 때만 묻는다.
+Check the stack in the existing code before asking. Follow what is already in use; ask only when it has to be decided fresh.
 
-## 2. 다이얼 3개를 숫자로 확정한다
+## 2. Fix three dials as numbers
 
-**코드를 쓰기 전에 세 값을 정하고 응답에 적는다.** 척도는 모두 1~10 정수다.
+**Set all three before writing code and state them in your response.** Each is an integer from 1 to 10.
 
-| 다이얼 | 1 | 10 |
+| Dial | 1 | 10 |
 |---|---|---|
-| `DESIGN_VARIANCE` | 완전 대칭 | 비대칭·실험적 |
-| `MOTION_INTENSITY` | 정적 | 스크롤 연동·물리 기반 |
-| `VISUAL_DENSITY` | 여백 위주 | 정보 빽빽 |
+| `DESIGN_VARIANCE` | Perfectly symmetric | Asymmetric, experimental |
+| `MOTION_INTENSITY` | Static | Scroll-linked, physics-based |
+| `VISUAL_DENSITY` | Mostly whitespace | Densely packed |
 
-브리프에서 값을 읽어낸다.
+Read the values from the brief.
 
-| 신호 | VARIANCE | MOTION | DENSITY |
+| Signal | VARIANCE | MOTION | DENSITY |
 |---|---|---|---|
-| 랜딩·마케팅·포트폴리오 (기본값) | 8 | 6 | 4 |
-| 절제된 에디토리얼 / 미니멀 / 차분함 | 5 | 3 | 3 |
-| 프리미엄 소비재 / 브랜드 | 7 | 6 | 3 |
-| 실험적 / 에이전시 / 강한 인상 | 9 | 8 | 3 |
-| 제품 UI · 관리 화면 (기본값) | 4 | 3 | 7 |
-| 데이터 밀도 높은 대시보드 | 3 | 2 | 8 |
-| 공공·금융·접근성 우선 | 3 | 2 | 5 |
-| 기존 화면 개선(보존) | 현재값 | 현재값+1 | 현재값 |
-| 기존 화면 전면개편 | 현재값+2 | 현재값+2 | 현재값 |
+| Landing, marketing, portfolio (default) | 8 | 6 | 4 |
+| Restrained editorial, minimal, calm | 5 | 3 | 3 |
+| Premium consumer, brand | 7 | 6 | 3 |
+| Experimental, agency, high impact | 9 | 8 | 3 |
+| Product UI, admin screens (default) | 4 | 3 | 7 |
+| Data-dense dashboard | 3 | 2 | 8 |
+| Public sector, finance, accessibility-first | 3 | 2 | 5 |
+| Redesign, preserving | current | current+1 | current |
+| Redesign, full overhaul | current+2 | current+2 | current |
 
-**값이 규칙을 건다.**
+**The values gate the rules.**
 
-- `VARIANCE ≥ 5` — 중앙정렬 히어로를 쓰지 않는다. 좌측 정렬 / 분할 / 비대칭 중에서 고른다
-- `VARIANCE ≤ 4` — 대칭 그리드로 간다. 실험적 레이아웃을 시도하지 않는다
-- `MOTION ≥ 4` — 움직임을 줄이는 설정에 대응한다. 그리고 실제로 움직여야 한다. 값만 선언하고 정적이면 값을 3으로 내린다
-- `MOTION ≤ 3` — 상태가 실제로 변하는 곳(열림·닫힘·로딩)에만
-- `DENSITY ≥ 7` — 카드 컨테이너를 쓰지 않는다. 여백과 구분선으로 나눈다
-- `DENSITY ≤ 3` — 한 화면의 주요 블록 3개 이하
+- `VARIANCE >= 5` — do not use a centered hero. Pick left-aligned, split, or asymmetric
+- `VARIANCE <= 4` — use a symmetric grid. Do not attempt experimental layouts
+- `MOTION >= 4` — honor reduced-motion settings. And it must actually move. If you declare the value and ship something static, lower the value to 3
+- `MOTION <= 3` — only where state actually changes (open, close, loading)
+- `DENSITY >= 7` — do not use card containers. Separate with whitespace and rules
+- `DENSITY <= 3` — three or fewer main blocks per screen
 
-## 3. 읽을 참조 파일을 고른다
+## 3. Pick which reference files to read
 
-무엇을 만드는지에 따라 갈린다. 해당하는 것만 읽는다.
+This depends on what you are building. Read only what applies.
 
-| 파일 | 언제 |
+| File | When |
 |---|---|
-| `references/ai-tells.md` | 화면 작업이면 **항상** |
-| `references/landing.md` | 랜딩·마케팅·포트폴리오일 때만 |
-| `references/redesign.md` | 이미 있는 화면을 고칠 때만 |
-| `references/tailwind.md` | Tailwind·shadcn/ui를 쓸 때. 스택 기본값과 성능·움직임 구현 규칙도 여기 |
-| `references/preflight.md` | **마감 직전 항상** |
+| `references/ai-tells.md` | **Always**, for any screen work |
+| `references/landing.md` | Landing, marketing, portfolio only |
+| `references/redesign.md` | Only when changing an existing screen |
+| `references/tailwind.md` | When using Tailwind or shadcn/ui. Stack defaults and the performance and motion rules live here too |
+| `references/preflight.md` | **Always, right before finishing** |
 
-기존 화면을 고치는 경우 `redesign.md`를 **먼저** 읽는다. 감사보다 먼저 손대면 되돌릴 것이 생긴다.
+When changing an existing screen, read `redesign.md` **first**. Touching it before the audit creates work to undo.
 
-## 4. 구조가 다른 변형을 2~3개 만든다
+## 4. Build two or three structurally different variants
 
-**색만 다른 것은 변형이 아니다.** 다음 중 최소 둘이 실제로 달라야 한다.
+**Different colors is not a variant.** At least two of these must actually differ.
 
-- 레이아웃 — 배치가 다른가
-- 정보 위계 — 무엇을 가장 크게 보여주는가
-- 주요 동작 — 핵심 버튼이 어디에 어떤 형태로 있는가
+- Layout — is the arrangement different
+- Information hierarchy — what is shown largest
+- Primary action — where the key button is and what form it takes
 
-살짝씩 다른 카드 그리드 세 개는 변형이 아니라 벽지다.
+Three slightly different card grids are wallpaper, not variants.
 
-**보는 방법** — 한 화면에서 전환할 수 있게 한다. 라우팅이 있으면 URL 쿼리(`?variant=a`)로, 없으면 토글 상태로 바꾼다. 전환 바는 화면 하단에 띄운다.
+**How to view them** — make them switchable on one screen. With routing, use a URL query (`?variant=a`); without it, use toggle state. Float the switcher at the bottom of the screen.
 
-**빈 라우트에 만들지 않는다.** 실제 데이터와 실제 주변 UI 안에 넣는다. 빈 페이지는 디자인 문제를 숨긴다.
+**Do not build them on an empty route.** Put them inside real data and the real surrounding UI. An empty page hides design problems.
 
-기존 화면을 고치는 경우 **현재 화면도 변형 중 하나로 포함시킨다.** 비교 대상이 있어야 개선인지 취향 변경인지 구분된다.
+When changing an existing screen, **include the current screen as one of the variants.** Without a baseline there is no way to tell improvement from a change of taste.
 
-각 변형이 무엇을 다르게 시도했는지 한 줄씩 설명을 붙인다. 디자인 용어 없이 쓴다.
+Add one line per variant on what it tried differently. Write it without design jargon.
 
-**변형 단계의 코드에는 테스트를 쓰지 않는다.** 둘 이상은 버릴 코드다. tdd 스킬이 예외로 둔 일회성 프로토타입에 해당하므로 따로 확인받지 않아도 된다. 5단계에서 고른 안을 다시 쓸 때부터 tdd를 따른다.
+**Do not write tests for variant-stage code.** Two or more of them are throwaway. This is the one-off prototype the tdd skill already exempts, so no confirmation is needed. Follow tdd from the moment you rewrite the chosen variant in step 5.
 
-## 5. 고르고 마감한다
+## 5. Choose and finish
 
-선택된 안만 남기고 나머지 변형과 전환 바를 지운다. 그다음 `references/preflight.md`의 체크리스트를 돌린다.
+Keep only the chosen variant; delete the rest and the switcher. Then run the checklist in `references/preflight.md`.
 
-세는 항목은 실제로 센다. 보는 항목은 실제로 화면을 띄워 본다. 못 넘긴 항목이 있으면 고친다.
+Count the items that are counted. Actually open the screen for the items that are looked at. Fix anything that does not pass.
 
-## 하지 않는 것
+## Never do this
 
-- 방향 확인과 다이얼 확정 없이 바로 코드 쓰기
-- 프로토타입 코드를 그대로 프로덕션에 올리기 — 고른 뒤 다시 쓴다
-- 화면을 보여주지 않고 "예쁘게 만들었다"고 보고하기
-- 체크리스트를 눈대중으로 넘기기
+- Writing code before the direction is confirmed and the dials are set
+- Shipping prototype code to production as is — rewrite it after choosing
+- Reporting "made it look nice" without showing the screen
+- Waving through the checklist by eye

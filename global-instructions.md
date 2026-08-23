@@ -1,54 +1,55 @@
 <!--
-전역 에이전트 지침 원본.
-~/.claude/CLAUDE.md 와 ~/.codex/AGENTS.md 가 이 파일을 심볼릭 링크한다.
-고칠 때는 반드시 이 파일을 고친다. scripts/link.sh 로 링크를 재생성·검증할 수 있다.
+Original of the global agent instructions.
+~/.claude/CLAUDE.md and ~/.codex/AGENTS.md symlink to this file.
+Always edit this file. Use scripts/link.sh to recreate and verify the links.
 -->
 
-## Git 작업 규칙
+## Git
 
-- 커밋은 절대 스스로 실행하지 않는다. 커밋 메시지 초안을 작성해 제안하고, 사용자가 명시적으로 "커밋해줘" 등으로 지시할 때만 실제 커밋을 실행한다.
-- 워킹트리 생성/전환, 브랜치 생성/전환/삭제 등 저장소 구조에 영향을 주는 작업은 실행 전 반드시 사용자에게 확인받는다.
-- 개발 작업은 기본 브랜치(main/master)에 직접 하지 않는다. 브랜치·커밋·PR의 절차와 네이밍 규칙, PR 본문 형식은 `branch-flow` 스킬을 따른다.
-- PR 머지는 사용자가 GitHub에서 직접 수행한다. 에이전트가 대신 머지하지 않는다.
-- 커밋 메시지와 PR 본문에 `Co-Authored-By` 서명이나 AI 생성 표기를 넣지 않는다.
+- Never commit on your own. Draft a commit message and propose it. Run the commit only when the user explicitly says so.
+- Always get confirmation before anything that changes repository structure: creating or switching worktrees, creating, switching, or deleting branches.
+- Do not do development work directly on the default branch (main/master). Follow the `branch-flow` skill for branch, commit, and PR procedure, naming, and PR body format.
+- The user merges PRs on GitHub. The agent does not merge on their behalf.
+- Do not put `Co-Authored-By` signatures or AI-generated markers in commit messages or PR bodies.
 
-## 설계
+## Design
 
-- 버그 수정이나 한 파일 안의 소수정을 넘어서는 작업은 구현 전에 `design` 스킬로 설계를 확정한다.
-- 요구사항이 불충분한 상태에서 추측으로 구현을 시작하지 않는다.
+- For anything beyond a bug fix or a small edit within one file, settle the design with the `design` skill before implementing.
+- Do not start implementing on guesses while requirements are still thin.
 
-## 서브 에이전트 위임
+## Delegating to subagents
 
-- 탐색·리뷰·검증처럼 무거운 작업의 위임 여부, 병렬 실행, 모델 선택은 `delegation` 스킬을 따른다.
-- 메인 에이전트는 위임 결과를 종합하고 의사결정에 집중해 컨텍스트를 깔끔하게 유지한다.
+- Follow the `delegation` skill to decide whether to delegate heavy work such as exploration, review, and verification, whether to run it in parallel, and which model tier to use.
+- The main agent synthesizes delegated results and concentrates on decisions, keeping its context clean.
 
-## 문서 작성 규칙
+## Writing documents
 
-- 사용자가 읽을 목적의 문서(설계 문서, 리뷰 문서, README, 회의록 등)는 한글로 작성한다.
+- Write in English: design documents, PRDs, TRDs, progress records, review records, and everything else under `docs/`.
+- Write in Korean: `README.md`, PR bodies, and commit messages. People read these.
 
-## 지침 파일 동기화 규칙
+## Keeping instruction files in sync
 
-프로젝트 지침 파일은 `CLAUDE.md` 또는 `AGENTS.md`다. 아래에서 "지침 파일"은 그 프로젝트가 쓰는 쪽을 가리킨다.
+A project's instruction file is either `CLAUDE.md` or `AGENTS.md`. Below, "instruction file" means whichever one that project uses.
 
-- 구조에 영향을 주는 변경(새 모듈/디렉터리 추가·삭제, 아키텍처나 컨벤션 변경, 설정 키 변경 등)을 하고 나면 관련 범위의 지침 파일(루트 또는 해당 하위 디렉터리)이 여전히 정확한지 확인하고, 낡았으면 수정한다.
-- 디렉터리별로 지침 파일이 나뉘어 있다면, 그 디렉터리 안에서 일어난 변경은 루트가 아니라 해당 하위 지침 파일을 먼저 검토 대상으로 삼는다.
-- 어떤 접근이 실패했거나 사용자가 같은 실수를 반복하지 말라고 지적했다면, 그 프로젝트의 지침 파일에 원인과 교훈을 한 줄로 남기는 것을 제안한다. 이미 그런 기록 섹션이 있으면 거기에 추가하고, 없다면 새로 만들지 여부를 먼저 물어본다.
-- 프로젝트 지침 파일은 `AGENTS.md`를 원본으로 두고 `CLAUDE.md`가 그것을 심볼릭 링크한다. 새로 만들거나 정리할 때는 `init` 스킬을 따른다.
-- 전역 지침(이 파일)은 `~/dev/claude-skills/global-instructions.md`가 원본이다. 각 하네스의 전역 지침 파일은 이 파일을 링크만 한다. 고칠 때는 원본을 고치고, 특정 에이전트 이름을 본문에 쓰지 않는다.
+- After a structural change (adding or removing a module or directory, changing architecture or conventions, changing config keys), check whether the instruction file for that scope (root or the relevant subdirectory) is still accurate, and fix it if it is stale.
+- When instruction files are split per directory, a change inside a directory makes that subdirectory's file the first review target, not the root.
+- When an approach failed, or the user pointed out a repeated mistake, propose adding one line to that project's instruction file recording the cause and the lesson. If such a section already exists, add to it. If not, ask first whether to create one.
+- A project instruction file keeps `AGENTS.md` as the original with `CLAUDE.md` symlinked to it. Follow the `init` skill when creating or reorganizing them.
+- The global instructions (this file) live in `~/dev/claude-skills/global-instructions.md`. Each harness's global instruction file only links to it. Edit the original, and do not name a specific agent in the body.
 
-## 테스트 작성 규칙
+## Tests
 
-- 새 기능/버그 수정/리팩터링은 테스트를 먼저 쓴다. 절차와 통합 테스트 판단 기준은 `tdd` 스킬을 따른다.
-- 테스트를 건너뛰어야 한다고 판단되면 반드시 먼저 사용자에게 확인받는다.
+- Write the test first for new features, bug fixes, and refactoring. Follow the `tdd` skill for the procedure and for deciding when an integration test is warranted.
+- When you conclude a test should be skipped, always confirm with the user first.
 
-## 코드/설정 파일 주석 스타일 규칙
+## Comment style in code and config files
 
-- 코드 주석은 서술형 문단으로 쓰지 않고 간결하게 작성한다.
-- 여러 사실을 전달해야 하면 한 줄짜리 주석을 여러 개 이어 쓴다(문단이 아니라 목록처럼).
-- 이 규칙은 코드/설정 파일 인라인 주석에 한정되며, README나 설계 문서 같은 산문 문서에는 적용하지 않는다.
+- Keep code comments terse. Do not write them as narrative paragraphs.
+- When several facts must be conveyed, write several one-line comments in a row (a list, not a paragraph).
+- This applies to inline comments in code and config files only, not to prose documents like READMEs and design documents.
 
-## 코딩 원칙
+## Coding principles
 
-- **사전 확인**: 구현 전 가정을 명시한다. 불확실하거나 여러 해석이 가능하면 추측하지 말고 전부 제시하며 질문한다. 더 단순한 대안이 있으면 반대 의견이라도 제시한다.
-- **단순성 우선**: 요청을 해결하는 최소한의 코드만 작성한다. 요청 이상의 기능, 일회성 추상화, 요청받지 않은 유연성/설정 가능성, 일어날 수 없는 시나리오의 에러 처리는 추가하지 않는다.
-- **정밀한 수정**: 요청과 무관한 코드/주석/포맷은 건드리지 않는다. 관련 없는 기존 미사용 코드는 삭제하지 않고 언급만 한다. 단, 이번 변경으로 새로 미사용이 된 import/변수/함수는 제거한다.
+- **Confirm first**: state your assumptions before implementing. When something is uncertain or admits several readings, do not guess — present all of them and ask. When a simpler alternative exists, say so even if it contradicts the request.
+- **Simplicity first**: write the minimum code that solves the request. Do not add capability beyond what was asked, single-use abstractions, flexibility or configurability nobody requested, or error handling for scenarios that cannot occur.
+- **Precise edits**: do not touch code, comments, or formatting unrelated to the request. Do not delete unrelated dead code — mention it instead. Do remove imports, variables, and functions that this change itself made unused.
