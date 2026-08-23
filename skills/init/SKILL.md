@@ -7,17 +7,12 @@ Keep `AGENTS.md` at the project root as the original, with `CLAUDE.md` symlinked
 
 ## 1. Check the existing files first
 
-There are four cases and they are handled differently.
-
-- **Neither exists** → create them
-- **Only `CLAUDE.md` exists** → move the content into `AGENTS.md` and replace `CLAUDE.md` with a link. **Back it up before replacing**
-- **Only `AGENTS.md` exists** → add the `CLAUDE.md` link
-- **Both are real files** → compare the content. If they differ, propose a merge and get approval. **Never overwrite on your own**
+Read `references/file-layout.md` and settle which case you are in before writing anything.
 
 **Preserving existing content is the default.** When instructions already exist, you are **updating** them, not rewriting them.
 
 - Do not touch rules, warnings, or past lessons a person wrote by hand
-- Fix only what is now wrong: commands that no longer exist, changed structure, directories that are gone
+- Fix only what is now wrong: commands that no longer run, conventions that changed, rules for code that is gone
 - If something should be deleted, present it as a list and get approval. Do not delete quietly
 - When you find items duplicated from the global instructions, **propose** removing them. The user decides
 
@@ -27,37 +22,41 @@ Summarize what you changed at the end.
 
 Do not fill this in with guesses. If the survey will take three or more tool calls, delegate with the delegation skill.
 
-- Build, test, run, and lint commands — find them in `package.json` scripts, `Makefile`, `pyproject.toml`, CI config
-- The directory structure and what each directory is for
-- Language, framework, main dependencies and versions
-- Conventions already in place — naming, test locations, import style
+- Build, test, run, and lint commands — from `package.json` scripts, `Makefile`, `pyproject.toml`, CI config. Run each one and keep only what actually works
+- Conventions a single file does not reveal — test runner and its rules, error handling, import style, layering
+- Known breakage — steps that fail often, approaches that were tried and abandoned
 
 ## 3. Write it
 
+**Under 100 lines.** This file loads in full every session, so length is a cost paid on every turn.
+
 **What goes in**
 
-- One paragraph of overview — what this project does
-- Frequently used commands — only ones you actually confirmed work
-- Structure — the main directories and their roles
+- One or two sentences on what this project is
+- Build, test, and lint commands. This is the main reason the file exists — always include them
 - Rules specific to this project — what differs from or adds to the global instructions
 - Warnings — what tends to fail, approaches that were wrong before
 
 **What must not go in**
 
+- Anything the code already shows — the language, the framework, which directory holds what, the folder tree, file and function listings
 - Anything already in the global instructions — git workflow, coding principles, test rules. Duplication loads twice and drifts apart later
-- Anything you learn by reading the code — function lists, file listings
-- Generalities — "write clean code", "keep it readable"
+- Generalities — "write clean code", "write good tests"
 
-Write it in English, and keep it short. **This file loads in full every session.** When a procedure gets long, propose moving it into a skill.
+**Write rules the agent can act on.** A rule that needs interpretation is noise.
+
+| Noise | Rule |
+|---|---|
+| Write tests well | Tests run on Vitest. Do not use mocks |
+| Handle errors properly | Throw `AppError`. Never return `null` on failure |
+| Keep commits clean | One commit per logical unit |
+
+**Point at other documents instead of inlining them.** When a convention runs long, leave it in its own file and reference the path — one line here, the detail loaded only when it is needed. When a long procedure shows up, propose moving it into a skill.
+
+**Format it for scanning.** Headings, lists, and tables. No narrative paragraphs.
+
+Write it in English.
 
 ## 4. Link them
 
-Create the link at the project root.
-
-```
-ln -s AGENTS.md CLAUDE.md
-```
-
-Do not add it to `.gitignore`. The instructions travel with the repo.
-
-If this is not a solo repo and several people clone it, say so first. Symlinks committed to git can break on Windows, and in that case ask whether to keep both as real files instead of a link.
+Create the link at the project root as described in `references/file-layout.md`.
