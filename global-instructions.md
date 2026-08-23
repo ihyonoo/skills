@@ -34,7 +34,7 @@ A project's instruction file is either `CLAUDE.md` or `AGENTS.md`. Below, "instr
 - After a structural change (adding or removing a module or directory, changing architecture or conventions, changing config keys), check whether the instruction file for that scope (root or the relevant subdirectory) is still accurate, and fix it if it is stale.
 - When instruction files are split per directory, a change inside a directory makes that subdirectory's file the first review target, not the root.
 - When an approach failed, or the user pointed out a repeated mistake, propose adding one line to that project's instruction file recording the cause and the lesson. If such a section already exists, add to it. If not, ask first whether to create one.
-- A project instruction file keeps `AGENTS.md` as the original with `CLAUDE.md` symlinked to it. Follow the `init` skill when creating or reorganizing them.
+- A project instruction file keeps `AGENTS.md` as the original with `CLAUDE.md` symlinked to it. Follow the `init` skill when creating, updating, or reorganizing them.
 - The global instructions (this file) live in `~/dev/claude-skills/global-instructions.md`. Each harness's global instruction file only links to it. Edit the original, and do not name a specific agent in the body.
 
 ## Tests
