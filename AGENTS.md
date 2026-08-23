@@ -51,6 +51,8 @@ Call skills by name: `delegate with the delegation skill`.
 
 One-directional pipeline calls are allowed (`design` → `prd` → `trd` → `implement`). **Never create a cycle.**
 
+Writing or reworking a skill goes through `skill-writer`, not `design`. It carries its own worthiness judgment and its own interview, so routing through `design` runs the interview twice.
+
 When two skills share logic, extract it into a primitive skill and have each call that.
 
 ## Handing work to subagents
@@ -95,5 +97,7 @@ Keep these in Korean:
 `scripts/check-skills.sh` — checks the machine-verifiable parts of these rules: frontmatter fields, body word count, `@` imports, reference file existence, README listing. Fix any FAIL.
 
 `scripts/link.sh` — creates a symlink in each installed harness's skill directory. Run it again after adding or renaming a skill. It leaves non-symlink entries alone and clears this repo's links whose source is gone.
+
+**When the edit touched a `description`, test that the skill still fires.** A description is the only thing that decides whether a skill loads, and no script can check it. The `skill-writer` skill holds the procedure.
 
 After adding a skill, add it to the skill table in the README.
