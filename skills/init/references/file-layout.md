@@ -5,8 +5,8 @@
 ## Which case are you in
 
 - **Neither exists** → create them
-- **Only `CLAUDE.md` exists** → move the content into `AGENTS.md` and replace `CLAUDE.md` with a link. **Back it up before replacing**
-- **Only `AGENTS.md` exists** → add the `CLAUDE.md` link
+- **Only `CLAUDE.md` exists** → ask the user whether to move the content into `AGENTS.md` and replace `CLAUDE.md` with a link. If they agree, **back it up before replacing**
+- **Only `AGENTS.md` exists** → ask the user whether to add the `CLAUDE.md` link. If they agree, add it
 - **Both are real files** → compare the content. If they differ, propose a merge and get approval. **Never overwrite on your own**
 
 ## Creating the link
