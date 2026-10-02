@@ -1,49 +1,47 @@
-# Body review prompt
+# 본문 리뷰 프롬프트
 
-Fill in `<...>` and pass it through as is. One subagent, standard tier or above.
+`<...>`를 채워 그대로 넘겨라. 서브에이전트 하나, 표준 등급 이상.
 
-Give the reviewer **the file path only.** Nothing about how the draft came to be, what was discussed, or what it is meant to fix. Whether the skill stands on its own is the thing being measured.
+리뷰어에게 **파일 경로만** 줘라. 초안이 어떻게 나왔는지, 무엇을 논의했는지, 무엇을 고치려는 것인지는 일절 주지 마라. 스킬이 혼자 서는지가 측정 대상이다.
 
-The spec-review skill's own two prompts do not fit here. They ask for success criteria, ungrounded figures, and non-goals — a skill body has none of those, and the reviewer will manufacture findings to fill the shape.
+spec-review 스킬의 자체 프롬프트 두 개는 여기에 맞지 않는다. 그 프롬프트는 성공 기준, 근거 없는 수치, 비목표를 묻는데 스킬 본문에는 그런 것이 없으므로, 리뷰어가 틀을 채우려고 지적 사항을 지어낸다.
 
 ---
 
 ```
-Read `<path to the draft SKILL.md>` and review it against the authoring rules in
-`<repo root>/AGENTS.md`. Read both files. Do not read anything else in the repo,
-except the `description` line of the other skills under `<repo root>/skills/*/SKILL.md`
-when you check for trigger collisions.
+`<path to the draft SKILL.md>`를 읽고 `<repo root>/AGENTS.md`의 작성 규칙에 비추어 리뷰하라.
+두 파일을 모두 읽어라. 저장소의 다른 것은 읽지 마라. 단, 트리거 충돌을 확인할 때는
+`<repo root>/skills/*/SKILL.md`에 있는 다른 스킬의 `description` 줄만 읽어라.
 
-Review on these axes:
+다음 축으로 리뷰하라.
 
-1. Description as trigger spec. Does it summarize the workflow instead of naming
-   occasions? A description that explains the procedure gets followed in place of
-   the body, and the body never loads. Does its trigger clause collide with the
-   description of an existing skill?
-2. Load cost. What in the body loads every time this skill fires but is needed only
-   sometimes? Name what belongs in `references/` instead. What in `references/` is
-   load-bearing enough that the skill misbehaves without it?
-3. Sentence form. Prohibitions must read `Do not` or `Never`, with no exception
-   clause attached. Flag every "avoid", "try not to", "should not", and every
-   prohibition softened by "unless". Flag format requirements written as
-   prohibitions where a positive recipe would work better.
-4. Actionability. Which instructions require interpretation before they can be
-   followed? Quote the sentence and give the two readings that diverge.
-5. Harness neutrality. Tool names, slash commands, specific model names, or
-   "in <agent> do X" branches in the body. These belong in `references/`, or should
-   be rewritten as behavior and model tiers.
-6. Duplication. Does the body restate a rule that AGENTS.md already carries?
-   The body is the procedure; the rules stay in one place.
+1. 트리거 명세로서의 description. 상황을 짚지 않고 워크플로를 요약하는가?
+   절차를 설명하는 description은 본문 대신 따라가게 되어 본문이 로드되지 않는다.
+   트리거 절이 기존 스킬의 description과 충돌하는가?
+2. 로드 비용. 이 스킬이 발동할 때마다 로드되지만 가끔만 필요한 것이 본문에 있는가?
+   대신 `references/`에 있어야 할 것을 짚어라. `references/`에서 그것 없이는
+   스킬이 오동작할 만큼 핵심적인 것은 무엇인가?
+3. 문장 형태. 금지문은 예외 절 없이 `하지 마라` 또는 `절대 ~하지 마라`여야 한다.
+   "avoid", "try not to", "should not"에 해당하는 표현과 "unless"로 누그러뜨린
+   금지문을 모두 지적하라. 긍정 레시피가 더 나은데 금지문으로 쓴 형식 요구도
+   지적하라.
+4. 실행 가능성. 따르기 전에 해석이 필요한 지시는 무엇인가? 그 문장을 인용하고
+   갈리는 두 해석을 제시하라.
+5. 하네스 중립성. 본문의 도구 이름, 슬래시 커맨드, 특정 모델 이름, "<agent>에서는
+   X를 하라" 식의 분기. 이는 `references/`로 가거나 동작과 모델 등급으로 다시
+   써야 한다.
+6. 중복. 본문이 AGENTS.md에 이미 있는 규칙을 다시 적고 있는가?
+   본문은 절차이고, 규칙은 한 곳에만 둔다.
 
-Quote the relevant sentence for every finding and attach a grade.
-- Blocking: shipping as written means the skill misfires, fails to load, or
-  cannot be followed
-- Worth fixing: it works, but it costs later
-- Opinion: taste, or an alternative
+지적 사항마다 해당 문장을 인용하고 등급을 붙여라.
+- 블로킹: 이대로 내놓으면 스킬이 오발동하거나, 로드되지 않거나,
+  따를 수 없다
+- 수정 권장: 동작은 하지만 나중에 비용이 든다
+- 의견: 취향, 또는 대안
 
-Do not comment on typos or prose style. Do not suggest additional content the
-skill does not need.
+오탈자나 문체는 언급하지 마라. 스킬에 필요 없는 내용을 추가하자고
+제안하지 마라.
 
-Write the result to `<output path>` as markdown, blocking findings first.
-Leave only the file path and the counts per grade in your final response.
+결과를 마크다운으로 `<output path>`에 쓰되 블로킹 지적 사항을 먼저 적어라.
+최종 응답에는 파일 경로와 등급별 개수만 남겨라.
 ```

@@ -4,48 +4,48 @@ description: 제품 요구사항 문서를 작성한다. 무엇을 왜 만드는
 argument-hint: [기능 이름]
 ---
 
-Write **what** is being built and **why**. How to build it belongs to the TRD.
+**무엇을** 만드는지와 **왜** 만드는지를 써라. 어떻게 만들지는 TRD의 몫이다.
 
-## Check first
+## 먼저 확인하라
 
-If the design is not settled, run the design skill first. If requirements have gaps, fill them with deep-interview. **Do not fill in blanks with guesses.**
+설계가 확정되지 않았으면 design 스킬을 먼저 돌려라. 요구사항에 빈틈이 있으면 deep-interview로 채워라. **빈칸을 추측으로 채우지 마라.**
 
-## Path
+## 경로
 
 `docs/prd/YYYY-MM-DD-<kebab-slug>.md`
 
-## Structure
+## 구조
 
-**1. Problem and background**
-What hurts right now, and why it must be solved now. Do not put the solution here.
+**1. 문제와 배경**
+지금 무엇이 아프고, 왜 지금 풀어야 하는가. 해결책은 여기에 쓰지 마라.
 
-**2. Goals and success criteria**
-These must be measurable. "Improve usability" is not a goal. State what changes by how much, as a number or an observable condition.
+**2. 목표와 성공 기준**
+측정할 수 있어야 한다. "사용성 개선"은 목표가 아니다. 무엇이 얼마나 바뀌는지를 숫자나 관찰 가능한 조건으로 써라.
 
-**3. Users and scenarios**
-Who uses this and when. Describe two or three representative scenarios as flows. Write the need, not the screen.
+**3. 사용자와 시나리오**
+누가 언제 쓰는가. 대표 시나리오 두세 개를 흐름으로 서술하라. 화면이 아니라 필요를 써라.
 
-**4. Requirements**
-Give every item an ID (`R-1`, `R-2`) and a priority.
-- **MUST** — cannot ship without it
-- **SHOULD** — needed, but can slip
-- **COULD** — only if there is room
+**4. 요구사항**
+모든 항목에 ID(`R-1`, `R-2`)와 우선순위를 붙여라.
+- **MUST** — 없으면 출시할 수 없다
+- **SHOULD** — 필요하지만 미룰 수 있다
+- **COULD** — 여유가 있을 때만 한다
 
-The TRD and the tests reference these IDs. Always assign them.
+TRD와 테스트가 이 ID를 참조한다. 반드시 부여하라.
 
-**Actually spread items across the three levels.** If everything is MUST, you have not prioritized.
+**세 단계에 실제로 나눠라.** 전부 MUST라면 우선순위를 매긴 것이 아니다.
 
-**5. Non-goals**
-What this round does not do. This heads off "why isn't this here" later.
+**5. 비목표**
+이번에 하지 않는 일. 나중에 "왜 이게 없냐"는 말이 나오는 것을 막는다.
 
-**6. Constraints**
-Deadlines, people, existing systems, regulations, budget.
+**6. 제약**
+기한, 인력, 기존 시스템, 규제, 예산.
 
-**7. Open questions**
-What is still undecided, and by when it must be decided.
+**7. 열린 질문**
+아직 정해지지 않은 것과 언제까지 정해야 하는지.
 
-## After writing
+## 작성 후
 
-Always run spec-review. Do not move to an approval request while a blocking finding remains.
+반드시 spec-review를 돌려라. 블로킹 지적 사항이 남아 있으면 승인 요청으로 넘어가지 마라.
 
-Once approved, move to trd.
+승인되면 trd로 넘어가라.

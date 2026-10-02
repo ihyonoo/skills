@@ -3,61 +3,61 @@ name: delegation
 description: 무거운 작업을 서브에이전트에 넘길지, 병렬로 돌릴지, 어떤 모델을 쓸지 추천안과 함께 사용자에게 확인받는다. 탐색·리뷰·검증·조사처럼 도구 호출이 3회 이상 예상되는 작업을 시작하기 직전에 사용한다.
 ---
 
-Form the judgment first, then confirm that judgment with the user. Do not just throw questions and leave the choice to them.
+먼저 판단을 세운 뒤, 그 판단을 사용자에게 확인받아라. 질문만 던지고 선택을 떠넘기지 마라.
 
-## 1. Judge first
+## 1. 먼저 판단하라
 
-| Situation | Approach |
+| 상황 | 방식 |
 |---|---|
-| Opening one or two files, one or two greps | **Handle it directly.** Spinning up a subagent costs more |
-| Codebase exploration needing three or more queries | One subagent |
-| Review, test and build verification, external research | One subagent |
-| Two or more independent domains with no file overlap | N in parallel |
-| Editing files, committing, pushing, creating branches | **Handle it directly.** Never delegate these |
+| 파일 한두 개 열기, grep 한두 번 | **직접 처리한다.** 서브에이전트를 띄우는 비용이 더 크다 |
+| 쿼리 세 번 이상이 필요한 코드베이스 탐색 | 서브에이전트 하나 |
+| 리뷰, 테스트·빌드 검증, 외부 조사 | 서브에이전트 하나 |
+| 파일이 겹치지 않는 독립 영역 둘 이상 | N개 병렬 |
+| 파일 수정, 커밋, 푸시, 브랜치 생성 | **직접 처리한다.** 절대 위임하지 마라 |
 
-## 2. Pick a model
+## 2. 모델을 골라라
 
-| Kind of work | Tier |
+| 작업 종류 | 티어 |
 |---|---|
-| Gathering files, listing, format conversion, plain summarization | Small and fast |
-| Codebase exploration, running tests, document drafts, ordinary review | Standard |
-| Architecture judgment, hard debugging, final review, subtle tradeoffs | Top-tier reasoning |
+| 파일 수집, 목록 나열, 형식 변환, 단순 요약 | 작고 빠른 모델 |
+| 코드베이스 탐색, 테스트 실행, 문서 초안, 일반 리뷰 | 표준 |
+| 아키텍처 판단, 어려운 디버깅, 최종 리뷰, 미묘한 트레이드오프 | 최상위 추론 모델 |
 
-Map the models the running agent offers onto these tiers (in Claude Code, haiku / sonnet / opus respectively).
+실행 중인 에이전트가 제공하는 모델을 이 티어에 대응시켜라 (Claude Code에서는 각각 haiku / sonnet / opus).
 
-When unclear, use standard. If you will trust the result and move on without checking, go up one tier.
+불분명하면 표준을 써라. 결과를 검증하지 않고 믿고 넘어갈 작업이면 한 티어 올려라.
 
-Review work has a second axis, and it is not capability. A reviewer from the same vendor shares your blind spots — it reads the same idioms as safe and the same designs as natural. Isolating the context is not the same as isolating the model.
+리뷰에는 두 번째 축이 있고, 그것은 성능이 아니다. 같은 벤더의 리뷰어는 당신과 사각지대를 공유한다. 같은 관용구를 안전하다고 읽고, 같은 설계를 자연스럽다고 읽는다. 컨텍스트를 분리하는 것과 모델을 분리하는 것은 다르다.
 
-So an agent from a different vendor is a valid model choice for any review, at any tier. Offer it only when the environment actually provides one — `references/external-review.md` has the availability check and the call shapes.
+그래서 다른 벤더의 에이전트는 어떤 티어의 리뷰에서든 유효한 모델 선택지다. 환경이 실제로 제공할 때만 제시하라. 사용 가능 여부 확인과 호출 형태는 `references/external-review.md`에 있다.
 
-## 3. Confirm
+## 3. 확인하라
 
-Ask two things as a set of options, but **put your recommendation first and mark the label with (추천).**
+두 가지를 선택지 묶음으로 물어라. 단 **추천안을 맨 앞에 두고 라벨에 (추천)을 붙여라.**
 
-- Execution: direct / one subagent / N in parallel — write the time cost and context impact into each option
-- Model: recommended model first, the rest with their tradeoff ("faster but may miss things" / "more accurate but slower"). For a review, include the external agent as one option whenever it is available, with its own tradeoff — slower, and a separate usage limit. When the user picks it, ask a second question for the model. **The vendor name is not a model**
+- 실행 방식: 직접 / 서브에이전트 하나 / N개 병렬 — 각 선택지에 시간 비용과 컨텍스트 영향을 적어라
+- 모델: 추천 모델을 맨 앞에 두고, 나머지에는 트레이드오프를 적어라 ("더 빠르지만 놓칠 수 있다" / "더 정확하지만 느리다"). 리뷰라면 외부 에이전트를 사용할 수 있을 때마다 선택지에 넣고, 그 트레이드오프(더 느리고 사용량 한도가 별도)를 적어라. 사용자가 그것을 고르면 모델을 묻는 두 번째 질문을 하라. **벤더 이름은 모델이 아니다**
 
-Skip the execution question when: the user already specified the approach, the work is plainly a direct-handling job, another skill already fixed the execution mode (spec-review's two parallel axes, for example), or an interview round is in progress.
+실행 방식 질문을 건너뛰는 경우: 사용자가 이미 방식을 지정했을 때, 작업이 분명히 직접 처리할 일일 때, 다른 스킬이 이미 실행 방식을 고정했을 때 (예: spec-review의 병렬 두 축), 인터뷰 라운드가 진행 중일 때.
 
-Skip the model question when: the user already named a model, the work is handled directly, or an interview round is in progress. **A fixed execution mode does not fix the model** — when another skill pinned the axes, still ask which model runs them.
+모델 질문을 건너뛰는 경우: 사용자가 이미 모델을 지정했을 때, 직접 처리할 때, 인터뷰 라운드가 진행 중일 때. **실행 방식이 고정돼도 모델이 고정되는 것은 아니다.** 다른 스킬이 축을 고정했더라도 어떤 모델로 돌릴지는 물어라.
 
-When you skip, run the recommendation and say so in one line.
+건너뛸 때는 추천안대로 실행하고 한 줄로 알려라.
 
-## 4. Write the prompt
+## 4. 프롬프트를 써라
 
-The subagent knows **nothing** about this conversation. Explain the purpose, the context, and the expected output format self-sufficiently inside the prompt.
+서브에이전트는 이 대화에 대해 **아무것도** 모른다. 목적, 컨텍스트, 기대하는 출력 형식을 프롬프트 안에서 스스로 완결되게 설명하라.
 
-**Do not paste conversation history.** What you paste, and what the agent outputs, sit in context for the rest of the session and get re-read every turn. When something must be handed over, write it to a file and pass the path. Take the result back as a file too.
+**대화 기록을 붙여넣지 마라.** 붙여넣은 내용과 에이전트의 출력은 세션이 끝날 때까지 컨텍스트에 남아 매 턴 다시 읽힌다. 넘길 것이 있으면 파일로 쓰고 경로를 전달하라. 결과도 파일로 받아라.
 
-Specify the output format — length cap, sections, and which language to write in.
+출력 형식을 지정하라. 길이 상한, 섹션, 작성 언어를 적어라.
 
-## 5. Run it and wait
+## 5. 실행하고 기다려라
 
-If the next task depends on the result, run it in the foreground; otherwise run it in the background and keep working. When several independent delegations exist, launch them in parallel at once.
+다음 작업이 결과에 의존하면 포그라운드로 실행하라. 아니면 백그라운드로 돌리고 다른 일을 계속하라. 독립적인 위임이 여럿이면 한꺼번에 병렬로 띄워라.
 
-**Do not guess at the result of a backgrounded task before the completion notice arrives.** If the user asks, say it is still running.
+**완료 알림이 오기 전에는 백그라운드 작업의 결과를 추측하지 마라.** 사용자가 물으면 아직 실행 중이라고 답하라.
 
-## 6. Verify the result
+## 6. 결과를 검증하라
 
-Do not take a subagent's report at face value. When the conclusion drives the next step, confirm one or two of its central claims yourself.
+서브에이전트의 보고를 액면 그대로 믿지 마라. 결론이 다음 단계를 좌우하면 핵심 주장 한두 개를 직접 확인하라.

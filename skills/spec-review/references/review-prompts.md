@@ -1,68 +1,66 @@
-# Subagent prompt templates
+# 서브에이전트 프롬프트 템플릿
 
-Fill in `<...>` and pass them through as is. The two axes are independent, so launch them in parallel.
+`<...>`를 채워서 그대로 넘겨라. 두 축은 독립이므로 병렬로 띄워라.
 
-Both prompts give **the document path only.** The moment you add what was discussed while writing it, that document looks self-sufficient forever.
-
----
-
-## Completeness axis
-
-```
-Read `<document path>` and verify whether the document itself is whole.
-
-Read only this document. Do not look at other files or code in the repo.
-Whether the document explains itself is what you are verifying.
-
-Look for:
-
-1. Decisions not made — items that should have been decided and were left blank.
-   "To be defined", "TBD", or simply passed over without mention
-2. Sentences that admit several readings — sentences two people could implement
-   differently. Write out both readings and how they diverge
-3. Success criteria that cannot be measured — phrasing like "fast", "stable",
-   "improved usability"
-4. Numbers that appear without grounds — figures the document never explains the source of
-5. Non-goals left unstated — is what this round does not do written down?
-   Without it, the document alone cannot tell you where the scope ends
-
-Quote the relevant sentence for every finding and attach a grade.
-- Blocking: proceeding as written will stall implementation
-- Worth fixing: it proceeds, but it costs later
-- Opinion: taste, or an alternative
-
-Do not comment on typos or style.
-
-Write the result to `<output path>` as markdown, blocking findings first.
-Leave only the file path and the counts per grade in your final response.
-```
+두 프롬프트 모두 **문서 경로만** 준다. 문서를 쓰는 동안 논의한 내용을 덧붙이는 순간, 그 문서는 영원히 자기완결적으로 보인다.
 
 ---
 
-## Feasibility axis
+## 완결성 축
 
 ```
-Read `<document path>` and verify whether implementation can start from this document alone.
+`<document path>`를 읽고 문서 자체가 온전한지 검증하라.
 
-After reading the document, check the actual code structure in `<repo path>`.
-Reconciling what the document says against what is in the code is this axis's job.
+이 문서만 읽어라. 저장소의 다른 파일이나 코드는 보지 마라.
+문서가 스스로를 설명하는지가 검증 대상이다.
 
-Look for:
+찾을 것:
 
-1. Points that block starting — can you open the first file from this document alone?
-   Parts where what to build first is not determined
-2. Hidden dependencies — things the document presumes but does not state.
-   External APIs, data sources, permissions, infrastructure, another team's work
-3. Conflicts with existing code — where the document's design collides with the current
-   structure. Quote the relevant file path
-4. Scope unrealistic within the constraints — what is excessive against the deadline,
-   people, and environment stated in the document
+1. 내려지지 않은 결정 — 정했어야 하는데 비워 둔 항목.
+   "추후 정의", "TBD", 또는 언급 없이 넘어간 것
+2. 여러 갈래로 읽히는 문장 — 두 사람이 다르게 구현할 수 있는 문장.
+   두 해석과 어디서 갈라지는지를 적어라
+3. 측정할 수 없는 성공 기준 — "빠르다", "안정적이다", "사용성 개선" 같은 표현
+4. 근거 없이 등장하는 숫자 — 문서가 출처를 설명하지 않는 수치
+5. 명시되지 않은 비목표 — 이번에 하지 않는 일이 적혀 있는가?
+   없으면 문서만으로는 범위가 어디서 끝나는지 알 수 없다
 
-Attach evidence to every finding: a sentence from the document, or file:line from the code.
-Grade: blocking / worth fixing / opinion.
+모든 지적 사항에 해당 문장을 인용하고 등급을 붙여라.
+- 블로킹: 쓰인 대로 진행하면 구현이 멈춘다
+- 수정 권장: 진행은 되지만 나중에 비용이 든다
+- 의견: 취향이나 대안
 
-Do not manufacture findings from speculation. If you could not confirm it, classify it as "unverified".
+오탈자와 문체는 언급하지 마라.
 
-Write the result to `<output path>` as markdown.
-Leave only the file path and the counts per grade in your final response.
+결과를 `<output path>`에 마크다운으로 쓰되, 블로킹 지적 사항을 먼저 써라.
+최종 응답에는 파일 경로와 등급별 개수만 남겨라.
+```
+
+---
+
+## 실현 가능성 축
+
+```
+`<document path>`를 읽고 이 문서만으로 구현을 시작할 수 있는지 검증하라.
+
+문서를 읽은 뒤 `<repo path>`의 실제 코드 구조를 확인하라.
+문서의 내용과 코드의 실제를 대조하는 것이 이 축의 일이다.
+
+찾을 것:
+
+1. 착수를 막는 지점 — 이 문서만으로 첫 파일을 열 수 있는가?
+   무엇을 먼저 만들지 정해지지 않은 부분
+2. 숨은 의존성 — 문서가 전제하지만 적지 않은 것.
+   외부 API, 데이터 소스, 권한, 인프라, 다른 팀의 작업
+3. 기존 코드와의 충돌 — 문서의 설계가 현재 구조와 부딪히는 곳.
+   해당 파일 경로를 인용하라
+4. 제약 안에서 비현실적인 범위 — 문서에 적힌 기한·인력·환경에 비해 과한 것
+
+모든 지적 사항에 근거를 붙여라. 문서의 문장이나 코드의 file:line이다.
+등급: 블로킹 / 수정 권장 / 의견.
+
+추측으로 지적 사항을 만들어 내지 마라. 확인하지 못했다면 "미검증"으로 분류하라.
+
+결과를 `<output path>`에 마크다운으로 써라.
+최종 응답에는 파일 경로와 등급별 개수만 남겨라.
 ```

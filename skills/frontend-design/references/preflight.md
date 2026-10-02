@@ -1,69 +1,69 @@
-# Pre-ship checklist
+# 출하 전 체크리스트
 
-**Everything here is counted or seen immediately.** If even one item does not pass, it is not done.
+**여기 있는 항목은 모두 세거나 눈으로 바로 확인할 수 있다.** 하나라도 통과하지 못하면 끝난 것이 아니다.
 
-Judgments like "is it harmonious" or "was it well derived from the brief" are not here. Those are not checklist items.
-
----
-
-## Common — every screen
-
-- [ ] Are all **three dial values** written as numbers in the response?
-- [ ] `MOTION_INTENSITY` is 4 or higher — is there actually at least one animation?
-- [ ] Is there **exactly one accent color**, used the same way across the whole screen?
-- [ ] Is there **one corner-radius system**? No round buttons inside an angular layout?
-- [ ] Is there **one theme**? No dark section wedged into the middle of a light screen?
-- [ ] **Is button text readable against its own background?** No white-on-white, no borderless transparent buttons?
-- [ ] Does every **button label fit on one line** at desktop?
-- [ ] Are there **two or more buttons meaning the same thing**?
-- [ ] Do **form inputs, placeholders, focus rings, and labels** clear contrast against the background?
-- [ ] Do **loading, empty, and error** states all exist?
-- [ ] Does it work **by keyboard alone**? Is focus visible?
-- [ ] Does it hold up at **narrow widths**? Is the collapse behavior written down for every multi-column layout?
-- [ ] Is there **one icon set**? No hand-drawn SVG? No emoji standing in for icons?
-- [ ] Is the **fake data** believable? No sample names (홍길동 / John Doe), no fake brands (Acme), no suspiciously round numbers (99.99%)?
-- [ ] Are there **precise-looking figures with no source**? If so, are they marked as placeholders?
-- [ ] Did you **re-read every visible sentence**? No awkward metaphors, no sentences that do not parse?
-- [ ] Are **italic descenders** (`y g j p q`) not being clipped?
-- [ ] Can you justify **each animation** in one sentence?
-
-## Additional — landing, marketing, portfolio
-
-Skip this section for product UI and dashboards.
-
-- [ ] Does the **hero fit in the first screen**? Headline within 2 lines, subtext within 20 words and 4 lines, button visible without scrolling?
-- [ ] Is **hero top padding** 6rem or less?
-- [ ] Are there **4 or fewer text elements in the hero**? No tagline under the buttons, no trust strip?
-- [ ] Is the **logo wall outside the hero**? No industry labels under the logos?
-- [ ] Did you **count the small labels (eyebrows)**? Is it at most `ceil(section count / 3)`?
-- [ ] Are there **numbered labels** (`00 / INDEX`, `001 · Features`)?
-- [ ] Is any **layout family used twice**? With 8 sections, are there 4 or more distinct families?
-- [ ] Does an **image-plus-text split** run 3 times consecutively?
-- [ ] Is there a **split header** (large headline left, small explanatory paragraph right)?
-- [ ] Does the **grid cell count match the content count**? No empty cells?
-- [ ] Do **at least 2 or 3 tiles** carry real visual variation?
-- [ ] Is a **list of more than 5 items** rendered as a plain list with rules?
-- [ ] Are **real images** in place? No fake product screens built from `div`s?
-- [ ] Are **quotes within 3 lines**, with both name and role in the attribution?
-- [ ] Is the **navigation on one line**? Height 80px or less?
-- [ ] Is there **at most one marquee** on the page?
-- [ ] Are the **decorative strings** gone — scroll cues, locale/time/weather strips, version footers, decorative status dots, the word strip at the bottom of the hero, `Step 1 / Step 2` labels, tag badges laid over images?
-
-## Additional — after changing an existing screen
-
-- [ ] Did **page URLs and routes** stay unchanged?
-- [ ] Did **form field names and their order** stay unchanged?
-- [ ] Did **primary nav labels** stay unchanged?
-- [ ] Was **existing accessibility work** (focus, alt text, keyboard) left intact?
-- [ ] Were the **brand colors and logo** left alone?
-- [ ] If you concluded something on this list must change, **did you say so instead of changing it**?
+"조화로운가", "브리프에서 잘 도출됐는가" 같은 판단은 여기 없다. 그런 것은 체크리스트 항목이 아니다.
 
 ---
 
-## When an item does not pass
+## 공통 — 모든 화면
 
-Fix it. Do not do "mostly fine, moving on". Count the items that are counted, and actually open the screen for the items that are looked at.
+- [ ] **다이얼 값 세 개**를 모두 응답에 숫자로 적었는가?
+- [ ] `MOTION_INTENSITY`가 4 이상이면 애니메이션이 실제로 하나 이상 있는가?
+- [ ] **강조 색이 정확히 하나**이고, 화면 전체에서 같은 방식으로 쓰였는가?
+- [ ] **모서리 둥글기 체계가 하나**인가? 각진 레이아웃 안에 둥근 버튼이 없는가?
+- [ ] **테마가 하나**인가? 밝은 화면 중간에 어두운 섹션이 끼어 있지 않은가?
+- [ ] **버튼 글자가 자기 배경 위에서 읽히는가?** 흰 배경에 흰 글자, 테두리 없는 투명 버튼이 없는가?
+- [ ] 데스크톱에서 **모든 버튼 라벨이 한 줄에 들어가는가**?
+- [ ] **같은 뜻의 버튼이 둘 이상** 있지 않은가?
+- [ ] **폼 입력창, 플레이스홀더, 포커스 링, 라벨**이 배경 대비 충분한 대비를 갖는가?
+- [ ] **로딩, 빈 상태, 오류** 상태가 모두 있는가?
+- [ ] **키보드만으로** 동작하는가? 포커스가 보이는가?
+- [ ] **좁은 폭**에서 버티는가? 모든 다단 레이아웃에 접히는 동작이 적혀 있는가?
+- [ ] **아이콘 세트가 하나**인가? 손으로 그린 SVG가 없는가? 아이콘 대신 쓴 이모지가 없는가?
+- [ ] **가짜 데이터**가 그럴듯한가? 샘플 이름(홍길동 / John Doe), 가짜 브랜드(Acme), 지나치게 둥근 숫자(99.99%)가 없는가?
+- [ ] **출처 없는 정밀한 수치**가 있는가? 있다면 플레이스홀더로 표시했는가?
+- [ ] **눈에 보이는 모든 문장을 다시 읽었는가?** 어색한 비유나 읽히지 않는 문장이 없는가?
+- [ ] **이탤릭체 디센더**(`y g j p q`)가 잘리지 않는가?
+- [ ] **각 애니메이션**을 한 문장으로 정당화할 수 있는가?
+
+## 추가 — 랜딩, 마케팅, 포트폴리오
+
+제품 UI와 대시보드는 이 섹션을 건너뛴다.
+
+- [ ] **히어로가 첫 화면에 들어가는가**? 헤드라인은 2줄 이내, 서브텍스트는 20단어·4줄 이내, 버튼은 스크롤 없이 보이는가?
+- [ ] **히어로 상단 패딩**이 6rem 이하인가?
+- [ ] **히어로의 텍스트 요소**가 4개 이하인가? 버튼 아래 태그라인이나 신뢰 스트립이 없는가?
+- [ ] **로고 월**이 히어로 밖에 있는가? 로고 아래에 업종 라벨이 없는가?
+- [ ] **작은 라벨(eyebrow)의 수**를 세었는가? `ceil(섹션 수 / 3)` 이하인가?
+- [ ] **번호가 붙은 라벨**(`00 / INDEX`, `001 · Features`)이 있는가?
+- [ ] **같은 레이아웃 계열을 두 번** 썼는가? 섹션이 8개라면 서로 다른 계열이 4개 이상인가?
+- [ ] **이미지와 텍스트 분할**이 3번 연속 나오는가?
+- [ ] **분할 헤더**(왼쪽에 큰 헤드라인, 오른쪽에 작은 설명 문단)가 있는가?
+- [ ] **그리드 셀 수가 콘텐츠 수와 맞는가**? 빈 셀이 없는가?
+- [ ] **타일 2~3개 이상**에 실제로 시각적 변화가 있는가?
+- [ ] **5개를 넘는 목록**을 구분선 있는 단순 목록으로 렌더링했는가?
+- [ ] **실제 이미지**가 들어 있는가? `div`로 만든 가짜 제품 화면이 없는가?
+- [ ] **인용문이 3줄 이내**이고, 출처 표기에 이름과 직함이 모두 있는가?
+- [ ] **내비게이션이 한 줄**인가? 높이가 80px 이하인가?
+- [ ] 페이지에 **마키가 최대 하나**인가?
+- [ ] **장식용 문자열**이 없는가 — 스크롤 유도 문구, 지역·시간·날씨 스트립, 버전 푸터, 장식용 상태 점, 히어로 하단의 단어 스트립, `Step 1 / Step 2` 라벨, 이미지 위에 얹은 태그 배지?
+
+## 추가 — 기존 화면을 바꾼 뒤
+
+- [ ] **페이지 URL과 라우트**가 그대로인가?
+- [ ] **폼 필드 이름과 순서**가 그대로인가?
+- [ ] **주요 내비게이션 라벨**이 그대로인가?
+- [ ] **기존 접근성 작업**(포커스, alt 텍스트, 키보드)이 온전히 남아 있는가?
+- [ ] **브랜드 색과 로고**를 건드리지 않았는가?
+- [ ] 이 목록의 무언가를 바꿔야 한다고 판단했다면, **바꾸지 않고 그렇게 말했는가**?
 
 ---
 
-Adapted and condensed from Leonxlnx/taste-skill (MIT).
+## 항목이 통과하지 못할 때
+
+고쳐라. "대체로 괜찮으니 넘어가자"는 안 된다. 센 항목은 세고, 눈으로 보는 항목은 화면을 실제로 열어서 확인하라.
+
+---
+
+Leonxlnx/taste-skill(MIT)을 가져와 줄여서 고쳤다.

@@ -1,22 +1,22 @@
-# File layout
+# 파일 배치
 
-`AGENTS.md` is the original. `CLAUDE.md` is a symlink to it.
+`AGENTS.md`가 원본이다. `CLAUDE.md`는 그 심볼릭 링크다.
 
-## Which case are you in
+## 어느 경우인가
 
-- **Neither exists** → create them
-- **Only `CLAUDE.md` exists** → ask the user whether to move the content into `AGENTS.md` and replace `CLAUDE.md` with a link. If they agree, **back it up before replacing**
-- **Only `AGENTS.md` exists** → ask the user whether to add the `CLAUDE.md` link. If they agree, add it
-- **Both are real files** → compare the content. If they differ, propose a merge and get approval. **Never overwrite on your own**
+- **둘 다 없다** → 만든다
+- **`CLAUDE.md`만 있다** → 내용을 `AGENTS.md`로 옮기고 `CLAUDE.md`를 링크로 바꿀지 사용자에게 물어라. 동의하면 **바꾸기 전에 백업하라**
+- **`AGENTS.md`만 있다** → `CLAUDE.md` 링크를 추가할지 사용자에게 물어라. 동의하면 추가한다
+- **둘 다 실제 파일이다** → 내용을 비교하라. 다르면 병합안을 제안하고 승인을 받아라. **임의로 덮어쓰지 마라**
 
-## Creating the link
+## 링크 만들기
 
 ```
 ln -s AGENTS.md CLAUDE.md
 ```
 
-Do not add it to `.gitignore`. The instructions travel with the repo.
+`.gitignore`에 추가하지 마라. 지침은 저장소와 함께 이동한다.
 
-## When several people clone the repo
+## 여러 사람이 저장소를 clone하는 경우
 
-If this is not a solo repo, say so before creating the link. Symlinks committed to git can break on Windows checkouts. Ask whether to keep both as real files instead.
+혼자 쓰는 저장소가 아니면 링크를 만들기 전에 그 사실을 알려라. git에 커밋된 심볼릭 링크는 Windows checkout에서 깨질 수 있다. 대신 둘 다 실제 파일로 둘지 물어라.

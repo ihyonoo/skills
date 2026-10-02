@@ -3,60 +3,60 @@ name: init
 description: 프로젝트 지침 파일을 만들거나 갱신하고 에이전트별 파일을 연결한다. 새 프로젝트에서 처음 작업할 때, "지침 만들어줘" "프로젝트 문서화해줘" "init"이라고 할 때 사용한다.
 ---
 
-Keep `AGENTS.md` at the project root as the original, with `CLAUDE.md` symlinked to it. The point is that whichever agent does the work reads the same instructions.
+프로젝트 루트에 `AGENTS.md`를 원본으로 두고, `CLAUDE.md`를 그 심볼릭 링크로 둔다. 어느 에이전트가 작업하든 같은 지침을 읽게 하려는 것이다.
 
-## 1. Check the existing files first
+## 1. 기존 파일부터 확인하라
 
-Read `references/file-layout.md` and settle which case you are in before writing anything.
+`references/file-layout.md`를 읽고, 무엇을 쓰기 전에 어느 경우인지 먼저 정하라.
 
-**Preserving existing content is the default.** When instructions already exist, you are **updating** them, not rewriting them.
+**기존 내용 보존이 기본이다.** 지침이 이미 있으면 새로 쓰는 것이 아니라 **갱신**하는 것이다.
 
-- Do not touch rules, warnings, or past lessons a person wrote by hand
-- Fix only what is now wrong: commands that no longer run, conventions that changed, rules for code that is gone
-- If something should be deleted, present it as a list and get approval. Do not delete quietly
-- When you find items duplicated from the global instructions, **propose** removing them. The user decides
+- 사람이 직접 쓴 규칙, 경고, 과거 교훈을 건드리지 마라
+- 이제 틀린 것만 고쳐라: 더 이상 실행되지 않는 커맨드, 바뀐 규약, 사라진 코드의 규칙
+- 삭제할 것이 있으면 목록으로 제시하고 승인을 받아라. 조용히 지우지 마라
+- 전역 지침과 중복되는 항목을 발견하면 제거를 **제안**하라. 결정은 사용자가 한다
 
-Summarize what you changed at the end.
+끝에 무엇을 바꿨는지 요약하라.
 
-## 2. Survey the codebase
+## 2. 코드베이스를 조사하라
 
-Do not fill this in with guesses. If the survey will take three or more tool calls, delegate with the delegation skill.
+추측으로 채우지 마라. 조사에 도구 호출이 세 번 이상 필요하면 delegation 스킬로 위임하라.
 
-- Build, test, run, and lint commands — from `package.json` scripts, `Makefile`, `pyproject.toml`, CI config. Run each one and keep only what actually works
-- Conventions a single file does not reveal — test runner and its rules, error handling, import style, layering
-- Known breakage — steps that fail often, approaches that were tried and abandoned
+- 빌드, 테스트, 실행, lint 커맨드 — `package.json` scripts, `Makefile`, `pyproject.toml`, CI 설정에서 찾는다. 각각 실행해 보고 실제로 동작하는 것만 남겨라
+- 파일 하나로는 드러나지 않는 규약 — 테스트 러너와 그 규칙, 에러 처리, import 스타일, 레이어링
+- 알려진 문제 — 자주 실패하는 단계, 시도했다가 버린 접근
 
-## 3. Write it
+## 3. 써라
 
-**Shorter is better.** This file loads in full every session, so every line is a cost paid on every turn. Around 100 lines, stop and check whether what you are adding is worth reloading forever. Go past it when the project genuinely needs it — not by default.
+**짧을수록 좋다.** 이 파일은 매 세션 전체가 로드되므로 한 줄마다 매 턴 비용을 치른다. 100줄 즈음에서 멈추고, 추가하려는 내용이 영원히 다시 로드할 가치가 있는지 따져라. 프로젝트가 정말 필요로 할 때만 넘겨라. 기본값으로 넘기지 마라.
 
-**What goes in**
+**들어갈 것**
 
-- One or two sentences on what this project is
-- Build, test, and lint commands. This is the main reason the file exists — always include them
-- Rules specific to this project — what differs from or adds to the global instructions
-- Warnings — what tends to fail, approaches that were wrong before
+- 이 프로젝트가 무엇인지 한두 문장
+- 빌드, 테스트, lint 커맨드. 이 파일이 존재하는 가장 큰 이유다. 항상 포함하라
+- 이 프로젝트 고유의 규칙 — 전역 지침과 다르거나 추가되는 것
+- 경고 — 자주 실패하는 것, 전에 틀렸던 접근
 
-**What must not go in**
+**들어가면 안 되는 것**
 
-- Anything the code already shows — the language, the framework, which directory holds what, the folder tree, file and function listings
-- Anything already in the global instructions — git workflow, coding principles, test rules. Duplication loads twice and drifts apart later
-- Generalities — "write clean code", "write good tests"
+- 코드가 이미 보여주는 것 — 언어, 프레임워크, 어느 디렉터리에 무엇이 있는지, 폴더 트리, 파일과 함수 목록
+- 전역 지침에 이미 있는 것 — git 워크플로, 코딩 원칙, 테스트 규칙. 중복은 두 번 로드되고 나중에 서로 어긋난다
+- 일반론 — "깨끗한 코드를 써라", "좋은 테스트를 써라"
 
-**Write rules the agent can act on.** A rule that needs interpretation is noise.
+**에이전트가 실행할 수 있는 규칙을 써라.** 해석이 필요한 규칙은 노이즈다.
 
-| Noise | Rule |
+| 노이즈 | 규칙 |
 |---|---|
-| Write tests well | Tests run on Vitest. Do not use mocks |
-| Handle errors properly | Throw `AppError`. Never return `null` on failure |
-| Keep commits clean | One commit per logical unit |
+| 테스트를 잘 써라 | 테스트는 Vitest로 돌린다. mock을 쓰지 마라 |
+| 에러를 제대로 처리하라 | `AppError`를 throw하라. 실패 시 `null`을 반환하지 마라 |
+| 커밋을 깔끔하게 하라 | 논리 단위당 커밋 하나 |
 
-**Point at other documents instead of inlining them.** When a convention runs long, leave it in its own file and reference the path — one line here, the detail loaded only when it is needed. When a long procedure shows up, propose moving it into a skill.
+**다른 문서는 인라인하지 말고 가리켜라.** 규약이 길어지면 별도 파일에 두고 경로만 참조하라. 여기에는 한 줄만 쓰고, 자세한 내용은 필요할 때만 로드한다. 긴 절차가 나오면 스킬로 옮기자고 제안하라.
 
-**Format it for scanning.** Headings, lists, and tables. No narrative paragraphs.
+**훑어보기 좋게 써라.** 제목, 목록, 표를 쓴다. 서술형 문단은 쓰지 마라.
 
-Write it in English.
+한국어로 써라.
 
-## 4. Link them
+## 4. 연결하라
 
-Create the link at the project root as described in `references/file-layout.md`.
+`references/file-layout.md`에 적힌 대로 프로젝트 루트에 링크를 만들어라.

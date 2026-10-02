@@ -1,37 +1,37 @@
-# Is this worth a skill?
+# 스킬로 만들 가치가 있는가?
 
-A skill costs its description on every turn of every session, forever, whether or not it fires. The body is free until it loads; the description is not. That is the whole price, and it is what the verdict weighs against.
+스킬은 발동 여부와 상관없이 모든 세션의 모든 턴마다 description 비용을 영원히 치른다. 본문은 로드되기 전까지 공짜지만 description은 아니다. 이것이 값의 전부이며, 판정은 이 값과 저울질한다.
 
-## Five questions
+## 다섯 가지 질문
 
-A skill needs a yes to all five. One no is a rejection.
+스킬은 다섯 개 모두 예여야 한다. 아니오가 하나면 거절이다.
 
-1. **Does it repeat?** Something done once is a request, not a skill. If you cannot name a second occasion it will fire, there is none.
-2. **Is it a procedure?** A skill encodes *steps in an order*. A single fact — a rule, a preference, a path — is a line of instruction, not a skill.
-3. **Does the model get it wrong by default?** Write down what happens with no skill at all. If that is already what you want, the skill buys nothing. Skills exist to override a default, not to describe it.
-4. **Are its triggers distinguishable?** Say the phrases out loud against the descriptions of the skills already installed. If an existing skill would reasonably fire on them, this one steals its triggers instead of adding coverage.
-5. **Is it too big for one clause?** If the whole thing fits as a section inside a skill that already exists, that is where it goes. A new skill is warranted when the addition would blur what the host skill is for.
+1. **반복되는가?** 한 번 하는 일은 요청이지 스킬이 아니다. 이 스킬이 발동할 두 번째 상황을 말할 수 없으면 없는 것이다.
+2. **절차인가?** 스킬은 *순서 있는 단계*를 담는다. 규칙, 선호, 경로 같은 단일 사실은 스킬이 아니라 지침 한 줄이다.
+3. **모델이 기본값으로 틀리는가?** 스킬이 전혀 없을 때 무슨 일이 일어나는지 적어라. 그것이 이미 원하는 결과라면 스킬로 얻는 것이 없다. 스킬은 기본값을 덮어쓰려고 있는 것이지 기본값을 설명하려고 있는 것이 아니다.
+4. **트리거를 구별할 수 있는가?** 그 문구를 이미 설치된 스킬들의 description과 견주어 소리 내어 말해 보라. 기존 스킬이 그 문구에 발동할 만하다면, 이 스킬은 범위를 넓히지 못하고 그 스킬의 트리거를 빼앗는다.
+5. **한 절로 담기에는 큰가?** 전체가 이미 있는 스킬 안의 한 섹션으로 들어간다면 거기로 간다. 추가분이 호스트 스킬의 목적을 흐릴 때만 새 스킬이 정당하다.
 
-## What a rejection turns into
+## 거절은 무엇이 되는가
 
-Say which one, and why it fits better. Then stop — this skill does not carry it out.
+어느 쪽인지, 왜 그쪽이 더 맞는지 말하라. 그다음 멈춰라. 이 스킬은 그것을 실행하지 않는다.
 
-| The request is really | Goes to | Tell the user |
+| 요청의 실체 | 갈 곳 | 사용자에게 알릴 것 |
 |---|---|---|
-| One rule, always in effect | The global instructions | Which section, and the exact line to add |
-| A step missing from a procedure that exists | A clause in that skill | Which skill, which section, what the clause says |
-| A fact true of one project only | That project's instruction file, through the init skill | Which project, and that init owns the edit |
-| A one-off | Nothing | Do it now instead of encoding it |
+| 항상 적용되는 규칙 하나 | 전역 지침 | 어느 섹션인지, 추가할 정확한 한 줄 |
+| 이미 있는 절차에서 빠진 단계 | 그 스킬의 한 절 | 어느 스킬, 어느 섹션, 그 절의 내용 |
+| 한 프로젝트에만 해당하는 사실 | init 스킬을 거쳐 그 프로젝트의 지침 파일 | 어느 프로젝트인지, 수정은 init이 맡는다는 것 |
+| 일회성 작업 | 없음 | 코드화하지 말고 지금 해 준다 |
 
-## Signals that the verdict is no
+## 판정이 아니오라는 신호
 
-- The request describes a *topic* rather than an occasion — "a skill for databases", "a skill for testing". A skill fires on a moment, not a subject
-- The trigger phrase is a synonym pile. Needing five ways to say the same thing usually means the boundary is not real
-- It exists to make the model "be careful about X". Carefulness is not a procedure
-- The body would be a list of facts with no order between them. That is reference material — put it in an existing skill's `references/`
+- 요청이 상황이 아니라 *주제*를 말한다. "데이터베이스 스킬", "테스트 스킬" 같은 것이다. 스킬은 주제가 아니라 순간에 발동한다
+- 트리거 문구가 동의어 더미다. 같은 말을 다섯 가지로 해야 한다면 경계가 실재하지 않는 경우가 많다
+- 모델이 "X에 조심하게" 만들려는 것이 존재 이유다. 조심성은 절차가 아니다
+- 본문이 순서 없는 사실의 목록이 된다. 그것은 참고 자료이니 기존 스킬의 `references/`에 넣어라
 
-## When the verdict is yes but the shape is wrong
+## 판정은 예인데 모양이 틀렸을 때
 
-Two skills sharing most of their steps is one skill with a branch, or two skills calling a shared primitive. Never copy the shared part into both — the copies drift, and the repo has no check that catches it.
+단계 대부분을 공유하는 두 스킬은 분기가 있는 스킬 하나이거나, 공유 프리미티브를 호출하는 두 스킬이다. 공유 부분을 양쪽에 복사하지 마라. 복사본은 어긋나고, 저장소에는 그것을 잡는 점검이 없다.
 
-A skill that would need a routing table in the body to pick between branches is a routing skill; that is the only case that earns a word-limit exception, and granting one requires a human edit to `scripts/check-skills.sh`.
+본문에 분기를 고르는 라우팅 표가 필요한 스킬은 라우팅 스킬이며, 단어 제한 예외를 받을 수 있는 유일한 경우다. 예외를 주려면 `scripts/check-skills.sh`를 사람이 직접 고쳐야 한다.

@@ -3,38 +3,38 @@ name: post-merge
 description: PR 머지 후 로컬 저장소를 정리한다. 사용자가 머지했다고 알릴 때, 이미 머지된 브랜치가 로컬에 남아 있을 때 사용한다.
 ---
 
-## 1. Confirm the merge
+## 1. 머지를 확인하라
 
-Before cleaning up, confirm the merge actually happened. Use `gh pr view <number> --json state,mergedAt,mergeCommit`, or read the log of the remote default branch.
+정리하기 전에 머지가 실제로 일어났는지 확인하라. `gh pr view <number> --json state,mergedAt,mergeCommit`을 쓰거나, 원격 기본 브랜치의 로그를 읽어라.
 
-**Remember what you found here.** Step 2 depends on it.
+**여기서 알아낸 것을 기억하라.** 2단계가 이에 달려 있다.
 
-If the merge is not confirmed, **do not clean up.** Report that it could not be confirmed.
+머지가 확인되지 않으면 **정리하지 마라.** 확인할 수 없었다고 보고하라.
 
-## 2. Clean up
+## 2. 정리하라
 
-Once the merge is confirmed, do not ask for approval. Clean up and report the result.
+머지가 확인되면 승인을 구하지 말고 정리한 뒤 결과를 보고하라.
 
 ```
-git checkout <default branch>
-git pull origin <default branch>
-git branch -d <merged branch>
-git push origin --delete <merged branch>
+git checkout <기본 브랜치>
+git pull origin <기본 브랜치>
+git branch -d <머지된 브랜치>
+git push origin --delete <머지된 브랜치>
 ```
 
-If the remote branch is already gone, the last command fails. Leave it and move on.
+원격 브랜치가 이미 없으면 마지막 커맨드는 실패한다. 그대로 두고 넘어가라.
 
-If `-d` refuses, the answer depends on what step 1 found. **The refusal alone is not evidence that the branch was never merged** — squash and rebase merges create new commits, so the original commits stay unreachable from the default branch and `-d` sees only that.
+`-d`가 거부하면 1단계에서 알아낸 것에 따라 답이 달라진다. **거부만으로는 브랜치가 머지된 적이 없다는 증거가 되지 않는다.** squash와 rebase 머지는 새 커밋을 만들기 때문에 원래 커밋이 기본 브랜치에서 도달 불가능한 채로 남고, `-d`는 그것만 본다.
 
-- **Step 1 confirmed the merge** → it was a squash or rebase merge. Say so and delete with `-D`
-- **Step 1 did not confirm it** → it really was not merged. Do not force. Report the remaining commits and hand the decision back
+- **1단계에서 머지를 확인했다** → squash 또는 rebase 머지였다. 그렇게 알리고 `-D`로 삭제하라
+- **1단계에서 확인하지 못했다** → 정말 머지되지 않은 것이다. 강제로 삭제하지 마라. 남은 커밋을 보고하고 결정을 사용자에게 돌려라
 
-## 3. Check what is left
+## 3. 남은 것을 확인하라
 
-- If other merged branches remain, clean those up too. Confirm the merge separately for each one
-- If stashes or uncommitted changes remain, report them. Do not delete them
+- 머지된 다른 브랜치가 남아 있으면 그것도 정리하라. 브랜치마다 머지를 따로 확인하라
+- stash나 커밋하지 않은 변경이 남아 있으면 보고하라. 삭제하지 마라
 
-## Never do this
+## 절대 하지 마라
 
-- Force-delete with `-D` without the step 1 confirmation
-- "Clean up" with destructive commands like `git reset --hard` or `git clean`
+- 1단계 확인 없이 `-D`로 강제 삭제하는 것
+- `git reset --hard`나 `git clean` 같은 파괴적 커맨드로 "정리"하는 것

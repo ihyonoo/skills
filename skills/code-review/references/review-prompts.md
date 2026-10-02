@@ -1,72 +1,72 @@
-# Subagent prompt templates
+# 서브에이전트 프롬프트 템플릿
 
-Fill in `<...>` and pass them through as is. The two axes are independent, so launch them in parallel.
+`<...>`를 채워서 그대로 전달하라. 두 축은 독립적이므로 병렬로 띄워라.
 
-Neither prompt carries **the author's intent.** Give only the diff and the paths to the standards.
+어느 프롬프트에도 **작성자의 의도**를 넣지 마라. diff와 기준 문서 경로만 줘라.
 
 ---
 
-## Correctness axis
+## 정확성 축
 
 ```
-Review the `<base>...<head>` change in `<repo path>`. Look only for defects.
+`<repo path>`의 `<base>...<head>` 변경을 리뷰하라. 결함만 찾아라.
 
-Start by checking the change:
+먼저 변경을 확인하라.
   git -C <repo path> diff <base>...<head>
 
-Work through the following in order. Write "not applicable" and move on when an item does not apply.
+아래 항목을 순서대로 점검하라. 해당하지 않는 항목은 "해당 없음"이라고 적고 넘어가라.
 
-1. Boundary conditions — empty input, zero, maximum, a single element, duplicates
-2. Error paths — resource cleanup on failure, leftover partial state, missing rollback
-3. Trust boundaries — points where external input flows inward unvalidated
-4. Order and concurrency — places that break when run twice or reordered
-5. Conditional side effects — writes, deletes, or sends that happen only in a specific branch
+1. 경계 조건 — 빈 입력, 0, 최댓값, 요소 하나, 중복
+2. 에러 경로 — 실패 시 리소스 정리, 남는 부분 상태, 롤백 누락
+3. 신뢰 경계 — 외부 입력이 검증 없이 안으로 흘러드는 지점
+4. 순서와 동시성 — 두 번 실행하거나 순서를 바꾸면 깨지는 곳
+5. 조건부 부수 효과 — 특정 분기에서만 일어나는 쓰기, 삭제, 전송
 
-Every finding must include:
-- File path and line number
-- The concrete input or state that actually triggers the defect
-- Grade: blocking / worth fixing / opinion
+모든 지적 사항에 다음을 포함하라.
+- 파일 경로와 줄 번호
+- 결함을 실제로 일으키는 구체적인 입력이나 상태
+- 등급: 블로킹 / 수정 권장 / 의견
 
-Evidence rules:
-- "Looks fine" is not a result. If you judged it safe, quote the line that makes it safe
-- Do not wave things through with "it is probably handled" or "there is probably a test". Confirm it, or write "unverified"
-- Do not invent defects from speculation. If you cannot write the path that reproduces it, drop the item
+근거 규칙:
+- "문제없어 보인다"는 결과가 아니다. 안전하다고 판단했으면 안전하게 만드는 줄을 인용하라
+- "아마 처리되어 있을 것이다", "아마 테스트가 있을 것이다"로 넘어가지 마라. 확인하거나 "미검증"이라고 적어라
+- 추측으로 결함을 지어내지 마라. 재현 경로를 쓸 수 없으면 그 항목을 빼라
 
-Do not comment on formatting, naming, or taste.
+서식, 네이밍, 취향은 언급하지 마라.
 
-Write the result to `<output path>` as markdown, sorted by grade, most severe first.
-Leave only the file path and the counts per grade in your final response.
+결과를 `<output path>`에 마크다운으로 작성하라. 등급순으로, 심각한 것부터 정렬하라.
+최종 응답에는 파일 경로와 등급별 개수만 남겨라.
 ```
 
 ---
 
-## Consistency axis
+## 일관성 축
 
 ```
-Verify that the `<base>...<head>` change in `<repo path>` matches the settled documents and the repo rules.
+`<repo path>`의 `<base>...<head>` 변경이 확정된 문서와 저장소 규칙에 맞는지 검증하라.
 
-Read:
-- The change: git -C <repo path> diff <base>...<head>
-- Requirements document: <document path>
-- Instruction file: <repo path>/AGENTS.md (or CLAUDE.md)
-- Global instructions: <global instructions path>
+읽을 것:
+- 변경: git -C <repo path> diff <base>...<head>
+- 요구사항 문서: <document path>
+- 지침 파일: <repo path>/AGENTS.md (또는 CLAUDE.md)
+- 전역 지침: <global instructions path>
 
-Verify:
+검증할 것:
 
-1. Requirement coverage — walk each requirement ID in the document and confirm
-   corresponding code exists. Record any ID with no correspondence
-2. Scope creep — features, settings, or abstractions that arrived without being in the document
-3. Rule violations — points that conflict with the instruction file or the global
-   instructions. Quote which rule and which sentence
-4. Newly unused — imports, variables, and functions this change cut the references to.
-   Exclude anything already unused before the change
+1. 요구사항 커버리지 — 문서의 요구사항 ID를 하나씩 짚으며
+   대응하는 코드가 있는지 확인하라. 대응이 없는 ID는 기록하라
+2. 범위 확장 — 문서에 없는데 들어온 기능, 설정, 추상화
+3. 규칙 위반 — 지침 파일이나 전역 지침과 충돌하는 지점.
+   어떤 규칙의 어떤 문장인지 인용하라
+4. 새로 안 쓰이게 된 것 — 이 변경이 참조를 끊은 import, 변수, 함수.
+   변경 전부터 이미 안 쓰이던 것은 제외하라
 
-Attach a file path, a line number, and evidence (the relevant sentence from the document
-or the rules) to every finding. If you cannot quote the evidence, drop the item.
+모든 지적 사항에 파일 경로, 줄 번호, 근거(문서나 규칙의 해당 문장)를 붙여라.
+근거를 인용할 수 없으면 그 항목을 빼라.
 
-Do not look for code defects. Another reviewer handles those.
+코드 결함은 찾지 마라. 다른 리뷰어가 맡는다.
 
-Write the result to `<output path>` as markdown.
-Put the list of uncovered requirement IDs at the top.
-Leave only the file path and the count of uncovered IDs in your final response.
+결과를 `<output path>`에 마크다운으로 작성하라.
+대응이 없는 요구사항 ID 목록을 맨 위에 둬라.
+최종 응답에는 파일 경로와 대응이 없는 ID의 개수만 남겨라.
 ```

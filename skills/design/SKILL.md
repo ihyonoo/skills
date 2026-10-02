@@ -4,50 +4,50 @@ description: 구현 전에 설계를 확정한다. 새 기능·리팩터링·구
 argument-hint: [만들려는 것]
 ---
 
-## 1. Assess the scope and confirm it
+## 1. 범위를 평가하고 확인받아라
 
-Assess first.
+먼저 평가하라.
 
-- **S** — a bug fix, an edit inside one file, work whose behavior is already settled
-- **M** — one feature added, two to five files, solved within the existing structure
-- **L** — a new module or service, structural change, a new external dependency, or a decision that is hard to reverse
+- **S** — 버그 수정, 파일 하나 안의 수정, 동작이 이미 정해진 작업
+- **M** — 기능 하나 추가, 파일 2~5개, 기존 구조 안에서 해결
+- **L** — 새 모듈이나 서비스, 구조 변경, 새 외부 의존성, 되돌리기 어려운 결정
 
-State the assessment and its reason in one line, and confirm it as a set of options. If the user picks a different path, take it.
+평가와 그 이유를 한 줄로 밝히고, 선택지 묶음으로 확인받아라. 사용자가 다른 경로를 고르면 그 경로를 따른다.
 
-**When this skill does not fit** (a plain question, work whose design is already settled), say so in one line and bow out.
+**이 스킬이 맞지 않을 때**(단순 질문, 설계가 이미 정해진 작업)는 한 줄로 말하고 물러나라.
 
-## 2. Follow the path for the scope
+## 2. 범위에 맞는 경로를 따라라
 
-**S** — no design document. Three-line summary of what, why, and how → approval → implement.
+**S** — 설계 문서 없음. 무엇을, 왜, 어떻게를 세 줄로 요약 → 승인 → 구현.
 
-**M** — deep-interview (the frontier usually empties in one or two rounds) → one-page design memo → spec-review → approval → implement.
+**M** — deep-interview(프런티어는 보통 한두 라운드에 비워진다) → 한 쪽짜리 설계 메모 → spec-review → 승인 → 구현.
 
-**L** — deep-interview until the frontier is empty → prd → trd → implement. **Do not write a separate design memo.** The settled decisions from the interview become the PRD's material directly, and the rejected alternatives and assumptions become the PRD's constraints and open-questions sections. When three documents say the same thing, they start to diverge.
+**L** — 프런티어가 빌 때까지 deep-interview → prd → trd → 구현. **별도의 설계 메모를 쓰지 마라.** 인터뷰에서 확정된 결정이 곧바로 PRD의 재료가 되고, 기각된 대안과 가정은 PRD의 제약 사항과 열린 질문 섹션이 된다. 문서 세 개가 같은 말을 하면 서로 어긋나기 시작한다.
 
-When hidden complexity surfaces mid-work, **raise the level.** Stop, say so, then raise it. Never lower it.
+작업 중에 숨은 복잡성이 드러나면 **등급을 올려라.** 멈추고, 말하고, 올려라. 절대 내리지 마라.
 
-## 3. When research is needed
+## 3. 조사가 필요할 때
 
-If you do not know the current code structure, existing patterns, or dependencies, delegate exploration with the delegation skill. While waiting on results, ask the questions that do not depend on them.
+현재 코드 구조, 기존 패턴, 의존성을 모르면 delegation 스킬로 탐색을 위임하라. 결과를 기다리는 동안 결과에 의존하지 않는 질문을 하라.
 
-## The design memo — M path only
+## 설계 메모 — M 경로만
 
-Path: `docs/design/YYYY-MM-DD-<kebab-slug>.md`
+경로: `docs/design/YYYY-MM-DD-<kebab-slug>.md`
 
-L does not get one; the PRD and TRD play this role.
+L은 쓰지 않는다. PRD와 TRD가 이 역할을 한다.
 
-What goes in:
+들어갈 내용:
 
-- **Problem** — the problem, not the symptom. Why it must be done now
-- **Decisions** — what is settled and on what grounds
-- **Rejected alternatives** — what was considered and not taken, and why. Recorded so the same discussion does not repeat
-- **Non-goals** — state explicitly what this round does not do
-- **Assumptions** — what is left open, and what breaks if it is wrong
-- **Blast radius** — the files and modules to be touched
+- **문제** — 증상이 아니라 문제. 왜 지금 해야 하는가
+- **결정** — 무엇이 확정됐고 어떤 근거인가
+- **기각한 대안** — 검토했지만 택하지 않은 것과 그 이유. 같은 논의가 반복되지 않도록 기록한다
+- **비목표** — 이번 라운드에서 하지 않는 것을 명시한다
+- **가정** — 열려 있는 것, 그리고 틀리면 무엇이 깨지는가
+- **영향 범위** — 건드릴 파일과 모듈
 
-Write it in English. Code is capped at interface signatures.
+한국어로 써라. 코드는 인터페이스 시그니처까지만 쓴다.
 
-## Never do this
+## 절대 하지 마라
 
-- Drafting the design before the interview — it drags the user into your assumptions
-- Moving to implementation without approval
+- 인터뷰 전에 설계 초안을 쓰는 것 — 사용자를 내 가정으로 끌고 간다
+- 승인 없이 구현으로 넘어가는 것

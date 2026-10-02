@@ -3,59 +3,59 @@ name: tdd
 description: 테스트를 먼저 쓰고 구현한다. 새 기능을 만들 때, 버그를 고칠 때, 리팩터링할 때 사용한다.
 ---
 
-**Do not write implementation code without a failing test.** If you already wrote it, delete it and start over. Do not keep it for reference and do not write the test while looking at it.
+**실패하는 테스트 없이 구현 코드를 쓰지 마라.** 이미 썼다면 지우고 처음부터 다시 시작하라. 참고용으로 남겨 두지 말고, 그것을 보면서 테스트를 쓰지도 마라.
 
 ## RED
 
-Write the test and **run it to see it fail with your own eyes.**
+테스트를 쓰고 **실패하는 것을 직접 눈으로 확인하라.**
 
-Read the failure message. If it failed for a different reason than expected, the test is wrong. Fix it and run again.
+실패 메시지를 읽어라. 예상과 다른 이유로 실패했다면 테스트가 틀린 것이다. 고치고 다시 돌려라.
 
-Do not skip the run. A test whose failure you never observed proves nothing when it passes.
+실행을 건너뛰지 마라. 실패하는 것을 본 적 없는 테스트는 통과해도 아무것도 증명하지 못한다.
 
 ## GREEN
 
-Write the **minimum** implementation that passes. Do not add what you think will be needed later.
+통과하는 **최소한의** 구현을 써라. 나중에 필요할 것 같은 것을 미리 넣지 마라.
 
 ## REFACTOR
 
-Clean up while the test stays green. Remove duplication, fix names, improve structure. Do not change behavior in this step.
+테스트가 green인 상태에서 정리하라. 중복을 없애고, 이름을 고치고, 구조를 개선하라. 이 단계에서 동작을 바꾸지 마라.
 
-## Fixing a bug
+## 버그 고치기
 
-Write a test that reproduces the bug first. **Confirm that test fails**, then fix. Once it passes, it stays as the regression test.
+버그를 재현하는 테스트를 먼저 써라. **그 테스트가 실패하는 것을 확인한** 뒤 고쳐라. 통과하면 회귀 테스트로 남긴다.
 
-If you do not know the cause, run the root-cause skill first.
+원인을 모르면 root-cause 스킬을 먼저 돌려라.
 
-## Refactoring
+## 리팩터링
 
-Refactoring does not change behavior, so do not write a new test first. Instead, **start by checking whether the current tests cover the area you are about to change.**
+리팩터링은 동작을 바꾸지 않으므로 새 테스트를 먼저 쓰지 마라. 대신 **바꾸려는 영역을 현재 테스트가 덮는지 확인하는 것으로 시작하라.**
 
-- **Covered** — change it while keeping those tests green. A red light midway means behavior changed
-- **Not covered** — first write tests that record the current behavior. Write **what it does now**, not what it should do. This becomes the before-and-after baseline
+- **덮고 있다** — 그 테스트를 green으로 유지하며 바꿔라. 중간에 red가 뜨면 동작이 바뀐 것이다
+- **덮지 않는다** — 먼저 현재 동작을 기록하는 테스트를 써라. 앞으로 어떻게 돼야 하는지가 아니라 **지금 무엇을 하는지**를 써라. 이것이 전후 비교의 기준선이 된다
 
-If a test has to be edited to pass during refactoring, that is a behavior change, not a refactor. Stop and go back to RED.
+리팩터링 중 통과시키려고 테스트를 고쳐야 한다면 그것은 리팩터링이 아니라 동작 변경이다. 멈추고 RED로 돌아가라.
 
-## How far to test
+## 어디까지 테스트할까
 
-Unit tests alone are not enough in some cases.
+단위 테스트만으로는 부족한 경우가 있다.
 
-- The project is deployed to real users, or has production infrastructure or CI
-- Several modules already work together
+- 프로젝트가 실제 사용자에게 배포되거나, 운영 인프라나 CI가 있다
+- 이미 여러 모듈이 함께 동작한다
 
-In those cases, also write integration tests for the connection points (API endpoints, DB state transitions, external process calls). **When it is unclear, decide in favor of including the integration test.**
+이 경우 연결 지점(API 엔드포인트, DB 상태 전이, 외부 프로세스 호출)에 대한 통합 테스트도 써라. **불분명하면 통합 테스트를 포함하는 쪽으로 결정하라.**
 
-## A good test
+## 좋은 테스트
 
-- Its name says what it verifies
-- It verifies one behavior
-- It watches observable behavior, not implementation detail. It does not count internal function calls
-- On failure, the message alone tells you what is wrong and where
+- 이름이 무엇을 검증하는지 말한다
+- 동작 하나를 검증한다
+- 구현 세부가 아니라 관찰 가능한 동작을 본다. 내부 함수 호출 횟수를 세지 않는다
+- 실패했을 때 메시지만으로 무엇이 어디서 잘못됐는지 알 수 있다
 
-## Confirm before skipping
+## 건너뛰기 전에 확인하라
 
-One-off prototypes, generated code, and config files can be exceptions. But **do not make that call alone — confirm with the user first.**
+일회성 프로토타입, 생성된 코드, 설정 파일은 예외가 될 수 있다. 하지만 **혼자 판단하지 말고 사용자에게 먼저 확인하라.**
 
-One exception is fixed in advance: the variants built during the frontend-design variant stage are throwaway code, so they get no tests and need no confirmation.
+한 가지 예외는 미리 정해져 있다. frontend-design의 변형 단계에서 만드는 변형은 버리는 코드이므로 테스트를 쓰지 않으며 확인도 필요 없다.
 
-If the work is not writing code (writing documents, looking up a config value), say so in one line and bow out.
+작업이 코드를 쓰는 일이 아니면(문서 작성, 설정값 조회) 한 줄로 그렇다고 말하고 물러나라.

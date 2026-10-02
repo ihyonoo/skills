@@ -3,65 +3,65 @@ name: skill-writer
 description: 스킬을 새로 만들고, 기존 스킬을 고치고 나누고 지운다. "스킬 만들어줘" "스킬로 만들자" "이 스킬 고쳐줘"라고 할 때, SKILL.md의 본문이나 description을 손볼 때, 본문이 길어 references로 뺄 때 사용한다. 스킬 작업은 design 대신 이걸 쓴다.
 ---
 
-The authoring rules live in the root `AGENTS.md`. Read it before writing anything. It holds the rules; this skill holds the procedure. **Never restate a rule from it here.** Point at it.
+작성 규칙은 루트 `AGENTS.md`에 있다. 무엇이든 쓰기 전에 읽어라. 규칙은 거기에 있고, 이 스킬에는 절차가 있다. **여기에 규칙을 다시 적지 마라.** 가리키기만 하라.
 
-**Bow out** when the working directory has no `skills/` beside `scripts/check-skills.sh`. This is the skills repo only. Say so in one line and stop.
+작업 디렉터리에서 `scripts/check-skills.sh` 옆에 `skills/`가 없으면 **물러난다.** 이 스킬은 스킬 저장소 전용이다. 한 줄로 그렇게 말하고 멈춰라.
 
-## 1. Judge whether it deserves a skill
+## 1. 스킬로 만들 가치가 있는지 판단한다
 
-Read `references/when-to-make-a-skill.md` and reach a verdict before anything else. For an edit, split, or delete of a skill that already exists, read `references/restructure.md` for that branch's judgment instead of this section's, then return here and keep going from step 2. The verdict is still stated and confirmed before anything is written.
+`references/when-to-make-a-skill.md`를 읽고 다른 무엇보다 먼저 판정을 내려라. 이미 있는 스킬을 고치거나 나누거나 지우는 경우에는 이 절 대신 `references/restructure.md`를 읽고 해당 분기의 판단을 따른 뒤, 여기로 돌아와 2단계부터 이어가라. 무엇이든 쓰기 전에 판정을 밝히고 확인받는 것은 이 경우에도 같다.
 
-State the verdict and its grounds, and confirm as a set of options.
+판정과 근거를 밝히고, 선택지로 확인받아라.
 
-**On rejection, the run ends.** Name the alternative — a clause inside an existing skill, one line in the global instructions, a project instruction file — and stop there. Do not carry it out. Each alternative lands in a file with another owner, and a "no" must not quietly edit three of them. If the user takes the recommendation, it comes back as a new request.
+**거절되면 실행은 거기서 끝난다.** 대안을 말하고 멈춰라. 대안은 기존 스킬 안의 한 절, 전역 지침의 한 줄, 프로젝트 지침 파일 중 하나다. 대안을 직접 실행하지 마라. 각 대안은 주인이 다른 파일에 들어가므로, "아니오"가 조용히 파일 세 개를 고치게 해서는 안 된다. 사용자가 추천안을 받아들이면 새 요청으로 돌아온다.
 
-## 2. Settle what the skill does
+## 2. 스킬이 무엇을 하는지 확정한다
 
-Three things must be stated before a draft exists:
+초안이 나오기 전에 세 가지가 밝혀져 있어야 한다.
 
-- the trigger phrases a user actually says, in Korean
-- the steps of the body
-- the condition the skill bows out under
+- 사용자가 실제로 하는 말인 트리거 문구 (한국어)
+- 본문의 단계
+- 스킬이 물러나는 조건
 
-When the user has not stated any one of them, run the deep-interview skill until they have. Never invent a trigger phrase on their behalf — an invented phrase is what the trigger test fails on. When all three are already stated, skip this step.
+사용자가 이 중 하나라도 밝히지 않았으면 모두 밝혀질 때까지 deep-interview 스킬을 돌려라. 사용자 대신 트리거 문구를 지어내지 마라. 지어낸 문구는 트리거 테스트에서 실패한다. 세 가지가 이미 다 밝혀져 있으면 이 단계는 건너뛴다.
 
-## 3. Write it
+## 3. 쓴다
 
-Four rules fail most often even though `AGENTS.md` is loaded every session. Loading them was never the problem; checking is. Open each section, hold the draft against it, and say which ones you checked:
+`AGENTS.md`가 매 세션 로드되는데도 가장 자주 어기는 규칙이 네 개 있다. 로드가 문제였던 적은 없고, 확인이 문제다. 각 절을 열어 초안과 대조하고, 어느 것을 확인했는지 밝혀라.
 
-- description as a trigger spec — `AGENTS.md` §frontmatter
-- body word count — §Structure
-- prohibition form — §Match sentence form to the failure mode
-- harness neutrality — §Harness neutrality
+- 트리거 명세로서의 description — `AGENTS.md` §frontmatter
+- 본문 단어 수 — §Structure
+- 금지문 형태 — §Match sentence form to the failure mode
+- 하네스 중립성 — §Harness neutrality
 
-## 4. Verify, in this order
+## 4. 이 순서로 검증한다
 
-The order is load-bearing. A subagent resolves skills from the installed skill directory, so a new skill does not exist for the trigger test until the symlink is installed.
+순서가 핵심이다. 서브에이전트는 설치된 스킬 디렉터리에서 스킬을 찾으므로, symlink가 설치되기 전에는 새 스킬이 트리거 테스트에 존재하지 않는다.
 
-1. `scripts/check-skills.sh` — fix every FAIL before continuing
-2. **Body review** — hand the draft to a subagent using `references/body-review-prompt.md`. Follow the spec-review skill's discipline: pass the file path and nothing about how it was written, take findings in three grades, and answer every one with accept, rebut, or defer. Do not use spec-review's own two prompts
-3. **Install** — run `scripts/link.sh` with no arguments. `--check` only verifies, and the symlink is what the next step needs
-4. **Trigger test** — `references/trigger-test.md`. Three intended phrases must all fire the skill and two adjacent phrases must all fire something else. 3/3 and 0/2, no partial credit
+1. `scripts/check-skills.sh` — 계속하기 전에 FAIL을 모두 고쳐라
+2. **본문 리뷰** — `references/body-review-prompt.md`를 써서 초안을 서브에이전트에 넘겨라. spec-review 스킬의 규율을 따라라. 파일 경로만 넘기고 작성 경위는 넘기지 마라. 지적 사항은 세 등급으로 받고, 하나하나에 수용, 반박, 보류 중 하나로 답하라. spec-review 자체의 프롬프트 두 개는 쓰지 마라
+3. **설치** — 인자 없이 `scripts/link.sh`를 실행하라. `--check`는 확인만 하는데, 다음 단계에 필요한 것은 symlink다
+4. **트리거 테스트** — `references/trigger-test.md`. 의도한 문구 세 개는 모두 이 스킬을 발동시켜야 하고, 인접한 문구 두 개는 모두 다른 스킬을 발동시켜야 한다. 3/3과 0/2여야 하며 부분 점수는 없다
 
-Delegate the body review and the trigger test with the delegation skill.
+본문 리뷰와 트리거 테스트는 delegation 스킬로 위임하라.
 
-Scale the verification to what changed:
+검증 범위는 바뀐 내용에 맞춘다.
 
-| Changed | Runs |
+| 바뀐 것 | 실행 |
 |---|---|
-| description, or a new skill | all four |
-| body only | check, review, install |
-| a reference file only | check |
+| description, 또는 새 스킬 | 네 단계 전부 |
+| 본문만 | 점검, 리뷰, 설치 |
+| 참조 파일만 | 점검 |
 
-## 5. Finish
+## 5. 마무리
 
-- Add the skill to the README skill table, and update the `흐름` section when the new skill calls or is called by another
-- When the rules themselves need to change, or a word-limit exception is warranted, **propose it and stop.** Never edit `AGENTS.md` or `scripts/check-skills.sh` from this skill
-- Leave the branch, the commit, and the PR to the user
+- README 스킬 표에 스킬을 추가하고, 새 스킬이 다른 스킬을 호출하거나 다른 스킬에 호출되면 `흐름` 절을 갱신하라
+- 규칙 자체를 바꿔야 하거나 단어 수 예외가 필요하면 **제안하고 멈춰라.** 이 스킬에서 `AGENTS.md`나 `scripts/check-skills.sh`를 절대 고치지 마라
+- 브랜치, 커밋, PR은 사용자에게 맡겨라
 
-## Never do this
+## 절대 하지 마라
 
-- Never write the draft before the worthiness verdict is confirmed
-- Never ship a skill whose trigger test has not passed
-- Never pass the authoring context to the trigger-test subagent. It gets the phrase and nothing else
-- Never review your own draft
+- 가치 판정이 확인되기 전에 초안을 쓰지 마라
+- 트리거 테스트를 통과하지 못한 스킬을 내놓지 마라
+- 트리거 테스트 서브에이전트에 작성 맥락을 절대 넘기지 마라. 문구만 준다
+- 자기 초안을 직접 리뷰하지 마라

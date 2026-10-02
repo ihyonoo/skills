@@ -1,51 +1,51 @@
-# Trigger test
+# 트리거 테스트
 
-A skill that never fires is dead code that still bills its description on every turn. `check-skills.sh` cannot detect it. This is the step that can.
+발동하지 않는 스킬은 매 턴 description 비용만 내는 죽은 코드다. `check-skills.sh`는 이를 잡지 못한다. 잡을 수 있는 단계가 이것이다.
 
-The test runs **after** `scripts/link.sh` has installed the symlink. A subagent resolves skills from the installed skill directory, not from this repo, so before that the skill does not exist as far as the test is concerned.
+테스트는 `scripts/link.sh`가 symlink를 설치한 **뒤에** 실행한다. 서브에이전트는 이 저장소가 아니라 설치된 스킬 디렉터리에서 스킬을 찾으므로, 그 전에는 테스트 입장에서 스킬이 존재하지 않는다.
 
-## Build five scenarios
+## 시나리오 다섯 개를 만든다
 
-**Three fire phrases.** Sentences a user would actually type to reach this skill, in Korean, phrased differently from each other. Take them from the description's trigger clause — that is what the clause is for. If you cannot write three that differ, the trigger boundary is too narrow to be worth a skill.
+**발동 문구 세 개.** 사용자가 이 스킬에 닿으려고 실제로 입력할 문장이며, 한국어이고 서로 표현이 다르다. description의 트리거 절에서 가져와라. 그 절은 그러라고 있는 것이다. 서로 다른 문구 세 개를 쓸 수 없다면 트리거 경계가 너무 좁아 스킬로 둘 가치가 없다.
 
-**Two misfire phrases.** Triggers belonging to the *nearest* existing skills — the ones whose descriptions came closest when you checked question 4 of the worthiness judgment. Not nonsense, and not phrases unrelated to the repo: the failure being hunted is a new description stealing a neighbor's triggers, and only a real neighbor's phrase can expose it.
+**오발동 문구 두 개.** *가장 가까운* 기존 스킬의 트리거다. 가치 판정의 4번 질문을 확인할 때 description이 가장 근접했던 스킬을 말한다. 말이 안 되는 문구나 저장소와 무관한 문구는 안 된다. 찾으려는 실패는 새 description이 이웃의 트리거를 빼앗는 것이고, 실제 이웃의 문구만 그것을 드러낼 수 있다.
 
-List the five with their expected outcome before running anything. Writing the expectation after seeing the result is not a test.
+실행하기 전에 다섯 개와 기대 결과를 적어라. 결과를 보고 나서 기대를 쓰는 것은 테스트가 아니다.
 
-## The prompt
+## 프롬프트
 
-One subagent per phrase, launched together. Small and fast tier is enough — the subagent is being measured, not consulted.
+문구마다 서브에이전트 하나를 쓰고 함께 띄워라. 작고 빠른 등급이면 충분하다. 서브에이전트는 자문 대상이 아니라 측정 대상이다.
 
 ```
 <phrase>
 
-Before doing anything else, answer this: which skill, if any, does this request
-call for? Answer with the skill name alone, or "none". Then stop. Do not perform
-the request, do not read any file, do not explain your reasoning.
+다른 무엇보다 먼저 이것에 답하라. 이 요청에는 어느 스킬이 필요한가, 필요한
+스킬이 없다면 무엇인가? 스킬 이름만으로, 또는 "none"으로 답하라. 그리고 멈춰라.
+요청을 수행하지 말고, 파일을 읽지 말고, 이유를 설명하지 마라.
 ```
 
-**The phrase and nothing else.** No file path, no mention of a new skill, no summary of what was just written. Any of them leaks the answer and turns a fire into a false pass.
+**문구만 주고 다른 것은 일절 주지 마라.** 파일 경로, 새 스킬 언급, 방금 쓴 내용의 요약은 모두 답을 흘려 발동을 거짓 통과로 만든다.
 
-## Pass criteria
+## 통과 기준
 
-**3/3 fire and 0/2 misfire.** No partial credit.
+**3/3 발동, 0/2 오발동.** 부분 점수는 없다.
 
-- A fire phrase answering "none", or naming a different skill, is a fail
-- A misfire phrase naming the new skill is a fail — it is stealing a neighbor's trigger
-- A misfire phrase naming a third skill is fine. This test does not adjudicate between two existing skills
+- 발동 문구가 "none"이라고 답하거나 다른 스킬을 대면 실패다
+- 오발동 문구가 새 스킬을 대면 실패다. 이웃의 트리거를 빼앗고 있다
+- 오발동 문구가 제3의 스킬을 대면 괜찮다. 이 테스트는 기존 스킬 둘 사이를 가리지 않는다
 
-## On failure
+## 실패했을 때
 
-The description is what fires a skill, so the description is what changes. The body is not involved.
+스킬을 발동시키는 것은 description이므로 바꾸는 것도 description이다. 본문은 관여하지 않는다.
 
-| Symptom | Fix |
+| 증상 | 수정 |
 |---|---|
-| A fire phrase missed | The trigger clause lacks the words the user actually says. Add that phrasing — one trigger per branch, not a pile of synonyms |
-| A misfire phrase captured | The trigger clause is too broad, or it overlaps a neighbor's. Narrow it, or state the boundary the neighbor's description already implies |
-| Everything answers "none" | The description does not read as a trigger spec. Check it against that rule before touching anything else |
+| 발동 문구가 빗나감 | 트리거 절에 사용자가 실제로 하는 말이 없다. 그 표현을 더하되, 동의어를 쌓지 말고 분기당 트리거 하나로 한다 |
+| 오발동 문구가 가로채임 | 트리거 절이 너무 넓거나 이웃과 겹친다. 좁히거나, 이웃의 description이 이미 암시하는 경계를 명시한다 |
+| 전부 "none"으로 답함 | description이 트리거 명세로 읽히지 않는다. 다른 것을 건드리기 전에 그 규칙에 대조하라 |
 
-Revise and re-run the whole set of five. **After two failed runs, stop and bring it to the user** — a third revision is guessing, and the boundary itself is probably wrong.
+고친 뒤 다섯 개 전체를 다시 실행하라. **두 번 실패하면 멈추고 사용자에게 가져가라.** 세 번째 수정은 추측이고, 경계 자체가 틀렸을 공산이 크다.
 
-## If the subagent cannot see the skill
+## 서브에이전트가 스킬을 보지 못할 때
 
-The assumption that a symlink created mid-session is visible to a subagent holds or it does not; find out on the first run. If every phrase — fire and misfire alike — answers "none" or names only pre-existing skills, and the symlink is confirmed present, the harness is enumerating skills at startup. Say so, and run the test in a fresh session rather than declaring a pass.
+세션 도중 만든 symlink가 서브에이전트에게 보이는지는 첫 실행에서 확인된다. 발동 문구와 오발동 문구 모두 "none"이라고 답하거나 기존 스킬만 대고, symlink가 있는 것도 확인됐다면 하네스가 시작할 때 스킬을 열거하는 것이다. 그렇게 말하고, 통과를 선언하지 말고 새 세션에서 테스트를 실행하라.

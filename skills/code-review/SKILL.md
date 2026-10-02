@@ -3,64 +3,64 @@ name: code-review
 description: 코드 변경을 리뷰해 결함과 규약 위반을 찾는다. 구현이 끝났을 때, PR을 올리기 전, 사용자가 "코드 리뷰해줘" "이 변경 봐줘" "괜찮은지 봐줘"라고 할 때 사용한다. 문서·PRD·TRD 리뷰는 spec-review를 쓴다.
 ---
 
-## Delegate the review. Never review your own code
+## 리뷰를 위임하라. 자기 코드를 직접 리뷰하지 마라
 
-Hand the review to a subagent that did not write this code. The context that produced the bug is the same context that hides it.
+이 코드를 쓰지 않은 서브에이전트에게 리뷰를 넘겨라. 버그를 만든 컨텍스트가 그 버그를 가리는 컨텍스트와 같다.
 
-Give the reviewer the change and the standards, nothing else. **Do not pass why you wrote it that way.** Pass the diff range, the relevant document path, and the instruction file path.
+리뷰어에게는 변경과 기준만 줘라. 그 외에는 아무것도 주지 마라. **왜 그렇게 썼는지는 전달하지 마라.** diff 범위, 관련 문서 경로, 지침 파일 경로를 전달하라.
 
-Whether the code explains itself is the point of the review. A reviewer who hears the author's excuses first will accept that code forever.
+코드가 스스로를 설명하는지가 리뷰의 핵심이다. 작성자의 변명을 먼저 들은 리뷰어는 그 코드를 영원히 받아들인다.
 
-## Split into two axes
+## 두 축으로 나눠라
 
-They are independent, so run them in parallel (use the delegation skill to decide). Prompts are in `references/review-prompts.md`.
+두 축은 독립적이므로 병렬로 돌려라 (delegation 스킬로 판단하라). 프롬프트는 `references/review-prompts.md`에 있다.
 
-One exception: when the chosen reviewer is an external agent from another vendor, the two axes merge into a single call. The delegation skill defines that branch.
+예외가 하나 있다. 선택된 리뷰어가 다른 벤더의 외부 에이전트면 두 축을 한 번의 호출로 합친다. 이 분기는 delegation 스킬이 정의한다.
 
-**Correctness** — does this code do what it intends
+**정확성** — 이 코드가 의도한 대로 동작하는가
 
-- Boundary conditions — empty input, zero, maximum, a single element
-- Error paths — are resources released on failure, is partial state left behind
-- Trust boundaries — does external input flow inward unvalidated
-- Order and concurrency dependence — does it break when run twice or reordered
-- Conditional side effects — writes that happen only inside a branch
+- 경계 조건 — 빈 입력, 0, 최댓값, 요소 하나
+- 에러 경로 — 실패 시 리소스를 해제하는가, 부분 상태가 남는가
+- 신뢰 경계 — 외부 입력이 검증 없이 안으로 흘러드는가
+- 순서·동시성 의존 — 두 번 실행하거나 순서를 바꾸면 깨지는가
+- 조건부 부수 효과 — 분기 안에서만 일어나는 쓰기
 
-**Consistency** — does this change match the documents and the rules
+**일관성** — 이 변경이 문서와 규칙에 맞는가
 
-- Requirement IDs with no corresponding code
-- Things that arrived without being in the document
-- Points that conflict with the instruction file or the global instructions
-- Imports, variables, and functions this change itself made unused
+- 대응하는 코드가 없는 요구사항 ID
+- 문서에 없는데 들어온 것
+- 지침 파일이나 전역 지침과 충돌하는 지점
+- 이 변경 때문에 안 쓰이게 된 import, 변수, 함수
 
-## Attach evidence
+## 근거를 붙여라
 
-**"Looks fine" is not a review result.** If you judged something safe, quote the line that makes it safe. If you could not confirm it, classify it as "unverified".
+**"문제없어 보인다"는 리뷰 결과가 아니다.** 안전하다고 판단했으면 안전하게 만드는 줄을 인용하라. 확인하지 못했으면 "미검증"으로 분류하라.
 
-Do not wave things through with "it is probably handled" or "there is probably a test". Confirm it, or write that you could not.
+"아마 처리되어 있을 것이다", "아마 테스트가 있을 것이다"로 넘어가지 마라. 확인하거나, 확인하지 못했다고 적어라.
 
-## Assign a grade
+## 등급을 매겨라
 
-- **Blocking** — merging breaks behavior or corrupts data
-- **Worth fixing** — it works now, but it costs later
-- **Opinion** — taste, or an alternative
+- **블로킹** — 머지하면 동작이 깨지거나 데이터가 손상된다
+- **수정 권장** — 지금은 동작하지만 나중에 비용이 든다
+- **의견** — 취향이거나 대안이다
 
-If even one blocking finding stands, do not open the PR.
+블로킹 지적 사항이 하나라도 남아 있으면 PR을 열지 마라.
 
-## Handle the results
+## 결과를 처리하라
 
-Do not flatter the review. For each item, state one of three:
+리뷰에 아부하지 마라. 항목마다 셋 중 하나를 밝혀라.
 
-- Accept — fix it
-- Rebut — write why it is not a problem. The reviewer may have misread the code
-- Defer — write why it is not being fixed now, and when it will be
+- 수용 — 고친다
+- 반박 — 문제가 아닌 이유를 적는다. 리뷰어가 코드를 잘못 읽었을 수 있다
+- 보류 — 지금 고치지 않는 이유와 고칠 시점을 적는다
 
-When "the reviewer lacked context" is the repeated rebuttal, that is **a signal the context is missing from the code or the document.**
+"리뷰어에게 컨텍스트가 부족했다"가 반복되는 반박이라면, 그것은 **코드나 문서에 컨텍스트가 빠져 있다는 신호다.**
 
-After fixing, re-review only what changed. Do not rerun the whole thing.
+고친 뒤에는 바뀐 부분만 다시 리뷰하라. 전체를 다시 돌리지 마라.
 
-## Never do this
+## 절대 하지 마라
 
-- Letting the author review their own code — the same context that produced the bug hides it
-- Filling the page with formatting and naming notes. That is the linter's job
-- Flagging existing code unrelated to this change — if you find some, report it as a separate list
-- Opening the PR with a blocking finding left standing
+- 작성자가 자기 코드를 리뷰하게 하지 마라 — 버그를 만든 컨텍스트가 그 버그를 가린다
+- 서식과 네이밍 지적으로 지면을 채우지 마라. 린터가 할 일이다
+- 이번 변경과 무관한 기존 코드를 지적하지 마라 — 발견하면 별도 목록으로 보고하라
+- 블로킹 지적 사항이 남은 채로 PR을 열지 마라

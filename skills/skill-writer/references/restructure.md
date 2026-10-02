@@ -1,49 +1,49 @@
-# Editing, splitting, and deleting a skill
+# 스킬 수정, 분리, 삭제
 
-The worthiness judgment in `references/when-to-make-a-skill.md` asks whether a skill should exist. These three ask something narrower, and each has its own question.
+`references/when-to-make-a-skill.md`의 가치 판정은 스킬이 존재해야 하는지를 묻는다. 이 셋은 더 좁은 질문을 던지며, 각각 고유한 질문이 있다.
 
-## Edit
+## 수정
 
-**The question: does this change the trigger, or the procedure?**
+**질문: 트리거가 바뀌는가, 절차가 바뀌는가?**
 
-A procedure change touches the body and runs verification steps 1–3. A trigger change touches the description and runs all four — the description is the only thing that decides whether the skill fires, so any edit to it puts firing back in doubt.
+절차 변경은 본문을 건드리고 검증 1~3단계를 실행한다. 트리거 변경은 description을 건드리고 네 단계를 모두 실행한다. 스킬이 발동할지를 결정하는 것은 description뿐이므로, description을 고치면 발동 여부가 다시 불확실해진다.
 
-- Preserve what is there. An edit is not a rewrite, and rules a person wrote by hand stay unless they are now wrong
-- When a rule looks obsolete, list it and get approval. Do not delete quietly
-- Adding to a skill that is near the word limit means moving something out first. Do not let the body cross the limit and plan to fix it after
+- 있는 것을 보존하라. 수정은 재작성이 아니며, 사람이 직접 쓴 규칙은 이제 틀린 게 아닌 한 남긴다
+- 규칙이 낡아 보이면 목록으로 만들어 승인을 받아라. 조용히 지우지 마라
+- 단어 제한에 가까운 스킬에 내용을 더하려면 먼저 무언가를 밖으로 옮겨라. 본문이 제한을 넘게 두고 나중에 고치자고 계획하지 마라
 
-## Split
+## 분리
 
-**The question: is the body over the limit, or is the skill doing two jobs?**
+**질문: 본문이 제한을 넘었는가, 스킬이 두 가지 일을 하는가?**
 
-Over the limit is a packaging problem. Two jobs is a design problem, and splitting the file does not solve it.
+제한 초과는 포장 문제다. 두 가지 일은 설계 문제이며, 파일을 쪼갠다고 풀리지 않는다.
 
-Packaging — the body carries content that loads every time and is needed only sometimes:
+포장 — 본문이 매번 로드되는데 가끔만 필요한 내용을 담고 있다.
 
-1. Move examples, templates, checklists, and long tables into `references/<topic>.md`. Keep principles and judgment criteria in the body — the reader needs those to decide *which* reference to open
-2. Reference each new file from the body by path. A file nothing references is dead weight, and `check-skills.sh` warns about it
-3. Do not split by size alone. One reference per decision the reader makes, not one per 300 words
+1. 예시, 템플릿, 체크리스트, 긴 표를 `references/<topic>.md`로 옮겨라. 원칙과 판단 기준은 본문에 둬라. 독자가 *어느* 참조 파일을 열지 정하는 데 그것이 필요하다
+2. 새 파일마다 본문에서 경로로 참조하라. 아무도 참조하지 않는 파일은 죽은 짐이며 `check-skills.sh`가 경고한다
+3. 크기만으로 나누지 마라. 참조 파일은 독자가 내리는 결정 하나에 하나씩 두고, 300단어마다 하나씩 두지 마라
 
-Two jobs — the skill fires on two unrelated occasions:
+두 가지 일 — 스킬이 서로 무관한 두 상황에서 발동한다.
 
-1. Extract the shared logic into a primitive skill and have both call it by name. Never copy it into both
-2. Both halves need their own trigger phrases and their own trigger test. A split that leaves one half unreachable has removed a skill rather than divided one
-3. One-directional calls only. Never create a cycle
+1. 공유 로직을 프리미티브 스킬로 빼서 양쪽이 이름으로 호출하게 하라. 양쪽에 복사하지 마라
+2. 두 절반 모두 자기 트리거 문구와 자기 트리거 테스트가 필요하다. 한쪽이 닿지 않게 되는 분리는 스킬을 나눈 것이 아니라 없앤 것이다
+3. 호출은 한 방향만 허용한다. 순환을 절대 만들지 마라
 
-A routing table in the body — branch conditions that pick which reference to read — is the one shape that earns a word-limit exception, and the exception requires a human edit to `scripts/check-skills.sh`. Propose it and stop.
+본문 안의 라우팅 표, 즉 어느 참조 파일을 읽을지 고르는 분기 조건은 단어 제한 예외를 받을 수 있는 유일한 형태이며, 예외에는 `scripts/check-skills.sh`를 사람이 직접 고치는 일이 필요하다. 제안하고 멈춰라.
 
-## Delete
+## 삭제
 
-**The question: is anything still pointing at it?**
+**질문: 아직 이것을 가리키는 것이 있는가?**
 
-Deletion is the only destructive branch here. **Confirm with the user, naming the skill, before removing anything.**
+삭제는 여기서 유일하게 파괴적인 분기다. **무엇이든 지우기 전에 스킬 이름을 대며 사용자에게 확인받아라.**
 
-Nothing in the repo catches the leftovers. `check-skills.sh` walks `skills/*/` and warns when a skill is missing from the README; it has no reverse check, so a README row for a skill that no longer exists is never flagged. Work the list by hand:
+저장소에는 남은 흔적을 잡아내는 장치가 없다. `check-skills.sh`는 `skills/*/`를 훑어 README에 빠진 스킬을 경고할 뿐 역방향 점검은 없어서, 이미 없는 스킬의 README 행은 잡히지 않는다. 목록을 직접 따라가라.
 
-1. `grep -rn '<name>' skills/ README.md AGENTS.md global-instructions.md docs/` — every other skill that calls it by name, every README table row, the `흐름` section, any mention in the rules
-2. Fix each caller first. A skill calling a name that no longer resolves fails silently at the moment it is needed
-3. Remove `skills/<name>/`
-4. Run `scripts/link.sh`. It prunes this repo's dead symlinks — but it skips a harness whose parent directory is absent, so a harness not installed on this machine keeps its stale link until the script runs there
-5. Run `scripts/check-skills.sh`. It will not catch a stale README row; confirm that by eye against step 1's grep
+1. `grep -rn '<name>' skills/ README.md AGENTS.md global-instructions.md docs/` — 이름으로 호출하는 다른 스킬, README 표의 행, `흐름` 절, 규칙 안의 언급을 모두 찾는다
+2. 호출하는 쪽을 먼저 고쳐라. 더는 풀리지 않는 이름을 호출하는 스킬은 그 이름이 필요한 순간에 조용히 실패한다
+3. `skills/<name>/`을 지워라
+4. `scripts/link.sh`를 실행하라. 이 저장소의 죽은 symlink를 정리하지만, 상위 디렉터리가 없는 하네스는 건너뛴다. 이 머신에 설치되지 않은 하네스는 그 스크립트가 거기서 실행될 때까지 낡은 링크를 유지한다
+5. `scripts/check-skills.sh`를 실행하라. 낡은 README 행은 잡지 못한다. 1단계의 grep 결과와 눈으로 대조해 확인하라
 
-There is no trigger test for a deletion. The check is the grep, and it is done by hand.
+삭제에는 트리거 테스트가 없다. 점검은 grep이며 직접 한다.
