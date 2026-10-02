@@ -1,46 +1,46 @@
-# External review
+# 외부 리뷰
 
-A reviewer from a different vendor does not share the running agent's blind spots. Offer it as one of the model options in step 3. It replaces the in-harness reviewer for that run; it is not an extra pass stacked on top.
+다른 벤더의 리뷰어는 실행 중인 에이전트의 사각지대를 공유하지 않는다. 3단계의 모델 선택지 중 하나로 제시하라. 이것은 해당 실행에서 하네스 내부 리뷰어를 대체한다. 그 위에 얹는 추가 패스가 아니다.
 
-## Check availability first
+## 먼저 사용 가능 여부를 확인하라
 
-Offer the option only when the CLI is installed **and** the login check exits zero. If either fails, drop the option without a word. Do not tell the user to install or log in in the middle of a review.
+CLI가 설치되어 있고 **그리고** 로그인 확인이 0으로 종료될 때만 선택지로 제시하라. 둘 중 하나라도 실패하면 아무 말 없이 선택지를 뺀다. 리뷰 도중에 사용자에게 설치나 로그인을 요구하지 마라.
 
-| Running agent | External CLI | Installed | Logged in |
+| 실행 중인 에이전트 | 외부 CLI | 설치 확인 | 로그인 확인 |
 |---|---|---|---|
 | Claude Code | `codex` | `command -v codex` | `codex login status` |
 | Codex | `claude` | `command -v claude` | `claude auth status` |
 
-Judge login by exit status. Do not judge it by whether a credentials file exists — both CLIs support environment tokens, keychain storage, and a relocated config home, so a present file proves nothing and an absent one disproves nothing.
+로그인 여부는 종료 코드로 판단하라. 인증 파일이 있는지로 판단하지 마라. 두 CLI 모두 환경 변수 토큰, 키체인 저장, 설정 홈 이전을 지원하므로 파일이 있다고 로그인된 것도, 없다고 로그인 안 된 것도 아니다.
 
-## Ask the vendor, then the model
+## 벤더를 묻고, 그다음 모델을 물어라
 
-`codex` and `claude` name vendors, not models. Once the user picks the external agent, ask a second question for the model, and pass the answer through `-m` (codex) or `--model` (claude).
+`codex`와 `claude`는 벤더 이름이지 모델이 아니다. 사용자가 외부 에이전트를 고르면 모델을 묻는 두 번째 질문을 하고, 답을 `-m`(codex) 또는 `--model`(claude)로 넘겨라.
 
-**Never skip that question because the user said to go ahead.** "Run the review" approves the review, not a model. Taking the CLI default silently hides which model produced the findings, which is the whole reason the question exists.
+**사용자가 진행하라고 했다는 이유로 그 질문을 건너뛰지 마라.** "리뷰 돌려"는 리뷰를 승인한 것이지 모델을 승인한 것이 아니다. CLI 기본값을 말없이 쓰면 어떤 모델이 지적 사항을 냈는지 가려진다. 이 질문이 있는 이유가 바로 그것이다.
 
-Neither CLI can list its models without a terminal. **Never present a hardcoded model list as if it were authoritative** — it goes stale on every release. Offer the CLI default as one option, let the user name a specific model, and pass no model flag when they take the default.
+어느 CLI도 터미널 없이는 모델 목록을 조회하지 못한다. **하드코딩한 모델 목록을 확정된 것처럼 제시하지 마라.** 릴리스마다 낡는다. CLI 기본값을 선택지 하나로 제시하고, 사용자가 특정 모델을 직접 지정하게 하라. 기본값을 택하면 모델 플래그를 넘기지 마라.
 
-Report the model together with the findings. When the user took the default, report the literal words "CLI default" — neither the discarded stdout nor the output file names the resolved model, so any specific name written there would be a guess.
+지적 사항과 함께 모델을 보고하라. 사용자가 기본값을 택했다면 문구 그대로 "CLI default"라고 보고하라. 버려진 stdout도 출력 파일도 실제 적용된 모델명을 알려주지 않으므로, 구체적인 이름을 적으면 추측이 된다.
 
-## One call, not two axes
+## 두 축이 아니라 한 번의 호출이다
 
-`code-review` and `spec-review` each split into two axes and run them in parallel. **That split does not carry over.** When the external agent is the chosen model, run one call over the whole change, with both axes in the one prompt.
+`code-review`와 `spec-review`는 각각 두 축으로 나눠 병렬로 돌린다. **그 분리는 여기에 적용되지 않는다.** 외부 에이전트가 선택된 모델이면 변경 전체에 대해 호출을 한 번만 하고, 프롬프트 하나에 두 축을 모두 담아라.
 
-The parallel split widens coverage inside a single vendor. The external run buys something else — one independent read of the whole change — and splitting it doubles a path that already takes minutes.
+병렬 분리는 한 벤더 안에서 커버리지를 넓힌다. 외부 실행이 사는 것은 다른 것, 즉 변경 전체를 독립적으로 한 번 읽는 것이다. 분리하면 이미 몇 분 걸리는 경로가 두 배가 된다.
 
-## Forbid delegation inside the prompt
+## 프롬프트 안에서 위임을 금지하라
 
-On the codex path the external agent reads its own global instructions — the same file the running agent reads — and left alone it applies the delegation rules to itself and stops to ask which model should review. The claude path escapes this through `--safe-mode`, which drops instruction files. Open every prompt with the ban anyway; one prompt text that holds for either vendor beats two:
+codex 경로에서는 외부 에이전트가 자신의 전역 지침을 읽는다. 실행 중인 에이전트가 읽는 것과 같은 파일이다. 그대로 두면 위임 규칙을 자기 자신에게 적용해 어떤 모델이 리뷰해야 하는지 묻느라 멈춘다. claude 경로는 지침 파일을 끄는 `--safe-mode`로 이를 피한다. 그래도 모든 프롬프트를 이 금지 문구로 시작하라. 어느 벤더에나 통하는 프롬프트 문구 하나가 둘로 나눈 것보다 낫다.
 
 ```
-Perform this review yourself, in this session. Do not delegate it, do not ask which
-model should run it, and do not ask any clarifying question. Produce the findings directly.
+이 리뷰는 이 세션에서 직접 수행하라. 위임하지 마라. 어떤 모델이 리뷰할지 묻지 마라.
+확인 질문도 하지 마라. 지적 사항을 바로 작성하라.
 ```
 
-## Call shape
+## 호출 형태
 
-Write the prompt to a file and feed it on stdin. Never interpolate prompt text into the command line — it carries paths, quotes, and code, and the shell expands `$`, backticks, and quotes before the CLI ever starts.
+프롬프트를 파일에 쓰고 stdin으로 넣어라. 프롬프트 텍스트를 명령줄에 끼워 넣지 마라. 프롬프트에는 경로, 따옴표, 코드가 들어 있고, CLI가 시작되기 전에 셸이 `$`, 백틱, 따옴표를 먼저 전개한다.
 
 ```bash
 # codex — default model, then explicit model
@@ -52,24 +52,24 @@ claude -p --safe-mode --permission-mode plan < "$PROMPT" > "$OUT" 2>/dev/null
 claude -p --safe-mode --permission-mode plan --model "$MODEL" < "$PROMPT" > "$OUT" 2>/dev/null
 ```
 
-`--sandbox` belongs to `exec` and must come before any subcommand. `codex exec review --sandbox` is a parse error.
+`--sandbox`는 `exec`의 옵션이므로 어떤 서브커맨드보다 앞에 와야 한다. `codex exec review --sandbox`는 파싱 에러다.
 
-`--safe-mode` disables hooks, skills, and instruction files, which would otherwise write outside the permission gate. Do not substitute `--bare`: it forces `ANTHROPIC_API_KEY` and breaks an OAuth login. Codex ships no equivalent flag, which is why the delegation ban above has to live in the prompt text instead.
+`--safe-mode`는 훅, 스킬, 지침 파일을 끈다. 이것들은 권한 게이트 밖에서 쓰기를 수행할 수 있다. `--bare`로 대체하지 마라. `--bare`는 `ANTHROPIC_API_KEY`를 강제해 OAuth 로그인을 깨뜨린다. Codex에는 이에 해당하는 플래그가 없다. 위의 위임 금지 문구를 프롬프트 텍스트에 넣어야 하는 이유다.
 
-Name the target inside the prompt — the diff range for code, the file path for a document. Pass the standards the consumer skill tells you to pass, and nothing beyond them.
+프롬프트 안에 대상을 명시하라. 코드면 diff 범위, 문서면 파일 경로다. 이를 호출하는 스킬이 넘기라고 한 기준만 넘기고 그 이상은 넘기지 마라.
 
-Point the output at a fresh file in a scratch directory, never at a path inside the reviewed tree. The sandbox governs the agent's own tool use — it does not govern the shell's `>` redirection or codex's `-o` writer, both of which run with your privileges. An output path aimed into the repository overwrites whatever sits there, guard or no guard.
+출력은 스크래치 디렉터리의 새 파일로 지정하라. 리뷰 대상 트리 안의 경로로 지정하지 마라. 샌드박스는 에이전트 자신의 도구 사용만 통제한다. 셸의 `>` 리디렉션과 codex의 `-o` 기록기는 통제하지 못하며, 둘 다 당신의 권한으로 실행된다. 출력 경로를 저장소 안으로 잡으면 가드가 있든 없든 거기 있던 파일을 덮어쓴다.
 
-This is the only shape. Codex also ships a built-in `review` subcommand, and its prompt can carry file paths — but not alongside a scope selector: `codex exec review --uncommitted "focus"` exits 2 with `error: the argument '--uncommitted' cannot be used with '[PROMPT]'`. Its usage string lists both, so confirm by running it, not by reading the help. Stripped of the scope selectors it offers nothing this shape lacks, and it needs its own sandbox handling, so do not use it.
+이것이 유일한 형태다. Codex에는 내장 `review` 서브커맨드도 있고 그 프롬프트에 파일 경로를 실을 수 있다. 하지만 범위 선택자와 함께는 안 된다. `codex exec review --uncommitted "focus"`는 `error: the argument '--uncommitted' cannot be used with '[PROMPT]'`와 함께 2로 종료한다. 사용법 문자열에는 둘 다 적혀 있으므로 도움말을 읽지 말고 직접 실행해서 확인하라. 범위 선택자를 빼면 위 형태에 없는 것을 제공하지 않고, 별도의 샌드박스 처리가 필요하므로 사용하지 마라.
 
-## Never do this
+## 절대 하지 마라
 
-- Never run without the read-only guard — `--sandbox read-only` for codex, `--safe-mode --permission-mode plan` for claude. Both CLIs write files by default, and claude's hooks write outside the permission gate unless customizations are off. A reviewer that edits the code is not a reviewer
-- Never point the output path inside the reviewed tree. That write goes around the read-only guard, not through it
-- Never read stdout from `codex exec`. It carries every tool call the external agent makes plus platform noise, and it stays in context for the rest of the session. Discard it and read the output file
-- Never paste the output file into the conversation whole. Extract the findings, drop the rest
-- Never fall back to the in-harness reviewer when the external run fails. Report the failure and ask
+- 읽기 전용 가드 없이 실행하지 마라. codex는 `--sandbox read-only`, claude는 `--safe-mode --permission-mode plan`이다. 두 CLI 모두 기본값이 파일 쓰기이고, claude의 훅은 커스터마이징을 끄지 않으면 권한 게이트 밖에서 쓴다. 코드를 고치는 리뷰어는 리뷰어가 아니다
+- 출력 경로를 리뷰 대상 트리 안으로 잡지 마라. 그 쓰기는 읽기 전용 가드를 통과하는 것이 아니라 우회한다
+- `codex exec`의 stdout을 읽지 마라. 외부 에이전트가 호출한 모든 도구와 플랫폼 노이즈가 담겨 있고, 세션이 끝날 때까지 컨텍스트에 남는다. 버리고 출력 파일을 읽어라
+- 출력 파일을 대화에 통째로 붙여넣지 마라. 지적 사항만 추려내고 나머지는 버려라
+- 외부 실행이 실패했다고 하네스 내부 리뷰어로 대체하지 마라. 실패를 보고하고 물어라
 
-## Cost
+## 비용
 
-A single-file review took about a minute; two files against the repo rules ran under two; four files with a command-verification mandate ran six. Usage counts against the external vendor's limit, not the running agent's. State both in the option description.
+파일 하나 리뷰는 약 1분, 저장소 규칙 대비 파일 두 개는 2분 미만, 명령 검증 의무를 건 파일 네 개는 6분이 걸렸다. 사용량은 실행 중인 에이전트가 아니라 외부 벤더의 한도에 계산된다. 선택지 설명에 둘 다 적어라.

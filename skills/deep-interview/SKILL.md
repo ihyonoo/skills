@@ -3,42 +3,42 @@ name: deep-interview
 description: 결정 트리를 라운드 단위로 좁혀가며 질문해 요구사항을 확정한다. 설계·기획·스펙 작성 전 정보가 부족할 때, 사용자가 "딥인터뷰", "요구사항 정리하자", "같이 설계하자"고 할 때 사용한다.
 ---
 
-Interview until you reach a shared understanding with the user. The output is not a document — it is a **list of settled decisions**.
+사용자와 이해가 일치할 때까지 인터뷰하라. 산출물은 문서가 아니라 **확정된 결정의 목록**이다.
 
-## The decision tree and the frontier
+## 결정 트리와 프런티어
 
-Treat requirements as a decision tree. Every decision branches into decisions hanging beneath it.
+요구사항을 결정 트리로 다뤄라. 모든 결정 아래에는 그에 딸린 결정들이 가지를 친다.
 
-**Frontier** = the questions answerable *right now* because their prerequisite decisions are already settled. A question that requires guessing an answer you have not heard yet is not on the frontier.
+**프런티어** = 선행 결정이 이미 확정되어 *지금 바로* 답할 수 있는 질문. 아직 듣지 못한 답을 추측해야만 하는 질문은 프런티어가 아니다.
 
-1. Compute the frontier
-2. Ask the entire frontier in one round. If a multiple-choice question tool exists, use it, and call it repeatedly when the frontier exceeds what one call holds. If not, produce a numbered list of questions
-3. Answers restructure the tree. Settled decisions push the frontier outward and blocked questions open up
-4. Next round with the new frontier
-5. **Stop when the frontier is empty.** Every branch has been visited and nothing was silently assumed
+1. 프런티어를 계산한다
+2. 프런티어 전체를 한 라운드에 묻는다. 객관식 질문 도구가 있으면 쓰고, 프런티어가 한 번에 담기는 양을 넘으면 반복 호출한다. 없으면 번호를 붙인 질문 목록을 만든다
+3. 답이 트리를 재구성한다. 확정된 결정은 프런티어를 바깥으로 밀고, 막혀 있던 질문이 열린다
+4. 새 프런티어로 다음 라운드를 진행한다
+5. **프런티어가 비면 멈춘다.** 모든 가지를 방문했고, 아무것도 암묵적으로 가정하지 않은 상태다
 
-## Rules for writing questions
+## 질문 작성 규칙
 
-- **Mark a recommendation on every set of options and put the recommended one first.** The user may not know the domain. Do not just ask them to pick — judge which is better and say so
-- Write the **tradeoff** into each option's description. What is gained and what is lost
-- Ask only what actually changes the outcome. When a conventional default exists, use it and say so in one line
-- One question settles one decision. Ask **which way to go**, not whether to proceed
-- Do not put interdependent questions in the same round. The dependent one goes in the next round
+- **모든 선택지 묶음에 추천안을 표시하고 추천안을 맨 앞에 둬라.** 사용자는 그 도메인을 모를 수 있다. 그냥 고르라고 하지 말고, 무엇이 더 나은지 판단해서 말하라
+- 각 선택지 설명에 **트레이드오프**를 적어라. 무엇을 얻고 무엇을 잃는가
+- 결과를 실제로 바꾸는 것만 물어라. 관례적인 기본값이 있으면 그것을 쓰고 한 줄로 밝혀라
+- 질문 하나는 결정 하나를 확정한다. 진행할지 여부가 아니라 **어느 쪽으로 갈지**를 물어라
+- 서로 의존하는 질문을 같은 라운드에 넣지 마라. 의존하는 쪽은 다음 라운드에 넣는다
 
-## Find facts yourself
+## 사실은 직접 찾아라
 
-Finding facts is your job. Making decisions is the user's job.
+사실을 찾는 것은 너의 일이다. 결정을 내리는 것은 사용자의 일이다.
 
-Do not ask the user anything you can confirm from files, the codebase, or the web. If the research will take three or more tool calls, delegate with the delegation skill. **Do not stall waiting on research** — defer only the questions that depend on it, and ask the rest of the frontier now.
+파일, 코드베이스, 웹에서 확인할 수 있는 것을 사용자에게 묻지 마라. 조사에 도구 호출이 세 번 이상 걸리면 delegation 스킬로 위임하라. **조사를 기다리며 멈추지 마라** — 조사에 의존하는 질문만 미루고, 프런티어의 나머지는 지금 물어라.
 
-## Number of rounds
+## 라운드 수
 
-Unlimited. Ending early is far worse than running many rounds. But do not ask about the same axis twice.
+제한 없음. 일찍 끝내는 것이 여러 라운드를 도는 것보다 훨씬 나쁘다. 단, 같은 축을 두 번 묻지 마라.
 
-## Ending
+## 마무리
 
-Compile the settled decisions into a list and confirm it with the user. Anything still unanswered is stated explicitly as an **assumption**, with one line on what breaks if it is wrong.
+확정된 결정을 목록으로 정리해 사용자에게 확인받아라. 아직 답이 없는 것은 **가정**으로 명시하고, 틀리면 무엇이 깨지는지 한 줄을 붙여라.
 
-## Never do this
+## 절대 하지 마라
 
-- Starting implementation mid-interview
+- 인터뷰 도중에 구현을 시작하는 것

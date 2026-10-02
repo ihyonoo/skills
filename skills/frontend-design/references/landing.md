@@ -1,134 +1,134 @@
-# Landing, marketing, and portfolio only
+# 랜딩, 마케팅, 포트폴리오 전용
 
-**This file is for landing pages, marketing pages, and portfolios only. If you are building product UI, admin screens, or a dashboard, leave now.**
+**이 파일은 랜딩 페이지, 마케팅 페이지, 포트폴리오 전용이다. 제품 UI, 관리자 화면, 대시보드를 만든다면 지금 나가라.**
 
-The rules below come from patterns observed repeatedly in real output. Treat them as prohibitions unless the brief explicitly asks otherwise.
-
----
-
-## 1. The hero
-
-**It fits in the first screen.** Headline within 2 lines, subtext within 20 words and 4 lines, the primary button visible without scrolling. When it overflows, reduce the type scale or cut the copy. If you cannot get the subtext under 20 words, the value proposition is not settled — the rule is not too tight.
-
-**Plan type size and image size together.** When the headline runs past 6 words and the image is large, do not start at the largest step. Use the largest step only when the headline is 3 to 5 words. A headline that folds to 4 lines is a size mistake, not a copy-length problem.
-
-**Cap the top padding.** Hero top padding stays at or under 6rem at desktop. More than that leaves the content floating mid-viewport, reading as a layout bug rather than intentional space.
-
-**Four text elements maximum.** The hero is one moment, not a feature list.
-
-1. A small label **or** a brand strip (neither is fine)
-2. The headline
-3. The subtext
-4. Buttons (one primary, at most one secondary)
-
-Not in the hero: a small tagline under the buttons, a trust strip ("used by teams at..."), a pricing teaser, feature bullets, a row of user avatars. All of these move to their own section directly below.
-
-**The logo wall goes outside the hero.** The "used by" logo row is its own section below. Do not push it into the same row as the hero copy.
-
-**The hero needs a real visual.** Text plus a gradient blob is a placeholder, not a hero.
-
-## 2. Small labels (eyebrows)
-
-The small uppercase label that sits above a section heading. Putting one above every section is the most common AI pattern.
-
-**At most one per three sections.** The hero counts as one. Nine sections allow at most three labels. If section A has one, the next two cannot.
-
-**How to count** — count the small uppercase, wide-tracking labels. Exceeding `ceil(section count / 3)` is a failure.
-
-**What to do instead** — drop it. The heading alone is enough. The section's position on the page already says what it is.
-
-**Do not number them** — no `00 / INDEX`, `001 · Features`, `06 · How it works`. No `01 / 4` pagination on images or tiles either. Do not count things the reader can count.
-
-**Do not add an explanatory sentence under the label** — label, heading, body is enough. Nothing wedged between them like "these ship today, not on a roadmap."
-
-## 3. Section layout
-
-**Do not use the same layout family twice.** A 3-column image card row, a full-width quote, a left-right split — one appearance each per page. Eight sections means at least four distinct families.
-
-**Left-right zigzag runs at most twice.** Alternating image-and-text splits fails on the third consecutive one. Break it with a full-width section, a vertical stack, or a different family.
-
-**No split headers** — do not use "large headline left, small explanatory paragraph right" as a section header. One message per section. When you genuinely need both, stack them vertically. Split only when the right column carries a real visual or interactive element.
-
-**Do not float a small paragraph at the top right of a heading** — a small explainer sitting in the corner with no alignment to anything is the tell.
-
-## 4. Grids and tiles
-
-**The cell count equals the content count.** Three items means three cells. An empty cell in the middle or at the end means the grid was planned wrong. Reshape the grid rather than filling the blank.
-
-**Tile backgrounds cannot all be identical.** Six white cards with only text is dull. Give at least two or three cells real visual variation — a real image, a pattern, a differently toned background.
-
-**Long lists become something other than a list.** Past 5 items, do not render a default list with rules. Use a 2-column split, a card grid with images, tabs or an accordion, horizontal scrolling, or a carousel. A 10-row table with a rule under every row is the laziest default.
-
-**Do not rule both above and below every row.** Pick one — a rule between rows, or a rule above the group.
-
-## 5. Content density
-
-Landing pages are decided on the first impression.
-
-**The default section shape** — a short heading (within 8 words), a short paragraph (within 25 words), and one visual **or** one button. Anything more must be justified by that section's job.
-
-**Do not build a section that dumps data.** A 20-row table, a 30-item award list, an enormous pricing matrix — the layout is wrong. Show the top 3 to 5 with a "view all" link, use a carousel or marquee for breadth, or move it to its own page if the data is the product.
-
-**One voice per page.** Do not mix technical notation, lyrical prose, and marketing copy on one screen.
-
-## 6. Quotes and testimonials
-
-- Body within **3 lines**. Cut a long original. A landing-page quote is an excerpt, not the full text
-- Attribution is name plus role (plus company). Never a bare name
-- Use real typographic quotation marks, or none at all
-
-## 7. Images
-
-**A text-only landing page is unfinished, not minimal.** Even a restrained brief needs a hero, a product or environment shot, and a supporting image.
-
-**Priority**
-1. **Use an image generation tool if one is available.** Generate per section at the right aspect ratio
-2. Otherwise use a real photo source. `https://picsum.photos/seed/{descriptive-seed}/{w}/{h}`, with the section described in the seed
-3. If neither is possible, leave a labeled placeholder comment (`<!-- TODO: hero product photo 1600x1200 -->`) and, at the end of the response, say which slots need which images
-
-**Do not do this**
-- Build a fake product screen out of `div`s — fake dashboards, fake terminals, fake task lists. The strongest signal there is
-- Draw decorative SVGs by hand
-- Lay tag badges over images (`Brand · 02` and the like)
-- Add a photo-credit caption when there is no real photographer (`Frame XII · 35mm`)
-
-**Logo walls** — use real SVG logos (Simple Icons, `https://cdn.simpleicons.org/{slug}/{color}`). For an invented brand, build a simple monogram. A row of plain text wordmarks reads as AI. Do not put industry labels under the logos — the logo itself is the credibility. Confirm they render in both light and dark mode.
-
-## 8. Navigation
-
-- **One line** at desktop. If it does not fit at 1024px, shorten labels, drop items, or collapse to a hamburger. A two-line nav is broken
-- 80px tall or less. 64 to 72px by default
-
-## 9. Motion
-
-**It must move as much as it claims.** When `MOTION_INTENSITY` is 4 or higher, actually implement hero entry, scroll reveal on key sections, and button response. If you cannot, drop the value to 3 and build a proper static screen. Half-built animation — cut-off scroll triggers, jumpy entries, uncleaned listeners — is the worst outcome.
-
-**At most one marquee per page.** Two or more horizontally scrolling text or logo strips read as lazy filler.
-
-**For stacked-card scroll effects**, pin to the top of the viewport before the sequence advances. Starting the pin at the middle of the viewport makes it begin after a half-scroll and feel wrong.
-
-**Glassmorphism** suits premium consumer work and media overlays, not admin screens or public services. When used, do not stop at a blur — build the edge with a 1px inner border and a faint inner shadow. Fall back to an opaque background when transparency is reduced.
-
-## 10. Decorative strings
-
-All of these recur in real output.
-
-- **Version labels in the hero** — `V0.6`, `BETA`, `EARLY ACCESS`. Only when the brief is about launch status
-- **`Brand · No. 01` style sublabels**
-- **Overusing the middle dot (`·`)** — at most one per line. Not the default separator for "A · B · C · D"
-- **Decorative colored dots** — on every nav item, every list row, every badge. Only when they carry real state (server status, availability)
-- **Locale, time, and weather strips** — `Seoul 14:23 · 18°C`, a city name in the header. Only for a genuinely multi-timezone team or a place-focused brand. A single address line in the footer is fine
-- **Scroll cues** — `Scroll`, `↓`, mouse-wheel icons. Someone who has not scrolled yet is looking at the hero. They know what scrolling is
-- **Vertically rotated text** — only when the brief is explicitly an experimental portfolio
-- **Decorative crosshairs and grid lines** — drop them unless they align real content
-- **A word strip at the bottom of the hero** — small caps reading `BRAND. MOTION. SPATIAL.`
-- **Version footers on a marketing page** — `v1.4.2`, `Build 0048`, `synced 4s ago`
-- **Fake stock counters** — `412 of 800 reserved`. Only with real data
-- **Score bars with a filled background track** — a number plus a small icon communicates a comparison better
-- **Generic step labels** — `Step 1 / Step 2 / Step 3`, `Phase 01`. The step's content is the label. Write "설치", "설정", "배포"
-- **Headlines broken with `<br>` and italicized** — only when the brief asks for it
-- **Precious section labels** — "현장에서", "작업 노트", "책상 위에서". Use plain functional labels
+아래 규칙은 실제 결과물에서 반복적으로 관찰한 패턴에서 나왔다. 브리프가 명시적으로 요청하지 않는 한 금지 사항으로 취급하라.
 
 ---
 
-Adapted and condensed from Leonxlnx/taste-skill (MIT).
+## 1. 히어로
+
+**첫 화면에 들어와야 한다.** 헤드라인은 2줄 이내, 서브텍스트는 20단어·4줄 이내, 주요 버튼은 스크롤 없이 보여야 한다. 넘치면 타입 스케일을 줄이거나 카피를 잘라라. 서브텍스트를 20단어 아래로 줄이지 못하면 가치 제안이 정리되지 않은 것이다. 규칙이 너무 빡빡한 것이 아니다.
+
+**글자 크기와 이미지 크기를 함께 계획하라.** 헤드라인이 6단어를 넘고 이미지가 크면 가장 큰 단계로 시작하지 마라. 가장 큰 단계는 헤드라인이 3~5단어일 때만 써라. 헤드라인이 4줄로 접히는 것은 카피 길이의 문제가 아니라 크기 실수다.
+
+**상단 패딩에 상한을 둬라.** 히어로 상단 패딩은 데스크톱에서 6rem 이하로 유지하라. 그 이상이면 콘텐츠가 뷰포트 중간에 떠서 의도된 여백이 아니라 레이아웃 버그로 읽힌다.
+
+**텍스트 요소는 최대 네 개.** 히어로는 기능 목록이 아니라 한 순간이다.
+
+1. 작은 라벨 **또는** 브랜드 스트립(둘 다 없어도 된다)
+2. 헤드라인
+3. 서브텍스트
+4. 버튼(주요 하나, 보조는 많아야 하나)
+
+히어로에 넣지 마라: 버튼 아래의 작은 태그라인, 신뢰 스트립("~팀이 사용 중"), 가격 티저, 기능 불릿, 사용자 아바타 줄. 이것들은 모두 바로 아래 별도 섹션으로 옮겨라.
+
+**로고 월은 히어로 밖에 둬라.** "사용 중인 곳" 로고 줄은 아래의 독립된 섹션이다. 히어로 카피와 같은 줄에 밀어 넣지 마라.
+
+**히어로에는 진짜 비주얼이 필요하다.** 텍스트에 그라디언트 덩어리를 얹은 것은 히어로가 아니라 플레이스홀더다.
+
+## 2. 작은 라벨(아이브로)
+
+섹션 제목 위에 놓이는 작은 대문자 라벨이다. 모든 섹션 위에 하나씩 두는 것이 가장 흔한 AI 패턴이다.
+
+**세 섹션당 최대 하나.** 히어로도 하나로 센다. 섹션이 아홉 개면 라벨은 최대 세 개다. 섹션 A에 하나 있으면 다음 두 섹션에는 둘 수 없다.
+
+**세는 법** — 작은 대문자에 자간이 넓은 라벨을 세라. `ceil(섹션 수 / 3)`를 넘으면 실패다.
+
+**대신 할 것** — 빼라. 제목만으로 충분하다. 페이지에서의 섹션 위치가 이미 무엇인지 말해준다.
+
+**번호를 붙이지 마라** — `00 / INDEX`, `001 · Features`, `06 · How it works` 금지. 이미지나 타일의 `01 / 4` 페이지 표시도 금지다. 독자가 직접 셀 수 있는 것을 세어 주지 마라.
+
+**라벨 아래에 설명 문장을 붙이지 마라** — 라벨, 제목, 본문이면 충분하다. "이것들은 로드맵이 아니라 오늘 출시된다" 같은 문장을 그 사이에 끼워 넣지 마라.
+
+## 3. 섹션 레이아웃
+
+**같은 레이아웃 계열을 두 번 쓰지 마라.** 3열 이미지 카드 줄, 전체 너비 인용문, 좌우 분할은 페이지당 각각 한 번만 나온다. 섹션이 여덟 개면 계열은 최소 네 가지여야 한다.
+
+**좌우 지그재그는 최대 두 번.** 이미지와 텍스트를 번갈아 놓는 분할이 세 번 연속되면 실패다. 전체 너비 섹션, 세로 쌓기, 다른 계열로 끊어라.
+
+**분할 헤더 금지** — "왼쪽에 큰 헤드라인, 오른쪽에 작은 설명 문단"을 섹션 헤더로 쓰지 마라. 섹션당 메시지는 하나다. 둘 다 정말 필요하면 세로로 쌓아라. 오른쪽 열에 진짜 비주얼이나 인터랙티브 요소가 있을 때만 분할하라.
+
+**제목 오른쪽 위에 작은 문단을 띄우지 마라** — 아무것과도 정렬되지 않은 채 구석에 놓인 작은 설명문이 티다.
+
+## 4. 그리드와 타일
+
+**셀 수는 콘텐츠 수와 같다.** 항목이 세 개면 셀도 세 개다. 중간이나 끝에 빈 셀이 있으면 그리드를 잘못 계획한 것이다. 빈칸을 채우지 말고 그리드 모양을 바꿔라.
+
+**타일 배경이 전부 같으면 안 된다.** 텍스트만 든 흰 카드 여섯 장은 지루하다. 최소 두세 개 셀에는 진짜 이미지, 패턴, 다른 톤의 배경 같은 실질적인 변화를 줘라.
+
+**긴 목록은 목록이 아닌 것으로 만들어라.** 5개를 넘으면 구분선 있는 기본 목록으로 렌더링하지 마라. 2열 분할, 이미지 있는 카드 그리드, 탭이나 아코디언, 가로 스크롤, 캐러셀을 써라. 행마다 구분선이 있는 10행 표는 가장 게으른 기본값이다.
+
+**모든 행의 위아래에 모두 구분선을 긋지 마라.** 하나만 골라라 — 행 사이의 구분선, 또는 그룹 위의 구분선.
+
+## 5. 콘텐츠 밀도
+
+랜딩 페이지는 첫인상으로 결정된다.
+
+**섹션의 기본 형태** — 짧은 제목(8단어 이내), 짧은 문단(25단어 이내), 비주얼 하나 **또는** 버튼 하나. 그 이상은 그 섹션의 역할로 정당화해야 한다.
+
+**데이터를 쏟아붓는 섹션을 만들지 마라.** 20행 표, 30개 수상 목록, 거대한 가격 매트릭스는 레이아웃이 틀린 것이다. 상위 3~5개와 "전체 보기" 링크를 보여주거나, 폭을 보여주려면 캐러셀이나 마키를 쓰거나, 데이터가 제품이면 별도 페이지로 옮겨라.
+
+**페이지당 목소리는 하나.** 기술 표기, 서정적 산문, 마케팅 카피를 한 화면에 섞지 마라.
+
+## 6. 인용문과 후기
+
+- 본문은 **3줄** 이내. 긴 원문은 잘라라. 랜딩 페이지의 인용문은 전문이 아니라 발췌다
+- 출처는 이름과 직함(과 회사). 이름만 쓰는 것은 절대 안 된다
+- 진짜 타이포그래피용 따옴표를 쓰거나, 아예 쓰지 마라
+
+## 7. 이미지
+
+**텍스트만 있는 랜딩 페이지는 미니멀이 아니라 미완성이다.** 절제된 브리프라도 히어로, 제품 또는 환경 사진, 보조 이미지가 필요하다.
+
+**우선순위**
+1. **이미지 생성 도구가 있으면 써라.** 섹션별로 맞는 종횡비로 생성하라
+2. 없으면 실제 사진 소스를 써라. `https://picsum.photos/seed/{descriptive-seed}/{w}/{h}`에서 시드에 섹션 설명을 넣어라
+3. 둘 다 안 되면 이름 붙인 플레이스홀더 주석(`<!-- TODO: hero product photo 1600x1200 -->`)을 남기고, 응답 끝에 어느 슬롯에 어떤 이미지가 필요한지 밝혀라
+
+**하지 마라**
+- `div`로 가짜 제품 화면을 만드는 것 — 가짜 대시보드, 가짜 터미널, 가짜 할 일 목록. 가장 강한 신호다
+- 장식용 SVG를 직접 그리는 것
+- 이미지 위에 태그 배지를 얹는 것(`Brand · 02` 같은 것)
+- 실제 사진작가가 없는데 사진 크레딧 캡션을 다는 것(`Frame XII · 35mm`)
+
+**로고 월** — 진짜 SVG 로고를 써라(Simple Icons, `https://cdn.simpleicons.org/{slug}/{color}`). 지어낸 브랜드는 단순한 모노그램을 만들어라. 일반 텍스트 워드마크 줄은 AI처럼 읽힌다. 로고 아래에 업종 라벨을 달지 마라. 로고 자체가 신뢰다. 라이트와 다크 모드 모두에서 렌더링되는지 확인하라.
+
+## 8. 내비게이션
+
+- 데스크톱에서 **한 줄**. 1024px에서 맞지 않으면 라벨을 줄이거나, 항목을 빼거나, 햄버거로 접어라. 두 줄 내비게이션은 깨진 것이다
+- 높이 80px 이하. 기본은 64~72px
+
+## 9. 모션
+
+**주장하는 만큼 움직여야 한다.** `MOTION_INTENSITY`가 4 이상이면 히어로 진입, 핵심 섹션의 스크롤 리빌, 버튼 반응을 실제로 구현하라. 못 하겠으면 값을 3으로 낮추고 제대로 된 정적 화면을 만들어라. 절반만 만든 애니메이션 — 끊긴 스크롤 트리거, 튀는 진입, 정리되지 않은 리스너 — 이 최악의 결과다.
+
+**마키는 페이지당 최대 하나.** 가로로 스크롤되는 텍스트나 로고 스트립이 둘 이상이면 게으른 채우기로 읽힌다.
+
+**카드가 쌓이는 스크롤 효과**는 시퀀스가 진행되기 전에 뷰포트 상단에 고정하라. 뷰포트 중간에서 고정을 시작하면 반쯤 스크롤한 뒤에 시작해서 어색하다.
+
+**글래스모피즘**은 프리미엄 소비자 서비스와 미디어 오버레이에 어울리고, 관리자 화면이나 공공 서비스에는 어울리지 않는다. 쓸 때는 블러에서 멈추지 마라. 1px 안쪽 테두리와 옅은 안쪽 그림자로 가장자리를 만들어라. 투명도 감소 설정에서는 불투명 배경으로 대체하라.
+
+## 10. 장식용 문자열
+
+모두 실제 결과물에서 반복해서 나온다.
+
+- **히어로의 버전 라벨** — `V0.6`, `BETA`, `EARLY ACCESS`. 브리프가 출시 상태에 관한 것일 때만 쓴다
+- **`Brand · No. 01` 식의 서브라벨**
+- **가운뎃점(`·`) 남용** — 한 줄에 최대 하나. "A · B · C · D"의 기본 구분자가 아니다
+- **장식용 색 점** — 모든 내비게이션 항목, 모든 목록 행, 모든 배지에 다는 것. 서버 상태, 가용 여부처럼 실제 상태를 나타낼 때만 쓴다
+- **지역, 시간, 날씨 스트립** — `Seoul 14:23 · 18°C`, 헤더의 도시 이름. 정말로 여러 시간대에 걸친 팀이거나 장소 중심 브랜드일 때만 쓴다. 푸터의 주소 한 줄은 괜찮다
+- **스크롤 신호** — `Scroll`, `↓`, 마우스 휠 아이콘. 아직 스크롤하지 않은 사람은 히어로를 보고 있다. 스크롤이 뭔지 안다
+- **세로로 회전한 텍스트** — 브리프가 명시적으로 실험적 포트폴리오일 때만 쓴다
+- **장식용 십자선과 격자선** — 실제 콘텐츠와 정렬되지 않으면 빼라
+- **히어로 하단의 단어 스트립** — `BRAND. MOTION. SPATIAL.`이라고 적힌 작은 대문자
+- **마케팅 페이지의 버전 푸터** — `v1.4.2`, `Build 0048`, `synced 4s ago`
+- **가짜 재고 카운터** — `412 of 800 reserved`. 실제 데이터가 있을 때만 쓴다
+- **배경 트랙이 채워진 점수 막대** — 숫자와 작은 아이콘이 비교를 더 잘 전달한다
+- **일반적인 단계 라벨** — `Step 1 / Step 2 / Step 3`, `Phase 01`. 단계의 내용이 곧 라벨이다. "설치", "설정", "배포"라고 써라
+- **`<br>`로 끊고 이탤릭으로 만든 헤드라인** — 브리프가 요청할 때만 쓴다
+- **꾸민 섹션 라벨** — "현장에서", "작업 노트", "책상 위에서". 평이하고 기능적인 라벨을 써라
+
+---
+
+Leonxlnx/taste-skill(MIT)에서 가져와 고치고 압축했다.

@@ -1,74 +1,74 @@
-# Changing an existing screen
+# 기존 화면 바꾸기
 
-**Read this when changing a screen that already exists. If you are building something new, leave now.**
+**이미 있는 화면을 바꿀 때 읽어라. 새로 만드는 중이라면 지금 나가라.**
 
-Getting the mode wrong is the single largest cause of bad results.
-
----
-
-## 1. Settle the mode first
-
-- **Preserve** — modernize without breaking the brand. Audit first, extract the existing tokens, improve incrementally
-- **Overhaul** — keep the content and the information architecture, build a new visual language. Treat visuals as greenfield
-
-When it is ambiguous, ask **once**. "Should this keep the existing brand, or should the visuals start fresh?"
-
-## 2. Audit before touching anything
-
-Write down the current state before proposing changes.
-
-- **Brand tokens** — primary and accent colors, type stack, logo treatment, corner radii
-- **Information architecture** — screen structure, primary navigation, key conversion paths
-- **Content blocks** — what exists, what is doing work, what is filler
-- **Patterns to keep** — recognizable signature elements, the voice of the copy
-- **Patterns to retire** — AI tells (`ai-tells.md`), broken layouts, dead links, performance problems
-- **The current dial values** — read this screen's `DESIGN_VARIANCE`, `MOTION_INTENSITY`, and `VISUAL_DENSITY`. **Those values are your starting point.** Do not start from the defaults
-
-If the page has search traffic, add one more — **the current search-traffic state**. Ranking pages, meta titles, structured data, share cards. Breaking search traffic is the largest risk in a redesign.
-
-## 3. Preservation rules
-
-- **Do not change the information architecture.** Unless asked, leave page URLs, anchor IDs, and primary nav labels alone. Search traffic and muscle memory both hang on them
-- **Extract the brand colors first.** A brand that is already purple stays purple. "No AI purple" is a default for fresh decisions, not a mandate to overwrite an existing brand
-- **Keep the voice of the copy.** Visual modernization is not a content rewrite
-- **Do not regress existing accessibility work.** Focus indicators, alt text, keyboard operation, and contrast all stay
-- **Respect existing analytics events.** Do not rename buttons, form fields, or section IDs that tracking depends on
-
-## 4. Apply the levers in order
-
-Ordered by effect against risk. Stop when the brief is satisfied.
-
-1. **Typography** — the largest visual lift per unit of risk
-2. **Spacing and rhythm** — section spacing, vertical rhythm
-3. **Color recalibration** — desaturate, unify the neutrals. Keep the brand accent
-4. **Motion** — add responses appropriate to the dial value to existing components
-5. **Recomposing the hero and key sections**
-6. **Replacing blocks wholesale** — only when they cannot be saved
-
-## 5. Decide how far to go
-
-- Information architecture, content, and search traffic are sound → **partial improvement** (levers 1 to 4). 70% of the value at 40% of the risk
-- The visual debt is structural (broken IA, no design system, broken mobile) → **overhaul**, preserving content strictly
-- The brand itself is changing → treat it as greenfield
-
-## 6. Never change these silently
-
-Do not touch these without the user's approval.
-
-- Page URLs and route paths
-- Primary navigation labels
-- Form field names and their order (this breaks analytics tracking and autofill)
-- The logo and wordmark
-- Legal, consent, and cookie copy
-
-When you conclude one of these must change, do not change it. Say so first.
+모드를 잘못 잡는 것이 나쁜 결과의 가장 큰 원인이다.
 
 ---
 
-## When building variants
+## 1. 먼저 모드를 정하라
 
-The procedure of building two or three structurally different variants is the same for an existing screen. But **include the current screen as one of the variants.** Without a baseline there is no way to tell improvement from a change of taste.
+- **보존** — 브랜드를 깨지 않고 현대화한다. 먼저 감사하고, 기존 토큰을 추출하고, 점진적으로 개선한다
+- **개편** — 콘텐츠와 정보 구조는 유지하고 새 시각 언어를 만든다. 시각 요소는 새로 만드는 것으로 다룬다
+
+모호하면 **한 번만** 물어라. "기존 브랜드를 유지할까요, 아니면 시각 요소를 새로 시작할까요?"
+
+## 2. 건드리기 전에 감사하라
+
+변경을 제안하기 전에 현재 상태를 적어라.
+
+- **브랜드 토큰** — 기본 색과 강조 색, 타입 스택, 로고 처리, 모서리 둥글기
+- **정보 구조** — 화면 구조, 주요 내비게이션, 핵심 전환 경로
+- **콘텐츠 블록** — 무엇이 있고, 무엇이 제 역할을 하고, 무엇이 군더더기인가
+- **유지할 패턴** — 알아볼 수 있는 시그니처 요소, 카피의 어조
+- **버릴 패턴** — AI 티(`ai-tells.md`), 깨진 레이아웃, 죽은 링크, 성능 문제
+- **현재 다이얼 값** — 이 화면의 `DESIGN_VARIANCE`, `MOTION_INTENSITY`, `VISUAL_DENSITY`를 읽어라. **그 값이 출발점이다.** 기본값에서 시작하지 마라
+
+페이지에 검색 트래픽이 있다면 하나를 더 적어라 — **현재 검색 트래픽 상태**. 순위가 잡힌 페이지, 메타 타이틀, 구조화 데이터, 공유 카드. 검색 트래픽을 깨뜨리는 것이 리디자인의 가장 큰 위험이다.
+
+## 3. 보존 규칙
+
+- **정보 구조를 바꾸지 마라.** 요청이 없으면 페이지 URL, 앵커 ID, 주요 내비게이션 라벨을 건드리지 마라. 검색 트래픽과 사용자의 손버릇이 모두 거기에 걸려 있다
+- **브랜드 색을 먼저 추출하라.** 이미 보라색인 브랜드는 보라색으로 둔다. "AI 보라색 금지"는 새로 정하는 결정의 기본값이지, 기존 브랜드를 덮어쓰라는 지시가 아니다
+- **카피의 어조를 유지하라.** 시각적 현대화는 콘텐츠 재작성이 아니다
+- **기존 접근성 작업을 후퇴시키지 마라.** 포커스 표시, alt 텍스트, 키보드 조작, 대비는 모두 유지한다
+- **기존 분석 이벤트를 존중하라.** 추적이 의존하는 버튼, 폼 필드, 섹션 ID의 이름을 바꾸지 마라
+
+## 4. 레버를 순서대로 적용하라
+
+위험 대비 효과 순이다. 브리프가 충족되면 멈춘다.
+
+1. **타이포그래피** — 위험 단위당 시각적 향상이 가장 크다
+2. **간격과 리듬** — 섹션 간격, 수직 리듬
+3. **색 재조정** — 채도를 낮추고 뉴트럴을 통일한다. 브랜드 강조 색은 유지한다
+4. **모션** — 다이얼 값에 맞는 반응을 기존 컴포넌트에 더한다
+5. **히어로와 주요 섹션 재구성**
+6. **블록 통째로 교체** — 살릴 수 없을 때만
+
+## 5. 어디까지 갈지 정하라
+
+- 정보 구조, 콘텐츠, 검색 트래픽이 건전하다 → **부분 개선**(레버 1~4). 위험 40%로 가치 70%
+- 시각적 부채가 구조적이다(깨진 정보 구조, 디자인 시스템 없음, 깨진 모바일) → **개편**하되 콘텐츠는 엄격히 보존한다
+- 브랜드 자체가 바뀐다 → 새로 만드는 것으로 다룬다
+
+## 6. 다음은 조용히 바꾸지 마라
+
+사용자의 승인 없이 건드리지 마라.
+
+- 페이지 URL과 라우트 경로
+- 주요 내비게이션 라벨
+- 폼 필드 이름과 순서 (분석 추적과 자동완성이 깨진다)
+- 로고와 워드마크
+- 법적 고지, 동의, 쿠키 문구
+
+이 중 하나를 바꿔야 한다고 판단했더라도 바꾸지 마라. 먼저 말하라.
 
 ---
 
-Adapted and condensed from Leonxlnx/taste-skill (MIT).
+## 변형을 만들 때
+
+구조가 다른 변형 두세 개를 만드는 절차는 기존 화면에도 같다. 단, **현재 화면을 변형 중 하나로 포함하라.** 기준선이 없으면 개선과 취향 변경을 구분할 방법이 없다.
+
+---
+
+Leonxlnx/taste-skill(MIT)을 가져와 줄여서 고쳤다.

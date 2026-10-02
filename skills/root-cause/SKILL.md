@@ -3,55 +3,55 @@ name: root-cause
 description: 버그의 근본 원인을 찾아낸 뒤 고친다. 에러·크래시·오동작을 보고받았을 때, "왜 이런지 모르겠다" "고쳤는데 또 그런다" "이상하게 동작한다"고 할 때 사용한다.
 ---
 
-**Do not fix a bug you have not reproduced.** A fix made without reproduction cannot be verified, and usually just hides the symptom.
+**재현하지 못한 버그를 고치지 마라.** 재현 없이 한 수정은 검증할 수 없고, 대개 증상만 가린다.
 
-## 1. Pin down the symptom
+## 1. 증상을 못박아라
 
-Write only facts. Keep guesses out.
+사실만 써라. 추측은 넣지 마라.
 
-- Expected behavior and actual behavior
-- The exact error message in full. Do not summarize it
-- Conditions — always, specific input, or specific environment
-- Since when. Whether it lines up with a recent change
+- 기대한 동작과 실제 동작
+- 정확한 에러 메시지 전문. 요약하지 마라
+- 조건 — 항상인지, 특정 입력인지, 특정 환경인지
+- 언제부터인지. 최근 변경과 시점이 맞는지
 
-## 2. Build a minimal reproduction
+## 2. 최소 재현을 만들어라
 
-Find the smallest case that triggers the bug. Shrink the input, drop steps, remove dependencies.
+버그를 일으키는 가장 작은 사례를 찾아라. 입력을 줄이고, 단계를 빼고, 의존성을 제거하라.
 
-**This is where most causes surface.** The point at which the bug disappears while shrinking is the location of the cause.
+**대부분의 원인이 여기서 드러난다.** 줄이다가 버그가 사라지는 지점이 원인의 위치다.
 
-If it does not reproduce, report that. Do not pretend to fix something that does not reproduce.
+재현되지 않으면 그렇다고 보고하라. 재현되지 않는 것을 고치는 척하지 마라.
 
-## 3. Form at least three hypotheses
+## 3. 가설을 최소 세 개 세워라
 
-Form only one and you will believe it is right.
+하나만 세우면 그것이 맞다고 믿게 된다.
 
-For each hypothesis, write **how to disprove it**. Not "how to check if it is right" — how to show it is wrong.
+가설마다 **어떻게 반증할지**를 써라. "맞는지 확인하는 방법"이 아니라 틀렸음을 보이는 방법이다.
 
-## 4. Test the cheap ones first
+## 4. 싼 것부터 검증하라
 
-One log line, then printing a value, then flipping a condition. Changing code to check comes last.
+로그 한 줄, 그다음 값 출력, 그다음 조건 뒤집기 순이다. 확인하려고 코드를 바꾸는 것은 마지막이다.
 
-If every hypothesis is wrong, go back to step 2 and shrink the reproduction further. Do not improvise new hypotheses.
+가설이 전부 틀렸으면 2단계로 돌아가 재현을 더 줄여라. 새 가설을 즉흥으로 만들지 마라.
 
-## 5. Ask why three times
+## 5. 왜를 세 번 물어라
 
-Once you find the direct cause of the symptom, do not stop there.
+증상의 직접 원인을 찾았다면 거기서 멈추지 마라.
 
-> Crashed on a null reference → why? The value was missing → why? It was called before initialization → why? The lifecycle assumption differed from the documentation
+> null 참조로 크래시 → 왜? 값이 없었다 → 왜? 초기화 전에 호출됐다 → 왜? 라이프사이클 가정이 문서와 달랐다
 
-The third answer is where the fix goes. Fix only the first answer and the same bug returns somewhere else.
+세 번째 답이 수정할 곳이다. 첫 번째 답만 고치면 같은 버그가 다른 곳에서 돌아온다.
 
-## 6. Fix it and prove it
+## 6. 고치고 증명하라
 
-**Before fixing, freeze the minimal reproduction as a failing test.** You already built the reproduction in step 2, so this is just transcribing it. This is the RED of the tdd skill.
+**고치기 전에 최소 재현을 실패하는 테스트로 고정하라.** 재현은 2단계에서 이미 만들었으므로 옮겨 적기만 하면 된다. 이것이 tdd 스킬의 RED다.
 
-- Confirm the test fails, then fix
-- Once it passes, it stays as the regression test
-- Check other places that could stem from the same cause
+- 테스트가 실패하는 것을 확인한 뒤 고쳐라
+- 통과하면 회귀 테스트로 남긴다
+- 같은 원인에서 비롯될 수 있는 다른 곳을 확인하라
 
-## Never do this
+## 절대 하지 마라
 
-- Fixing several places at once — you lose track of what fixed it
-- Wrapping in `try/except` to hide the symptom
-- Waving it off as "probably an environment issue" without reproducing it
+- 여러 곳을 한꺼번에 고치기 — 무엇이 고쳤는지 알 수 없게 된다
+- 증상을 가리려고 `try/except`로 감싸기
+- 재현하지 않고 "아마 환경 문제"라며 넘기기
